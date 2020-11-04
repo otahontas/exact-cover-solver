@@ -21,10 +21,21 @@ class Node:
         self.down.up = self.up.down = self.right.left = self.left.right = self
 
 
-class HeaderNode:
+class HeaderNode(Node):
     """Column header node for control row."""
 
-    def __init__(self, id):
+    def __init__(self, header_id):
         """Initialize header node with name and id."""
-        self.id = id
+        super(HeaderNode, self).__init__(self)
+        self.id = header_id
         self.size = 0
+
+
+class RootNode:
+    """Root node which links header columns together."""
+
+    def __init__(self, left=None, right=None):
+        """Initialize root."""
+        self.left = left
+        self.right = right
+        self.id = "Root"
