@@ -4,13 +4,10 @@
 class Node:
     """Single node definition."""
 
-    def __init__(self, column, up=None, down=None, left=None, right=None):
+    def __init__(self, header):
         """Initialize single node."""
-        self.column = column
-        self.up = up
-        self.down = down
-        self.left = left
-        self.right = right
+        self.header = header
+        self.up = self.down = self.left = self.right = self
 
     def deattach(self):
         """Remove node from matrix."""
