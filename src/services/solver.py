@@ -32,23 +32,39 @@ class Solver:
         previous.right = root
 
     def create_nodes(self, root, set_collection):
-        """Create nodes representing elements in each set in set collection."""
+        """Create nodes representing elements in each set in set collection.
+
+
+        All sets are iterated through. For each element in set the element is
+        linked to the correct column and columns header. Elements in set are
+        also linked together to form a circular row.
+        """
+        def find_header(header_id):
+            header = root
+            while header.id != header_id:
+                header = header.right
+            return header
+
         for set_name, set_elements in set_collection:
-            print("adding set ", set_name)
+            previous = None
+            first = None
             for element in set_elements:
-                # find correct header node
-                header = root
-                while header.id != element:
-                    header = header.right
+                header = find_header(element)
                 cell = Node(header)
-                if header.up is None and header.down is None:
-                    # If column is empty, inserting this as first in column
+                if not header.up and not header.down:
                     header.up = header.down = cell
                     cell.up = cell.down = header
                 else:
-                    # Column not empty, inserting as last
                     prev_up = header.up
                     prev_up.down = cell
                     cell.up = prev_up
                     cell.down = header
                     header.up = cell
+                if previous:
+                    previous.right = cell
+                    cell.left = previous
+                else:
+                    first = cell
+                previous = cell
+            previous.right = first
+            first.left = previous
