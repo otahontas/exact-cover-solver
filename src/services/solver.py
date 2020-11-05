@@ -18,7 +18,6 @@ class Solver:
         algoX = AlgorithmX()
         algoX.solve(root)
 
-
     def create_root(self):
         """Create root column."""
         return RootNode()
@@ -42,6 +41,7 @@ class Solver:
         linked to the correct column and columns header. Elements in set are
         also linked together to form a circular row.
         """
+
         def find_header(header_id):
             header = root
             while header.id != header_id:
@@ -53,7 +53,7 @@ class Solver:
             first = None
             for element in set_elements:
                 header = find_header(element)
-                cell = Node(header)
+                cell = Node(header, set_name)
                 if not header.up and not header.down:
                     header.up = header.down = cell
                     cell.up = cell.down = header
@@ -69,5 +69,6 @@ class Solver:
                 else:
                     first = cell
                 previous = cell
+                header.increase_count()
             previous.right = first
             first.left = previous
