@@ -1,6 +1,7 @@
 """Solver service, handles different solving modes."""
 
 from datastructures.node import Node, HeaderNode, RootNode
+from algos.algorithmX import AlgorithmX
 
 
 class Solver:
@@ -14,7 +15,9 @@ class Solver:
         root = self.create_root()
         self.create_headers(root, universe)
         self.create_nodes(root, set_collection)
-        return root
+        algoX = AlgorithmX()
+        algoX.solve(root)
+
 
     def create_root(self):
         """Create root column."""
