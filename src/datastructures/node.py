@@ -10,7 +10,7 @@ class Node:
         self.row = row
         self.up = self.down = self.left = self.right = self
 
-    def deattach_column(self):
+    def deattach(self):
         """Remove node from matrix."""
         self.up.down = self.down
         self.down.up = self.up
