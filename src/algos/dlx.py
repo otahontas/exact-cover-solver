@@ -9,9 +9,9 @@ class DLX(AlgorithmX):
         self.solutions = 0
         self.partial = set()
 
-    def solve(self, h):
+    def solve(self, matrix):
         """Solve exact cover problem and return rows that are chosen in solution."""
-        self._search(h)
+        self._search(matrix)
 
     def _search(self, h):
         """Perform algorithm X recursively."""
