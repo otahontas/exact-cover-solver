@@ -64,3 +64,15 @@ class DLXMatrix:
                 column.size += 1
             previous.right = first
             first.left = previous
+
+    def __repr__(self):
+        """Return printable representation of matrix."""
+        s = ""
+        column = self
+        while (column := column.right) != self:
+            data = column
+            data_str = ""
+            while (data := data.down) != column:
+                data_str = f"{data_str} {data.row}"
+            s = f"{s}Column {column.id} has {column.size} objects: {data_str}\n"
+        return s

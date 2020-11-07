@@ -19,7 +19,6 @@ class DLX(AlgorithmX):
     def _search(self, h):
         """Perform algorithm X recursively."""
         # If R[h] = h, solution has been found
-        self._print(h)
         if h.right == h:
             self.solutions.append(copy(self.partial))
             return
@@ -51,7 +50,6 @@ class DLX(AlgorithmX):
             j = r
             while (j := j.left) != r:
                 self._uncover(j.column)
-            self._print(h)
         # Uncover column c and return
         self._cover(c)
 
@@ -70,7 +68,7 @@ class DLX(AlgorithmX):
     def _cover(self, c):
         """Cover given column c.
 
-        First remove c from the header list and the remove all rows in c's own list
+        First remove c from the header list and then remove all rows in c's own list
         from other column lists they're in.
 
         Covering is done from top to bottom and left to right manner.
@@ -100,14 +98,3 @@ class DLX(AlgorithmX):
                 j.down.up = j
         c.left.right = c
         c.right.left = c
-
-    def _print(self, root):
-        """Print matrix nodes based on root."""
-        header = root.right
-        while header != root:
-            print(header.id, header.size)
-            node = header.down
-            while node != header:
-                print(node, node.row)
-                node = node.down
-            header = header.right
