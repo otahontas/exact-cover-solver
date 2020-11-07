@@ -23,6 +23,22 @@ Käynnistä ohjelma ajamalla:
 pipenv run start
 ```
 
+### Testit
+
+Testit ajetaan komennolla:
+
+```
+pipenv run test
+```
+
+Sellaisenaan komento raportoi ainostaan testien onnistumisesta tai epäonnistumisesta. Koodikattavuusraportin sen sijaan saat esille ajamalle:
+
+```
+pipenv run cov
+```
+
+Koodikattavuusraportti löytyy html-muodossa polusta `htmlcov/index.html`.
+
 
 ### Koodityylit
 
