@@ -7,6 +7,8 @@ verify_ssl = true
 start = "python3 src/exact_cover_solver/main.py"
 format = "black ."
 lint = "./scripts/lint.sh"
+test = "pytest"
+cov = "./scripts/cov.sh"
 
 [dev-packages]
 pytest = "*"
