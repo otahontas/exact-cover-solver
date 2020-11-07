@@ -1,12 +1,18 @@
-class AlgorithmX:
-    def __init__(self):
+"""Dancing links implementation for algorithm X."""
+
+from .algos import AlgorithmX
+
+
+class DLX(AlgorithmX):
+    def __init__(self, h):
         """Set up solution counter."""
         self.solutions = 0
         self.partial = set()
+        self.h = h
 
-    def solve(self, h):
+    def solve(self):
         """Solve exact cover problem and return rows that are chosen in solution."""
-        self._search(h)
+        self._search(self.h)
 
     def _search(self, h):
         """Perform algorithm X recursively."""
