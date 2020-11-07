@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [scripts]
-start = "python3 src/main.py"
+start = "python3 src/exact_cover_solver/main.py"
 format = "black ."
 lint = "./scripts/lint.sh"
 
