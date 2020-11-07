@@ -1,91 +1,112 @@
 class AlgorithmX:
-    def solve(self, root):
+    def __init__(self):
+        """Set up solution counter."""
+        self.solutions = 0
+        self.partial = set()
+
+    def solve(self, h):
         """Solve exact cover problem and return rows that are chosen in solution."""
-        self._search(root)
+        self._search(h)
 
-    def _search(self, root, partial=[]):
-        """jee"""
+    def _search(self, h):
+        """Perform algorithm X recursively."""
 
-        # Check if we have a solution, return if so
-        if root.right == root:
-            print("solution found, it includes following rows:")
-            for row in partial:
-                print(row, end="")
+        # If R[h] = h, solution has been found
+        print("")
+        print("=== NEW RECURSION STARTED === ")
+        self._print(h)
+        print("current partial:", self.partial)
+        if h.right == h:
+            print("solution found! It includes following rows: ", end=" ")
+            for row in self.partial:
+                print(row, end=" ")
             print("")
             return
 
-        # Find header
-        header = self._find_column_with_lowest_ones(root)
+        # Otherwise choose column c optimally
+        c = self._choose_optimal_column_object(h)
 
-        # Check if header count is zero
-        if not header.size:
-            print("\n === No ones in this column, returning ===")
+        # If this column doesn't have 1s, terminate unsuccesfully
+        if not c.size:
             return
 
-        # first one
-        row_node = header.down
-        new_partial = partial[:]
-        new_partial.append(row_node.row)
+        # Cover column c
+        self._cover(c)
 
-        covered = self._cover(row_node, root)
-        self._print(root)  # check
-        self._search(root, new_partial)
-        for node in covered:
-            node.deattach()
+        # Go through rows of column c
+        r = c
+        while (r := r.down) != c:
+            # Include row in partial solution
+            self.partial.add(r.row)
+            # Cover each column on this row
+            j = r
+            print("Starting to cover")
+            while (j := j.right) != r:
+                self._cover(j.header)
+            print("After covering")
+            self._print(h)
+            # Launch new recursive search
+            self._search(h)
+            # Remove this row from partial solution
+            self.partial.remove(r.row)
+            # Uncover each column on this row
+            print("Starting to uncover")
+            j = r
+            while (j := j.left) != r:
+                self._uncover(j.header)
+            print("After uncovering")
+            self._print(h)
+        # Uncover column c and return
+        self._cover(c)
 
-        # second one
-        row_node = row_node.down
-        new_partial = partial[:]
-        new_partial.append(row_node.row)
+    def _choose_optimal_column_object(self, h):
+        """Find column with smallest number of 1s.
 
-        covered = self._cover(row_node, root)
-        self._print(root)  # check
-        self._search(root, new_partial)
-        for node in covered:
-            node.deattach()
-
-
-    def _cover(self, start_node, root):
-        """Cover.
-        For each column in this row, deattach column and for each cell in deattached
-        column, deattach row.
+        This is done to minimize the branching factor.
         """
-        covered = []  # for now put covered in list
-        curr_node = start_node
-        while True:
-            tmp1 = curr_node
-            while tmp1 != curr_node.header:
-                tmp2 = tmp1
-                while tmp2.right != tmp2:
-                    tmp2.deattach()
-                    covered.append(tmp2)
-                    tmp2 = tmp2.right
-                tmp2.deattach()
-                covered.append(tmp2)
-                tmp1 = tmp1.down
-            curr_node.header.deattach()
-            covered.append(curr_node.header)
-            if curr_node.right is curr_node:
-                break
-            curr_node = curr_node.right
-        return covered
+        j = h.right
+        c = j
+        s = j.size
+        while (j := j.right) != h:
+            c, s = (j, j.size) if j.size < s else (c, s)
+        return c
 
-    def _uncover(self, start_node, root):
-        raise NotImplementedError
+    def _cover(self, c):
+        """Cover given column c.
 
-    def _find_column_with_lowest_ones(self, root):
-        """Loop through columns to find column with lowest ones."""
-        curr = root.right
-        col = curr
-        size = curr.size
-        while curr != root:
-            col, size = (curr, curr.size) if curr.size < size else (col, size)
-            curr = curr.right
-        return col
+        First remove c from the header list and the remove all rows in c's own list
+        from other column lists they're in.
+
+        Covering is done from top to bottom and left to right manner.
+        """
+        c.right.left = c.left
+        c.left.right = c.right
+        i = c
+        while (i := i.down) != c:
+            j = i
+            while (j := j.right) != i:
+                j.down.up = j.up
+                j.up.down = j.down
+                j.header.size -= 1
+
+    def _uncover(self, c):
+        """Uncover given column c
+
+        Unovering is done from bottom to top and right to left manner in order to undo
+        deattaches done in covering step.
+        """
+        i = c
+        while (i := i.up) != c:
+            j = i
+            while (j := j.left) != i:
+                j.header.size += 1
+                j.up.down = j
+                j.down.up = j
+        c.left.right = c
+        c.right.left = c
 
     def _print(self, root):
         """Print matrix nodes based on root."""
-        print("\n=== Situation ===")
         header = root.right
         while header != root:
             print(header.id, header.size)
