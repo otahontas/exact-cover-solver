@@ -32,10 +32,11 @@ Ohjelman koodityylit voit tarkistaa ajamalla
 pipenv run lint
 ```
 
-Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html)- ja [black](https://black.readthedocs.io/en/stable/)-työkaluilla. Tarkemmin nämä sisältävät:
-- tarkistus [pep8-tyyliohjeiden](https://www.python.org/dev/peps/pep-0008/) noudattamisesta
-- staattinen analyysi virheistä, turhista importeista jne
-- kompleksisuustarkistus koodin liiallisesta haarautumisesta
-- tarkistus black-formatoijan tyyliohjeiden noudattamisesta
+Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html)- ja [black](https://black.readthedocs.io/en/stable/)-työkaluilla. Tarkemmin nämä sisältävät tarkistukset:
+- [pep8-tyyliohjeiden](https://www.python.org/dev/peps/pep-0008/) noudattamisesta
+- virheistä, turhista importeista jne
+- koodin liiallisesta haarautumisesta / kompleksisuudesta
+- black-formatoijan tyyliohjeiden noudattamisesta
+- [pep257 -docstring ohjeiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta
 
 Blackin huomaamat virheet voi korjata automaattisesti ajamalla `pipenv run format`. Flaken huomaamat virheet täytyy sen sijaan korjata käsin.
