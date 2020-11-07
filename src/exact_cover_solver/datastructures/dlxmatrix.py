@@ -8,6 +8,10 @@ class DLXMatrix:
 
     def __init__(self, universe, set_collection):
         """Create column and data objects and link them to this matrix object."""
+        if not universe or not set_collection:
+            raise ValueError("Not possible to create matrix without universe or sets.")
+
+        self.id = "root"
         self.create_columns(universe)
         self.create_nodes(set_collection)
 
@@ -22,7 +26,7 @@ class DLXMatrix:
         self.left = previous
         previous.right = self
 
-    def create_nodes(self, root, set_collection):
+    def create_nodes(self, set_collection):
         """Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is
@@ -31,7 +35,7 @@ class DLXMatrix:
         """
 
         def find_column(_id):
-            column = root
+            column = self
             while column.id != _id:
                 column = column.right
             return column
@@ -57,6 +61,6 @@ class DLXMatrix:
                 else:
                     first = cell
                 previous = cell
-                column.increase_count()
+                column.size += 1
             previous.right = first
             first.left = previous
