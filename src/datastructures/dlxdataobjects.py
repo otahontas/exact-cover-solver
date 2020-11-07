@@ -11,7 +11,7 @@ class DataObject:
         self.up = self.down = self.left = self.right = self
 
     def deattach(self):
-        """Deattach object from linked list, but don't erase it from memory"""
+        """Deattach object from linked list, but don't erase it from memory."""
         raise NotImplementedError
 
     def attach(self):

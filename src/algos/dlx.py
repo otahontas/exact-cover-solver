@@ -4,6 +4,8 @@ from .algos import AlgorithmX
 
 
 class DLX(AlgorithmX):
+    """Dancing links implementation for algorithm X."""
+
     def __init__(self):
         """Set up solution counter."""
         self.solutions = 0
@@ -15,7 +17,6 @@ class DLX(AlgorithmX):
 
     def _search(self, h):
         """Perform algorithm X recursively."""
-
         # If R[h] = h, solution has been found
         print("")
         print("=== NEW RECURSION STARTED === ")
@@ -95,7 +96,7 @@ class DLX(AlgorithmX):
                 j.header.size -= 1
 
     def _uncover(self, c):
-        """Uncover given column c
+        """Uncover given column c.
 
         Unovering is done from bottom to top and right to left manner in order to undo
         deattaches done in covering step.

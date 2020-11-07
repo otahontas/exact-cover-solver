@@ -1,9 +1,11 @@
-"""DLX matrix implementation based on data objects."""
+"""Wrappers to represent dancing links data and column objects as matrix."""
 
 from .dlxdataobjects import DataObject, ColumnObject
 
 
 class DLXMatrix:
+    """Matrix representation and initialization methods for circular linked lists."""
+
     def __init__(self, universe, set_collection):
         """Create column and data objects and link them to this matrix object."""
         self.create_columns(universe)
