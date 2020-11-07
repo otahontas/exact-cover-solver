@@ -11,5 +11,5 @@ class AlgorithmX(ABC):
     """
 
     @abstractmethod
-    def solve(self):
+    def solve(self, *args, **kwargs):
         """Concrete solving method that should be implemented by subclasses."""

@@ -4,15 +4,14 @@ from .algos import AlgorithmX
 
 
 class DLX(AlgorithmX):
-    def __init__(self, h):
+    def __init__(self):
         """Set up solution counter."""
         self.solutions = 0
         self.partial = set()
-        self.h = h
 
-    def solve(self):
+    def solve(self, h):
         """Solve exact cover problem and return rows that are chosen in solution."""
-        self._search(self.h)
+        self._search(h)
 
     def _search(self, h):
         """Perform algorithm X recursively."""
