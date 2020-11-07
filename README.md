@@ -37,6 +37,6 @@ Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html)
 - virheistä, turhista importeista jne
 - koodin liiallisesta haarautumisesta / kompleksisuudesta
 - black-formatoijan tyyliohjeiden noudattamisesta
-- [pep257 -docstring ohjeiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta
+- [pep257 -docstring ohjeiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta (vain lähdekoodille, testeille ei ajeta docstring-tarkastuksia)
 
 Blackin huomaamat virheet voi korjata automaattisesti ajamalla `pipenv run format`. Flaken huomaamat virheet täytyy sen sijaan korjata käsin.
