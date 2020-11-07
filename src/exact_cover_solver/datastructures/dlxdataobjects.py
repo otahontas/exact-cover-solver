@@ -11,12 +11,15 @@ class DataObject:
         self.up = self.down = self.left = self.right = self
 
     def deattach(self):
-        """Deattach object from linked list, but don't erase it from memory."""
-        raise NotImplementedError
+        """Deattach data object from linked list, but don't erase it from memory."""
+        self.down.up = self.up
+        self.up.down = self.down
+        self.column.size -= 1
 
     def attach(self):
-        """Attach object back to its original position in linked list."""
-        raise NotImplementedError
+        """Attach data object back to its original position in linked list."""
+        self.column.size += 1
+        self.up.down = self.down.up = self
 
 
 class ColumnObject(DataObject):
@@ -27,3 +30,12 @@ class ColumnObject(DataObject):
         super(ColumnObject, self).__init__(self)
         self.id = _id
         self.size = 0
+
+    def deattach(self):
+        """Deattach column object from header list, but don't erase it from memory"""
+        self.right.left = self.left
+        self.left.right = self.right
+
+    def attach(self):
+        """Attach column object back to its original position in header list."""
+        self.left.right = self.right.left = self

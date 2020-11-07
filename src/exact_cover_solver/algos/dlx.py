@@ -13,44 +13,45 @@ class DLX(AlgorithmX):
         self.partial = set()
 
     def solve(self, matrix):
-        """Solve exact cover problem and return rows that are chosen in solution."""
+        """Solve exact cover problem."""
         self._search(matrix)
 
     def _search(self, h):
-        """Perform algorithm X recursively."""
-        # If R[h] = h, solution has been found
+        """Perform algorithm X recursively.
+
+        Algorithm:
+        - If R[h] = h, solution has been found
+        - Otherwise choose column c optimally. If column doesn't have 1s, terminate.
+        - Cover column c
+        - Go through rows of column c
+            - Include row in partial solution
+            - Cover each column on row
+            - Search for solution recursively
+            - Uncover each column on row
+            - Remove row from partial solution
+        - Uncover column c
+        """
         if h.right == h:
             self.solutions.append(copy(self.partial))
             return
 
-        # Otherwise choose column c optimally
         c = self._choose_optimal_column_object(h)
 
-        # If this column doesn't have 1s, terminate unsuccesfully
         if not c.size:
             return
 
-        # Cover column c
         self._cover(c)
 
-        # Go through rows of column c
         r = c
         while (r := r.down) != c:
-            # Include row in partial solution
             self.partial.add(r.row)
-            # Cover each column on this row
             j = r
             while (j := j.right) != r:
                 self._cover(j.column)
-            # Launch new recursive search
             self._search(h)
-            # Remove this row from partial solution
-            self.partial.remove(r.row)
-            # Uncover each column on this row
-            j = r
             while (j := j.left) != r:
                 self._uncover(j.column)
-        # Uncover column c and return
+            self.partial.remove(r.row)
         self._cover(c)
 
     def _choose_optimal_column_object(self, h):
@@ -73,15 +74,12 @@ class DLX(AlgorithmX):
 
         Covering is done from top to bottom and left to right manner.
         """
-        c.right.left = c.left
-        c.left.right = c.right
+        c.deattach()
         i = c
         while (i := i.down) != c:
             j = i
             while (j := j.right) != i:
-                j.down.up = j.up
-                j.up.down = j.down
-                j.column.size -= 1
+                j.deattach()
 
     def _uncover(self, c):
         """Uncover given column c.
@@ -93,8 +91,5 @@ class DLX(AlgorithmX):
         while (i := i.up) != c:
             j = i
             while (j := j.left) != i:
-                j.column.size += 1
-                j.up.down = j
-                j.down.up = j
-        c.left.right = c
-        c.right.left = c
+                j.attach()
+        c.attach()
