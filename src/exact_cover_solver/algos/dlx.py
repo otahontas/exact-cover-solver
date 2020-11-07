@@ -1,6 +1,7 @@
 """Dancing links implementation for algorithm X."""
 
-from .algos import AlgorithmX
+from exact_cover_solver.algos import AlgorithmX
+from copy import copy
 
 
 class DLX(AlgorithmX):
@@ -8,7 +9,7 @@ class DLX(AlgorithmX):
 
     def __init__(self):
         """Set up solution counter."""
-        self.solutions = 0
+        self.solutions = []
         self.partial = set()
 
     def solve(self, matrix):
@@ -18,15 +19,9 @@ class DLX(AlgorithmX):
     def _search(self, h):
         """Perform algorithm X recursively."""
         # If R[h] = h, solution has been found
-        print("")
-        print("=== NEW RECURSION STARTED === ")
         self._print(h)
-        print("current partial:", self.partial)
         if h.right == h:
-            print("solution found! It includes following rows: ", end=" ")
-            for row in self.partial:
-                print(row, end=" ")
-            print("")
+            self.solutions.append(copy(self.partial))
             return
 
         # Otherwise choose column c optimally
@@ -46,21 +41,16 @@ class DLX(AlgorithmX):
             self.partial.add(r.row)
             # Cover each column on this row
             j = r
-            print("Starting to cover")
             while (j := j.right) != r:
-                self._cover(j.header)
-            print("After covering")
-            self._print(h)
+                self._cover(j.column)
             # Launch new recursive search
             self._search(h)
             # Remove this row from partial solution
             self.partial.remove(r.row)
             # Uncover each column on this row
-            print("Starting to uncover")
             j = r
             while (j := j.left) != r:
-                self._uncover(j.header)
-            print("After uncovering")
+                self._uncover(j.column)
             self._print(h)
         # Uncover column c and return
         self._cover(c)
@@ -93,7 +83,7 @@ class DLX(AlgorithmX):
             while (j := j.right) != i:
                 j.down.up = j.up
                 j.up.down = j.down
-                j.header.size -= 1
+                j.column.size -= 1
 
     def _uncover(self, c):
         """Uncover given column c.
@@ -105,7 +95,7 @@ class DLX(AlgorithmX):
         while (i := i.up) != c:
             j = i
             while (j := j.left) != i:
-                j.header.size += 1
+                j.column.size += 1
                 j.up.down = j
                 j.down.up = j
         c.left.right = c
