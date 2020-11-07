@@ -22,7 +22,7 @@ class DataObject:
 class ColumnObject(DataObject):
     """Column object representing matrix columns."""
 
-    def __init__(self, _id):
+    def __init__(self, _id=None):
         """Set column size, link column object to itself."""
         super(ColumnObject, self).__init__(self)
         self.id = _id
