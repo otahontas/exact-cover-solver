@@ -4,11 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [scripts]
-start = "python3 src/exact_cover_solver/main.py"
+start = "python3 exact_cover_solver/main.py"
 format = "black ."
 lint = "./scripts/lint.sh"
-test = "pytest --cov=src src/tests"
-htmlcov = "pytest --cov=src src/tests --cov-report html"
+test = "pytest --cov=exact_cover_solver tests"
+htmlcov = "pytest --cov=exact_cover_solver tests --cov-report html"
 
 [dev-packages]
 pytest = "*"
