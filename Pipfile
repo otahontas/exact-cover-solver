@@ -16,6 +16,7 @@ black = "*"
 flake8 = "*"
 flake8-docstrings = "*"
 pytest-cov = "*"
+pdoc3 = "*"
 
 [packages]
 
