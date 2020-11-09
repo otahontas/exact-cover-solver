@@ -1,6 +1,6 @@
 """Dancing links implementation for algorithm X."""
 
-from .import AlgorithmX
+from exact_cover_solver.algos import AlgorithmX
 from copy import copy
 
 

@@ -1,7 +1,7 @@
 """Solver service, handles different solving modes."""
 
-from datastructures.dlxmatrix import DLXMatrix
-from algos.dlx import DLX
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.algos.dlx import DLX
 
 
 class Solver:

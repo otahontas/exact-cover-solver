@@ -1,6 +1,6 @@
 """Wrappers to represent dancing links data and column objects as matrix."""
 
-from .dlxdataobjects import DataObject, ColumnObject
+from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
 
 
 class DLXMatrix:
