@@ -1,11 +1,9 @@
 # Exact cover solver
 
------
-
 [![Tests](https://github.com/otahontas/exact_cover_solver/workflows/Tests/badge.svg)](https://github.com/otahontas/exact_cover_solver/actions?query=workflow%3ATests)
 [![Coverage](https://coveralls.io/repos/github/otahontas/exact_cover_solver/badge.svg?branch=master)](https://coveralls.io/github/otahontas/exact_cover_solver?branch=master)
+[![Code style](https://github.com/otahontas/exact_cover_solver/workflows/Code%20style/badge.svg)](https://github.com/otahontas/exact_cover_solver/actions?query=workflow%3A%22Code+style%22)
 
------
 
 Project for Helsinki University's Data structures and algorithms -project course. Repository docs are written in Finnish.
 
