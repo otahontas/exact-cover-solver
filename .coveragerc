@@ -1,3 +1,4 @@
 [run]
-source = src
-omit = src/tests/**,src/ui/**
+branch = True
+source = exact_cover_solver
+omit = exact_cover_solver/ui/**
