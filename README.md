@@ -66,4 +66,4 @@ Generoi ohjelman sisäinen dokumentaatio (vrt. Javadocit) komennolla:
 pipenv run htmldocs
 ```
 
-Tämän jälkeen html-muotoinen dokumentaatio löytyy polusta `htmldocs/index.html`. Github Pagesissa olevan, markdown-muotoisen dokumentaation, saat ajamalla `pipenv run docs`, minkä jälkeen tuorein dokumentaatio löytyy polusta `docs/exact_cover_solver`
+Tämän jälkeen html-muotoinen dokumentaatio löytyy polusta `htmldocs/exact_cover_solver/index.html`. Github Pagesissa olevan, markdown-muotoisen dokumentaation, saat ajamalla `pipenv run docs`, minkä jälkeen dokumentaatio löytyy polusta `docs/exact_cover_solver`.
