@@ -4,15 +4,16 @@
 [![Coverage](https://coveralls.io/repos/github/otahontas/exact_cover_solver/badge.svg?branch=master)](https://coveralls.io/github/otahontas/exact_cover_solver?branch=master)
 [![Code style](https://github.com/otahontas/exact_cover_solver/workflows/Code%20style/badge.svg)](https://github.com/otahontas/exact_cover_solver/actions?query=workflow%3A%22Code+style%22)
 
-
 Project for Helsinki University's Data structures and algorithms -project course. Repository docs are written in Finnish.
 
 ## Dokumentaatio
-- [Määrittelydokumentti](dokumentaatio/maarittely.md)
+- [Määrittelydokumentti](docs/maarittely.md)
+- [Testikattavuusraportti](https://coveralls.io/github/otahontas/exact_cover_solver?branch=master)
+- [Koodin dokumentaatio](https://otahontas.github.io/exact_cover_solver/)
 
 ## Viikkoraportit
-- [Viikko 1](dokumentaatio/raportit/viikko1.md)
-- [Viikko 2](dokumentaatio/raportit/viikko2.md)
+- [Viikko 1](docs/raportit/viikko1.md)
+- [Viikko 2](docs/raportit/viikko2.md)
 
 ## Käyttöohje
 
@@ -31,18 +32,18 @@ pipenv run start
 
 ### Testit
 
-Testit ajetaan komennolla:
+Aja testit komennolla:
 
 ```
 pipenv run test
 ```
 
-Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-muotoisen raportin saat ajamalla `pipenv run htmlcov`, minkä jälkeen Koodikattavuusraportti löytyy polusta `htmlcov/index.html`.
-
+Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-muotoisen raportin saat ajamalla `pipenv run htmlcov`, minkä jälkeen raportti löytyy polusta `htmlcov/index.html`.
 
 ### Koodityylit
 
-Ohjelman koodityylit voit tarkistaa ajamalla
+
+Tarkista koodityylit komennolla:
 
 ```
 pipenv run lint
@@ -56,3 +57,13 @@ Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html)
 - [pep257 -docstring ohjeiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta (vain lähdekoodille, testeille ei ajeta docstring-tarkastuksia)
 
 Blackin huomaamat virheet voi korjata automaattisesti ajamalla `pipenv run format`. Flaken huomaamat virheet täytyy sen sijaan korjata käsin.
+
+### API-dokumentaatio
+
+Generoi ohjelman sisäinen dokumentaatio (vrt. Javadocit) komennolla:
+
+```
+pipenv run htmldocs
+```
+
+Tämän jälkeen html-muotoinen dokumentaatio löytyy polusta `htmldocs/index.html`. Github Pagesissa olevan, markdown-muotoisen dokumentaation, saat ajamalla `pipenv run docs`, minkä jälkeen tuorein dokumentaatio löytyy polusta `docs/exact_cover_solver`

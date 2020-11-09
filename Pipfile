@@ -9,6 +9,8 @@ format = "black ."
 lint = "./scripts/lint.sh"
 test = "pytest --cov=exact_cover_solver tests"
 htmlcov = "pytest --cov=exact_cover_solver tests --cov-report html"
+docs = "pdoc --force --output-dir docs exact_cover_solver"
+htmldocs = "pdoc --html --force --output-dir htmldocs exact_cover_solver"
 
 [dev-packages]
 pytest = "*"
