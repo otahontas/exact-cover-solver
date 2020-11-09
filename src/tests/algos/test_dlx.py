@@ -22,6 +22,7 @@ def test_correct_single_solution_is_found():
     assert "B" and "D" and "F" in dlx.solutions[0]
     assert "A" and "C" and "E" not in dlx.solutions[0]
 
+
 def test_no_solution_is_found_with_unsolvable_collection():
     universe = [1, 2, 3, 4, 5, 6, 7]
     set_collection = [

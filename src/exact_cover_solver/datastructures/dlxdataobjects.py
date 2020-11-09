@@ -32,7 +32,7 @@ class ColumnObject(DataObject):
         self.size = 0
 
     def deattach(self):
-        """Deattach column object from header list, but don't erase it from memory"""
+        """Deattach column object from header list, but don't erase it from memory."""
         self.right.left = self.left
         self.left.right = self.right
 
