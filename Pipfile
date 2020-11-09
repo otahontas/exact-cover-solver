@@ -10,7 +10,6 @@ lint = "./scripts/lint.sh"
 test = "pytest --cov=exact_cover_solver tests"
 htmlcov = "pytest --cov=exact_cover_solver tests --cov-report html"
 docs = "./scripts/docs.sh"
-htmldocs = "pdoc --html --force --output-dir htmldocs exact_cover_solver"
 
 [dev-packages]
 pytest = "*"

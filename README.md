@@ -64,7 +64,7 @@ Blackin huomaamat virheet voi korjata automaattisesti ajamalla `pipenv run forma
 Generoi ohjelman sisäinen dokumentaatio (vrt. Javadocit) komennolla:
 
 ```
-pipenv run htmldocs
+pipenv run docs
 ```
 
-Tämän jälkeen html-muotoinen dokumentaatio löytyy polusta `htmldocs/exact_cover_solver/index.html`. Github Pagesissa olevan, markdown-muotoisen dokumentaation, saat ajamalla `pipenv run docs`, minkä jälkeen dokumentaatio löytyy polusta `docs/exact_cover_solver`.
+Tämän jälkeen [https://pdoc3.github.io/pdoc/](pdoc-kirjastolla) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
