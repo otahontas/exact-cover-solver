@@ -67,4 +67,4 @@ Generoi ohjelman sisäinen dokumentaatio (vrt. Javadocit) komennolla:
 pipenv run docs
 ```
 
-Tämän jälkeen [https://pdoc3.github.io/pdoc/](pdoc-kirjastolla) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
+Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
