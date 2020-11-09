@@ -8,7 +8,7 @@ start = "python3 src/exact_cover_solver/main.py"
 format = "black ."
 lint = "./scripts/lint.sh"
 test = "pytest --cov=src src/tests"
-covhtml = "pytest --cov=src src/tests --cov-report html"
+htmlcov = "pytest --cov=src src/tests --cov-report html"
 
 [dev-packages]
 pytest = "*"

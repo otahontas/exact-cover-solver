@@ -21,7 +21,7 @@ jobs:
         python -m pipenv install --dev
     - name: Run tests and report coverage
       run: |
-        python -m pipenv run cov
+        python -m pipenv run test
     - name: Push to coveralls.io
       uses: coverallsapp/github-action@master
       with:

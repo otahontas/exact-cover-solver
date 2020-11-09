@@ -32,13 +32,7 @@ Testit ajetaan komennolla:
 pipenv run test
 ```
 
-Sellaisenaan komento raportoi ainostaan testien onnistumisesta tai epäonnistumisesta. Koodikattavuusraportin sen sijaan saat esille ajamalle:
-
-```
-pipenv run cov
-```
-
-Koodikattavuusraportti löytyy html-muodossa polusta `htmlcov/index.html`.
+Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-muotoisen raportin saat ajamalla `pipenv run htmlcov`, minkä jälkeen Koodikattavuusraportti löytyy polusta `htmlcov/index.html`.
 
 
 ### Koodityylit
