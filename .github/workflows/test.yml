@@ -22,7 +22,9 @@ jobs:
     - name: Run tests and report coverage
       run: |
         python -m pipenv run test
-    - name: Push to coveralls.io
-      uses: coverallsapp/github-action@master
-      with:
+    - name: Push to coveralls.io with python-coveralls
+      run: |
+        python -m pipenv install coveralls
+        python -m pipenv run coveralls
+      env:
         github-token: ${{ secrets.GITHUB_TOKEN }}
