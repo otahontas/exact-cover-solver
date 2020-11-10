@@ -30,6 +30,7 @@ Tavoitteena on siis toteuttaa algoritmi, joka etsii kaikki mahdolliset peitteet.
 - https://en.wikipedia.org/wiki/Dancing_Links
 - https://en.wikipedia.org/wiki/Pentomino
 - http://www.tcs.hut.fi/Studies/T-79.5202/2006SPR/slideswww.pdf (suomenkielistä terminologiaa)
+- https://boyetblog.s3.amazonaws.com/PCPlus/294.pentominoes.pdf
 
 ## Muut tiedot
 - Opinto-ohjelma: tietojenkäsittelytieteen kandidaatti
