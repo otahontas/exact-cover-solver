@@ -59,6 +59,11 @@ def correct_up_down_flipped_pentominoes():
     ]
 
 
+@pytest.fixture
+def correct_orientation_amounts():
+    return [4, 4, 1, 4, 8, 2, 8, 8, 4, 4, 4, 8]
+
+
 def test_transpose_works_correctly(correct_transposed_pentominoes):
     pg = PentominoGenerator(6, 10)
     transposed = list(map(pg.transpose, pg.pentominoes))
@@ -75,3 +80,9 @@ def test_up_down_flip_works_correctly(correct_up_down_flipped_pentominoes):
     pg = PentominoGenerator(6, 10)
     transposed = list(map(pg.flip_up_down, pg.pentominoes))
     assert transposed == correct_up_down_flipped_pentominoes
+
+
+def test_correct_amount_of_orientations_is_generated(correct_orientation_amounts):
+    pg = PentominoGenerator(6, 10)
+    amounts = [len(x) for x in list(map(pg.generate_all_orientations, pg.pentominoes))]
+    assert amounts == correct_orientation_amounts
