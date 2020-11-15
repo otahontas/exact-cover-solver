@@ -86,3 +86,27 @@ def test_correct_amount_of_orientations_is_generated(correct_orientation_amounts
     pg = PentominoGenerator(6, 10)
     amounts = [len(x) for x in list(map(pg.generate_all_orientations, pg.pentominoes))]
     assert amounts == correct_orientation_amounts
+
+
+def test_correct_cells_are_covered():
+    pg = PentominoGenerator(6, 10)
+    pentomino = [[1, 1, 1], [1, 0, 0], [1, 0, 0]]
+
+    start = (0, 0)
+    covered = pg.solve_covered_cells(pentomino, start)
+    assert covered == [0, 1, 2, 10, 20]
+
+    pentomino = [[1, 1, 1, 1], [1, 0, 0, 0]]
+    start = (4, 6)
+    covered = pg.solve_covered_cells(pentomino, start)
+    assert covered == [46, 47, 48, 49, 56]
+
+
+def generator_generates_correct_amount_of_set_collections_for_6_10_board():
+    pg = PentominoGenerator(6, 10)
+    pg.generate()
+    
+    for i in range(72):
+        print(pg.set_collection[i])
+    assert len(list(filter(lambda x: (0 in x[1]), pg.set_collection))) == 72
+    assert len(pg.set_collection) == 1168

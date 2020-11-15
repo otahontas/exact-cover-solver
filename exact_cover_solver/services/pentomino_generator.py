@@ -32,7 +32,30 @@ class PentominoGenerator:
 
     def generate(self):
         """Generate universe and set collection for algo x."""
-        pass
+        self.set_collection.clear()
+        set_number = 0
+        for pentomino_index, pentomino in enumerate(self.pentominoes):
+            for orientation in self.generate_all_orientations(pentomino):
+                pentomino_height = len(orientation)
+                pentomino_width = len(orientation[0])
+                for r in range(self.height + 1 - pentomino_height):
+                    for c in range(self.width + 1 - pentomino_width):
+                        covered = [pentomino_index,
+                                   *[(BASE + x) for x in self.solve_covered_cells(orientation, (r, c))]]
+                        self.set_collection.append((set_number, covered))
+                        set_number += 1
+        return self.universe, self.set_collection,
+
+    def solve_covered_cells(self, pentomino, start):
+        y, x = start
+        covered = []
+        pentomino_height = len(pentomino)
+        pentomino_width = len(pentomino[0])
+        for r in range(pentomino_height):
+            for c in range(pentomino_width):
+                if pentomino[r][c] == 1:
+                    covered.append((y + r) * self.width + x + c)
+        return covered
 
     def generate_all_orientations(self, pentomino):
         """Generate different orientations for this pentomino."""
@@ -60,7 +83,7 @@ class PentominoGenerator:
 
     @staticmethod
     def transpose(pentomino):
-        """Return pentomino with rows and columsns transposed."""
+        """Return pentomino with rows and columns transposed."""
         return [list(x) for x in zip(*pentomino)]
 
     @staticmethod
