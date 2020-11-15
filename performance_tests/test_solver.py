@@ -6,6 +6,7 @@ from exact_cover_solver.algos.dlx import DLX
 
 
 def test_pentomino_board_gets_correct_amount_of_solutions():
+    """Test that 6x10 board gets correct amount of solutions."""
     pg = PentominoGenerator(6, 10)
     universe, set_collection = pg.generate()
     matrix = DLXMatrix(universe, set_collection)

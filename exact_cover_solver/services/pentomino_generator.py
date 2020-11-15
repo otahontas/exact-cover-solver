@@ -55,6 +55,7 @@ class PentominoGenerator:
         )
 
     def solve_covered_cells(self, pentomino, start):
+        """Find which cells this pentomino will cover."""
         y, x = start
         covered = []
         pentomino_height = len(pentomino)

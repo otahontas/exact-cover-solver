@@ -13,7 +13,7 @@ class DLX(AlgorithmX):
         self.partial = set()
 
     def solve(self, matrix):
-        """Solve exact cover problem"""
+        """Solve exact cover problem."""
         self._search(matrix)
 
     def _search(self, h):
