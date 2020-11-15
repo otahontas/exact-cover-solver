@@ -12,4 +12,4 @@ class AlgorithmX(ABC):
 
     @abstractmethod
     def solve(self, *args, **kwargs):
-        """Concrete solving method that should be implemented by subclasses."""
+        """Abstract solving method that should be implemented by subclasses."""
