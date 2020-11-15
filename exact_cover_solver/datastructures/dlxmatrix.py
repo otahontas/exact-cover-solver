@@ -35,10 +35,11 @@ class DLXMatrix:
         """
 
         def find_column(_id):
-            column = self
-            while column.id != _id:
-                column = column.right
-            return column
+            """Find column with given id."""
+            correct_column = self
+            while correct_column.id != _id:
+                correct_column = correct_column.right
+            return correct_column
 
         for set_name, set_elements in set_collection:
             previous = None

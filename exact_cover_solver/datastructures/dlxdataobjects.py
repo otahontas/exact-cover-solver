@@ -10,8 +10,8 @@ class DataObject:
         self.row = row
         self.up = self.down = self.left = self.right = self
 
-    def deattach(self):
-        """Deattach data object from linked list, but don't erase it from memory."""
+    def detach(self):
+        """Detach data object from linked list, but don't erase it from memory."""
         self.down.up = self.up
         self.up.down = self.down
         self.column.size -= 1
@@ -31,8 +31,8 @@ class ColumnObject(DataObject):
         self.id = _id
         self.size = 0
 
-    def deattach(self):
-        """Deattach column object from header list, but don't erase it from memory."""
+    def detach(self):
+        """Detach column object from header list, but don't erase it from memory."""
         self.right.left = self.left
         self.left.right = self.right
 

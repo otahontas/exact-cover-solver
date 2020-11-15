@@ -76,12 +76,12 @@ class DLX(AlgorithmX):
 
         Covering is done from top to bottom and left to right manner.
         """
-        c.deattach()
+        c.detach()
         i = c
         while (i := i.down) != c:
             j = i
             while (j := j.right) != i:
-                j.deattach()
+                j.detach()
 
     @staticmethod
     def _uncover(c):
