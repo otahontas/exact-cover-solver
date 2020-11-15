@@ -7,7 +7,8 @@ from exact_cover_solver.algos.dlx import DLX
 class Solver:
     """Service for solving an exact cover problem from given input."""
 
-    def solve(self, universe, set_collection):
+    @staticmethod
+    def solve(universe, set_collection):
         """Solves exact cover problem.
 
         Input should be universe of elements (such as numbers from 1 to seven)
