@@ -103,7 +103,6 @@ def test_correct_cells_are_covered():
 
 
 def test_generator_generates_correct_amount_of_set_collections_for_6_10_board():
-    # TODO: Actually nums should be 72 and 1168, generator currently uses placements that aren't useful
     pg = PentominoGenerator(6, 10)
     pg.generate()
 
