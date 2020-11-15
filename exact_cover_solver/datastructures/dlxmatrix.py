@@ -47,15 +47,11 @@ class DLXMatrix:
             for element in set_elements:
                 column = find_column(element)
                 cell = DataObject(column, row=set_name)
-                if not column.up and not column.down:
-                    column.up = column.down = cell
-                    cell.up = cell.down = column
-                else:
-                    prev_up = column.up
-                    prev_up.down = cell
-                    cell.up = prev_up
-                    cell.down = column
-                    column.up = cell
+                prev_up = column.up
+                prev_up.down = cell
+                cell.up = prev_up
+                cell.down = column
+                column.up = cell
                 if previous:
                     previous.right = cell
                     cell.left = previous
@@ -75,5 +71,5 @@ class DLXMatrix:
             data_str = ""
             while (data := data.down) != column:
                 data_str = f"{data_str} {data.row}"
-            s = f"{s}Column {column.id} has {column.size} objects: {data_str}\n"
+            s = f"{s}Column {column.id} has {column.size} objects:{data_str}\n"
         return s

@@ -58,3 +58,13 @@ def test_each_column_in_matrix_has_correct_size():
 def test_matrix_is_not_created_when_giving_empty_args():
     with pytest.raises(ValueError):
         DLXMatrix([], [])
+
+
+def test_matrix_has_correct_string_representation():
+    universe = [1, 2]
+    set_collection = [
+        ("A", [1]),
+        ("B", [1]),
+    ]
+    matrix = DLXMatrix(universe, set_collection)
+    assert str(matrix) == "Column 1 has 2 objects: A B\nColumn 2 has 0 objects:\n"
