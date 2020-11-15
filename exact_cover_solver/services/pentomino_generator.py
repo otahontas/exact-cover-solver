@@ -40,11 +40,19 @@ class PentominoGenerator:
                 pentomino_width = len(orientation[0])
                 for r in range(self.height + 1 - pentomino_height):
                     for c in range(self.width + 1 - pentomino_width):
-                        covered = [pentomino_index,
-                                   *[(BASE + x) for x in self.solve_covered_cells(orientation, (r, c))]]
+                        covered = [
+                            pentomino_index,
+                            *[
+                                (BASE + x)
+                                for x in self.solve_covered_cells(orientation, (r, c))
+                            ],
+                        ]
                         self.set_collection.append((set_number, covered))
                         set_number += 1
-        return self.universe, self.set_collection,
+        return (
+            self.universe,
+            self.set_collection,
+        )
 
     def solve_covered_cells(self, pentomino, start):
         y, x = start
@@ -64,8 +72,8 @@ class PentominoGenerator:
         for transposed in (pentomino, self.transpose(pentomino)):
             for left_right_flipped in (transposed, self.flip_left_right(transposed)):
                 for up_down_flipped in (
-                        left_right_flipped,
-                        self.flip_up_down(left_right_flipped),
+                    left_right_flipped,
+                    self.flip_up_down(left_right_flipped),
                 ):
                     orientation_as_string = str(up_down_flipped)
                     if orientation_as_string not in seen:

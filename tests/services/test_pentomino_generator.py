@@ -105,7 +105,7 @@ def test_correct_cells_are_covered():
 def generator_generates_correct_amount_of_set_collections_for_6_10_board():
     pg = PentominoGenerator(6, 10)
     pg.generate()
-    
+
     for i in range(72):
         print(pg.set_collection[i])
     assert len(list(filter(lambda x: (0 in x[1]), pg.set_collection))) == 72

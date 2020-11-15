@@ -38,6 +38,7 @@ def test_no_solution_is_found_with_unsolvable_collection():
 
     assert not dlx.solutions
 
+
 def test_iterative_version():
     universe = [1, 2, 3, 4, 5, 6, 7]
     set_collection = [
