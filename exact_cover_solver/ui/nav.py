@@ -8,15 +8,13 @@ class Nav(View):
         self, root: Tk, change_current_problem: Callable, change_current_algo: Callable
     ) -> None:
         """initialize nav object."""
-        super().__init__()
-        self.__root = root
+        super().__init__(root)
         self.__change_current_problem = change_current_problem
         self.__change_current_algo = change_current_algo
-        self._initialize()
 
     def _initialize(self) -> None:
         """Initialize navigation buttons and their functionalities."""
-        self._frame = ttk.Frame(master=self.__root)
+        self._frame = ttk.Frame(master=self._root)
         problem_label = ttk.Label(master=self._frame, text="Select problem to solve")
         pentomino_button = ttk.Button(
             master=self._frame, text="Pentomino", command=self._set_problem_to_pentomino

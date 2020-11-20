@@ -13,9 +13,11 @@ def test_pentomino_board_gets_correct_amount_of_solutions():
     matrix = DLXMatrix(universe, set_collection)
     dlx = DLX()
     start_time = time.time()
-    dlx.solve(matrix)
-    time_processing = time.time() - start_time
-    print(f"Found {len(dlx.solutions)} solutions in {time_processing} seconds")
+    print(next(dlx.solve(matrix)))
+    print(next(dlx.solve(matrix)))
+    # solutions = [solution for solution in dlx.solve(matrix)]
+    # time_processing = time.time() - start_time
+    # print(f"Found {len(solutions)} solutions in {time_processing} seconds")
 
 
 test_pentomino_board_gets_correct_amount_of_solutions()
