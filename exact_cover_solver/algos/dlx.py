@@ -42,28 +42,28 @@ class DLX(AlgorithmX):
             self.__solutions.append(partial[:])
             return
 
-        c = self._choose_optimal_column_object(matrix)
+        column = self._choose_optimal_column_object(matrix)
 
-        if not c.size:
+        if not column.size:
             return
 
-        self._cover(c)
+        self._cover(column)
 
-        r = c.down
-        while r != c:
-            partial.append(r.row)
-            j = r.right
-            while j != r:
-                self._cover(j.column)
-                j = j.right
+        row = column.down
+        while row != column:
+            partial.append(row.row)
+            node = row.right
+            while node != row:
+                self._cover(node.column)
+                node = node.right
             self._search(matrix, partial)
-            j = r.left
-            while j != r:
-                self._uncover(j.column)
-                j = j.left
+            node = row.left
+            while node != row:
+                self._uncover(node.column)
+                node = node.left
             partial.pop()
-            r = r.down
-        self._uncover(c)
+            row = row.down
+        self._uncover(column)
 
     @staticmethod
     def _choose_optimal_column_object(matrix: DLXMatrix) -> ColumnObject:
@@ -71,44 +71,44 @@ class DLX(AlgorithmX):
 
         This is done to minimize the branching factor.
         """
-        j = matrix.right
-        c = j
-        s = j.size
-        while j != matrix:
-            c, s = (j, j.size) if j.size < s else (c, s)
-            j = j.right
-        return c
+        current_column = matrix.right
+        column = current_column
+        size = current_column.size
+        while current_column != matrix:
+            column, size = (current_column, current_column.size) if current_column.size < size else (column, size)
+            current_column = current_column.right
+        return column
 
     @staticmethod
-    def _cover(c: ColumnObject) -> None:
-        """Cover given column c.
+    def _cover(column: ColumnObject) -> None:
+        """Cover given column.
 
-        First remove c from the header list and then remove all rows in c's own list
-        from other column lists they're in.
+        First remove column from the header list and then remove all rows in column from other column lists 
+        rows are in.
 
         Covering is done from top to bottom and left to right manner.
         """
-        c.detach()
-        i = c.down
-        while i != c:
-            j = i.right
-            while j != i:
-                j.detach()
-                j = j.right
-            i = i.down
+        column.detach()
+        row = column.down
+        while row != column:
+            node = row.right
+            while node != row:
+                node.detach()
+                node = node.right
+            row = row.down
 
     @staticmethod
-    def _uncover(c: ColumnObject) -> None:
-        """Uncover given column c.
+    def _uncover(column: ColumnObject) -> None:
+        """Uncover given column.
 
         Uncovering is done from bottom to top and right to left manner in order to undo
         covering steps.
         """
-        i = c.up
-        while i != c:
-            j = i.left
-            while j != i:
-                j.attach()
-                j = j.left
-            i = i.up
-        c.attach()
+        row = column.up
+        while row != column:
+            node = row.left
+            while node != row:
+                node.attach()
+                node = node.left
+            row = row.up
+        column.attach()
