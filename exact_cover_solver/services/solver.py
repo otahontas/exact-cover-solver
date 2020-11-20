@@ -10,11 +10,15 @@ class Solver:
     """Class for solving an exact cover problem from given input."""
 
     def __init__(self):
+        """Initialize algorithm."""
         self.__algorithm: Optional[AlgorithmX] = None
 
     @property
     def algorithm(self) -> AlgorithmX:
-        """Maintain a reference to one of the algoX objects. Concrete class is set during runtime."""
+        """Maintain a reference to one of the algoX objects.
+
+        Concrete class is set during runtime.
+        """
         return self.__algorithm
 
     @algorithm.setter

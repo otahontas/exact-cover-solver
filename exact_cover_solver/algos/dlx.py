@@ -75,7 +75,11 @@ class DLX(AlgorithmX):
         column = current_column
         size = current_column.size
         while current_column != matrix:
-            column, size = (current_column, current_column.size) if current_column.size < size else (column, size)
+            column, size = (
+                (current_column, current_column.size)
+                if current_column.size < size
+                else (column, size)
+            )
             current_column = current_column.right
         return column
 
@@ -83,8 +87,8 @@ class DLX(AlgorithmX):
     def _cover(column: ColumnObject) -> None:
         """Cover given column.
 
-        First remove column from the header list and then remove all rows in column from other column lists 
-        rows are in.
+        First remove column from the header list and then remove all rows
+        in column from other column lists rows are in.
 
         Covering is done from top to bottom and left to right manner.
         """
