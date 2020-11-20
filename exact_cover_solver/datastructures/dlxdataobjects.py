@@ -5,7 +5,7 @@ class DataObject:
     """Data object representing 1s in matrix."""
 
     def __init__(self, column: "ColumnObject", row: str) -> None:
-        """Link data object to column object, optionally set row name."""
+        """Link data object to column object, set row identifier."""
         self.column = column
         self.row = row
         self.up = self.down = self.left = self.right = self
@@ -25,8 +25,11 @@ class DataObject:
 class ColumnObject(DataObject):
     """Column object representing matrix columns."""
 
-    def __init__(self, _id: str) -> None:
-        """Set column size, link column object to itself."""
+    def __init__(self, _id: int) -> None:
+        """Set column size, link column object to itself.
+
+        Also set column id to represent element in search universe.
+        """
         super(ColumnObject, self).__init__(self, "column")
         self.id = _id
         self.size = 0

@@ -1,21 +1,34 @@
 """Wrappers to represent dancing links data and column objects as matrix."""
 
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
+from exact_cover_solver.types import Universe, SetCollection
+
+from typing import Optional
 
 
 class DLXMatrix:
     """Matrix representation and initialization methods for circular linked lists."""
 
-    def __init__(self, universe, set_collection):
-        """Create column and data objects and link them to this matrix object."""
+    def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
+        """Create column and data objects and link them to this matrix object.
+
+        Universe is expected to contain integers identifying
+        some collection of elements.
+        Set collection is collection of sets where sets are created
+        from elements of this universe.
+        """
         if not universe or not set_collection:
-            raise ValueError("Not possible to create matrix without universe or sets.")
+            raise ValueError(
+                "Not possible to create matrix without universe or set collection."
+            )
 
         self.id = "root"
-        self.create_columns(universe)
-        self.create_nodes(set_collection)
+        self.right: Optional[ColumnObject] = None
+        self.left: Optional[ColumnObject] = None
+        self._create_columns(universe)
+        self._create_nodes(set_collection)
 
-    def create_columns(self, universe):
+    def _create_columns(self, universe: Universe) -> None:
         """Create column columns and attach them to root."""
         previous = self
         for element in universe:
@@ -26,7 +39,7 @@ class DLXMatrix:
         self.left = previous
         previous.right = self
 
-    def create_nodes(self, set_collection):
+    def _create_nodes(self, set_collection: SetCollection) -> None:
         """Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is
@@ -34,7 +47,7 @@ class DLXMatrix:
         also linked together to form a circular row.
         """
 
-        def find_column(_id):
+        def find_column(_id) -> ColumnObject:
             """Find column with given id."""
             correct_column = self
             while correct_column.id != _id:
@@ -62,7 +75,7 @@ class DLXMatrix:
             previous.right = first
             first.left = previous
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return printable representation of matrix."""
         s = ""
         column = self.right

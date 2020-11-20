@@ -1,7 +1,8 @@
 """Solver service, handles different solving modes."""
 
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.algos import AlgorithmX, Solution
+from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.types import Solution
 
 from typing import Optional, List
 

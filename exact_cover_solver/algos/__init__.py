@@ -1,9 +1,6 @@
 """Package for algorithms, defines interface for algorithm X implementations."""
 
 from abc import ABC, abstractmethod
-from typing import List
-
-Solution = List[str]
 
 
 class AlgorithmX(ABC):
