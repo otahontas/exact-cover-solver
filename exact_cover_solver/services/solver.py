@@ -1,19 +1,27 @@
 """Solver service, handles different solving modes."""
 
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.algos import AlgorithmX, Solution
+
+from typing import Optional, List
 
 
 class Solver:
-    """Service for solving an exact cover problem from given input."""
+    """Class for solving an exact cover problem from given input."""
 
-    @staticmethod
-    def solve(universe, set_collection):
-        """Solves exact cover problem.
+    def __init__(self):
+        self.__algorithm: Optional[AlgorithmX] = None
 
-        Input should be universe of elements (such as numbers from 1 to seven)
-        and collection of sets consisting elements from universe.
-        """
-        matrix = DLXMatrix(universe, set_collection)
-        dlx = DLX()
-        dlx.solve(matrix)
+    @property
+    def algorithm(self) -> AlgorithmX:
+        """Maintain a reference to one of the algoX objects. Concrete class is set during runtime."""
+        return self.__algorithm
+
+    @algorithm.setter
+    def algorithm(self, algorithm: AlgorithmX) -> None:
+        """Replace algorithm object at runtime."""
+        self.__algorithm = algorithm
+
+    def solve(self, data: DLXMatrix) -> List[Solution]:
+        """Solves exact cover problem, input should correspond to current algo used."""
+        return self.__algorithm.solve(data)
