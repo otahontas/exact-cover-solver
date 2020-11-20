@@ -42,16 +42,20 @@ class DLX(AlgorithmX):
 
         self._cover(c)
 
-        r = c
-        while (r := r.down) != c:
+        r = c.down
+        while r != c:
             self.partial.add(r.row)
-            j = r
-            while (j := j.right) != r:
+            j = r.right
+            while j != r:
                 self._cover(j.column)
+                j = j.right
             self._search(h)
-            while (j := j.left) != r:
+            j = r.left
+            while j != r:
                 self._uncover(j.column)
+                j = j.left
             self.partial.remove(r.row)
+            r = r.down
         self._uncover(c)
 
     @staticmethod
@@ -63,8 +67,9 @@ class DLX(AlgorithmX):
         j = h.right
         c = j
         s = j.size
-        while (j := j.right) != h:
+        while j != h:
             c, s = (j, j.size) if j.size < s else (c, s)
+            j = j.right
         return c
 
     @staticmethod
@@ -77,11 +82,13 @@ class DLX(AlgorithmX):
         Covering is done from top to bottom and left to right manner.
         """
         c.detach()
-        i = c
-        while (i := i.down) != c:
-            j = i
-            while (j := j.right) != i:
+        i = c.down
+        while i != c:
+            j = i.right
+            while j != i:
                 j.detach()
+                j = j.right
+            i = i.down
 
     @staticmethod
     def _uncover(c):
@@ -90,9 +97,11 @@ class DLX(AlgorithmX):
         Uncovering is done from bottom to top and right to left manner in order to undo
         covering steps.
         """
-        i = c
-        while (i := i.up) != c:
-            j = i
-            while (j := j.left) != i:
+        i = c.up
+        while i != c:
+            j = i.left
+            while j != i:
                 j.attach()
+                j = j.left
+            i = i.up
         c.attach()
