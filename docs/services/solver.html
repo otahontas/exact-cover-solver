@@ -36,7 +36,8 @@ from exact_cover_solver.algos.dlx import DLX
 class Solver:
     &#34;&#34;&#34;Service for solving an exact cover problem from given input.&#34;&#34;&#34;
 
-    def solve(self, universe, set_collection):
+    @staticmethod
+    def solve(universe, set_collection):
         &#34;&#34;&#34;Solves exact cover problem.
 
         Input should be universe of elements (such as numbers from 1 to seven)
@@ -68,7 +69,8 @@ class Solver:
 <pre><code class="python">class Solver:
     &#34;&#34;&#34;Service for solving an exact cover problem from given input.&#34;&#34;&#34;
 
-    def solve(self, universe, set_collection):
+    @staticmethod
+    def solve(universe, set_collection):
         &#34;&#34;&#34;Solves exact cover problem.
 
         Input should be universe of elements (such as numbers from 1 to seven)
@@ -78,10 +80,10 @@ class Solver:
         dlx = DLX()
         dlx.solve(matrix)</code></pre>
 </details>
-<h3>Methods</h3>
+<h3>Static methods</h3>
 <dl>
 <dt id="exact_cover_solver.services.solver.Solver.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, universe, set_collection)</span>
+<span>def <span class="ident">solve</span></span>(<span>universe, set_collection)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Solves exact cover problem.</p>
@@ -91,7 +93,8 @@ and collection of sets consisting elements from universe.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def solve(self, universe, set_collection):
+<pre><code class="python">@staticmethod
+def solve(universe, set_collection):
     &#34;&#34;&#34;Solves exact cover problem.
 
     Input should be universe of elements (such as numbers from 1 to seven)

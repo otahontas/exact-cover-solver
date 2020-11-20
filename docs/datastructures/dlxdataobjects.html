@@ -39,8 +39,8 @@ class DataObject:
         self.row = row
         self.up = self.down = self.left = self.right = self
 
-    def deattach(self):
-        &#34;&#34;&#34;Deattach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+    def detach(self):
+        &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.down.up = self.up
         self.up.down = self.down
         self.column.size -= 1
@@ -60,8 +60,8 @@ class ColumnObject(DataObject):
         self.id = _id
         self.size = 0
 
-    def deattach(self):
-        &#34;&#34;&#34;Deattach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+    def detach(self):
+        &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.right.left = self.left
         self.left.right = self.right
 
@@ -98,8 +98,8 @@ class ColumnObject(DataObject):
         self.id = _id
         self.size = 0
 
-    def deattach(self):
-        &#34;&#34;&#34;Deattach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+    def detach(self):
+        &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.right.left = self.left
         self.left.right = self.right
 
@@ -127,17 +127,17 @@ class ColumnObject(DataObject):
     self.left.right = self.right.left = self</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.deattach"><code class="name flex">
-<span>def <span class="ident">deattach</span></span>(<span>self)</span>
+<dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach"><code class="name flex">
+<span>def <span class="ident">detach</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Deattach column object from header list, but don't erase it from memory.</p></div>
+<div class="desc"><p>Detach column object from header list, but don't erase it from memory.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def deattach(self):
-    &#34;&#34;&#34;Deattach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+<pre><code class="python">def detach(self):
+    &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
     self.right.left = self.left
     self.left.right = self.right</code></pre>
 </details>
@@ -164,8 +164,8 @@ class ColumnObject(DataObject):
         self.row = row
         self.up = self.down = self.left = self.right = self
 
-    def deattach(self):
-        &#34;&#34;&#34;Deattach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+    def detach(self):
+        &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.down.up = self.up
         self.up.down = self.down
         self.column.size -= 1
@@ -196,17 +196,17 @@ class ColumnObject(DataObject):
     self.up.down = self.down.up = self</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.datastructures.dlxdataobjects.DataObject.deattach"><code class="name flex">
-<span>def <span class="ident">deattach</span></span>(<span>self)</span>
+<dt id="exact_cover_solver.datastructures.dlxdataobjects.DataObject.detach"><code class="name flex">
+<span>def <span class="ident">detach</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Deattach data object from linked list, but don't erase it from memory.</p></div>
+<div class="desc"><p>Detach data object from linked list, but don't erase it from memory.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def deattach(self):
-    &#34;&#34;&#34;Deattach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+<pre><code class="python">def detach(self):
+    &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
     self.down.up = self.up
     self.up.down = self.down
     self.column.size -= 1</code></pre>
@@ -234,14 +234,14 @@ class ColumnObject(DataObject):
 <h4><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a></code></h4>
 <ul class="">
 <li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.attach" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.attach">attach</a></code></li>
-<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.deattach" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.deattach">deattach</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach">detach</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="exact_cover_solver.datastructures.dlxdataobjects.DataObject" href="#exact_cover_solver.datastructures.dlxdataobjects.DataObject">DataObject</a></code></h4>
 <ul class="">
 <li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.DataObject.attach" href="#exact_cover_solver.datastructures.dlxdataobjects.DataObject.attach">attach</a></code></li>
-<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.DataObject.deattach" href="#exact_cover_solver.datastructures.dlxdataobjects.DataObject.deattach">deattach</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.DataObject.detach" href="#exact_cover_solver.datastructures.dlxdataobjects.DataObject.detach">detach</a></code></li>
 </ul>
 </li>
 </ul>

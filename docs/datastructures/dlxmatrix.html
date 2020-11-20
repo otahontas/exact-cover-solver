@@ -64,10 +64,11 @@ class DLXMatrix:
         &#34;&#34;&#34;
 
         def find_column(_id):
-            column = self
-            while column.id != _id:
-                column = column.right
-            return column
+            &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
+            correct_column = self
+            while correct_column.id != _id:
+                correct_column = correct_column.right
+            return correct_column
 
         for set_name, set_elements in set_collection:
             previous = None
@@ -75,15 +76,11 @@ class DLXMatrix:
             for element in set_elements:
                 column = find_column(element)
                 cell = DataObject(column, row=set_name)
-                if not column.up and not column.down:
-                    column.up = column.down = cell
-                    cell.up = cell.down = column
-                else:
-                    prev_up = column.up
-                    prev_up.down = cell
-                    cell.up = prev_up
-                    cell.down = column
-                    column.up = cell
+                prev_up = column.up
+                prev_up.down = cell
+                cell.up = prev_up
+                cell.down = column
+                column.up = cell
                 if previous:
                     previous.right = cell
                     cell.left = previous
@@ -97,13 +94,15 @@ class DLXMatrix:
     def __repr__(self):
         &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
         s = &#34;&#34;
-        column = self
-        while (column := column.right) != self:
-            data = column
+        column = self.right
+        while column != self:
+            data = column.down
             data_str = &#34;&#34;
-            while (data := data.down) != column:
+            while data != column:
                 data_str = f&#34;{data_str} {data.row}&#34;
-            s = f&#34;{s}Column {column.id} has {column.size} objects: {data_str}\n&#34;
+                data = data.down
+            s = f&#34;{s}Column {column.id} has {column.size} objects:{data_str}\n&#34;
+            column = column.right
         return s</code></pre>
 </details>
 </section>
@@ -159,10 +158,11 @@ class DLXMatrix:
         &#34;&#34;&#34;
 
         def find_column(_id):
-            column = self
-            while column.id != _id:
-                column = column.right
-            return column
+            &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
+            correct_column = self
+            while correct_column.id != _id:
+                correct_column = correct_column.right
+            return correct_column
 
         for set_name, set_elements in set_collection:
             previous = None
@@ -170,15 +170,11 @@ class DLXMatrix:
             for element in set_elements:
                 column = find_column(element)
                 cell = DataObject(column, row=set_name)
-                if not column.up and not column.down:
-                    column.up = column.down = cell
-                    cell.up = cell.down = column
-                else:
-                    prev_up = column.up
-                    prev_up.down = cell
-                    cell.up = prev_up
-                    cell.down = column
-                    column.up = cell
+                prev_up = column.up
+                prev_up.down = cell
+                cell.up = prev_up
+                cell.down = column
+                column.up = cell
                 if previous:
                     previous.right = cell
                     cell.left = previous
@@ -192,13 +188,15 @@ class DLXMatrix:
     def __repr__(self):
         &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
         s = &#34;&#34;
-        column = self
-        while (column := column.right) != self:
-            data = column
+        column = self.right
+        while column != self:
+            data = column.down
             data_str = &#34;&#34;
-            while (data := data.down) != column:
+            while data != column:
                 data_str = f&#34;{data_str} {data.row}&#34;
-            s = f&#34;{s}Column {column.id} has {column.size} objects: {data_str}\n&#34;
+                data = data.down
+            s = f&#34;{s}Column {column.id} has {column.size} objects:{data_str}\n&#34;
+            column = column.right
         return s</code></pre>
 </details>
 <h3>Methods</h3>
@@ -245,10 +243,11 @@ also linked together to form a circular row.</p></div>
     &#34;&#34;&#34;
 
     def find_column(_id):
-        column = self
-        while column.id != _id:
-            column = column.right
-        return column
+        &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
+        correct_column = self
+        while correct_column.id != _id:
+            correct_column = correct_column.right
+        return correct_column
 
     for set_name, set_elements in set_collection:
         previous = None
@@ -256,15 +255,11 @@ also linked together to form a circular row.</p></div>
         for element in set_elements:
             column = find_column(element)
             cell = DataObject(column, row=set_name)
-            if not column.up and not column.down:
-                column.up = column.down = cell
-                cell.up = cell.down = column
-            else:
-                prev_up = column.up
-                prev_up.down = cell
-                cell.up = prev_up
-                cell.down = column
-                column.up = cell
+            prev_up = column.up
+            prev_up.down = cell
+            cell.up = prev_up
+            cell.down = column
+            column.up = cell
             if previous:
                 previous.right = cell
                 cell.left = previous
