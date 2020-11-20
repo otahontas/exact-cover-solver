@@ -15,6 +15,7 @@ Project for Helsinki University's Data structures and algorithms -project course
 ## Viikkoraportit
 - [Viikko 1](docs/raportit/viikko1.md)
 - [Viikko 2](docs/raportit/viikko2.md)
+- [Viikko 3](docs/raportit/viikko3.md)
 
 ## Käyttöohje
 
