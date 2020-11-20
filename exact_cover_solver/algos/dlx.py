@@ -1,22 +1,26 @@
 """Dancing links implementation for algorithm X."""
 
-from exact_cover_solver.algos import AlgorithmX
-from copy import copy
+from exact_cover_solver.algos import AlgorithmX, Solution
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
+
+from typing import List
 
 
 class DLX(AlgorithmX):
     """Dancing links implementation for algorithm X."""
 
-    def __init__(self):
-        """Set up solution counter."""
-        self.solutions = []
-        self.partial = set()
+    def __init__(self) -> None:
+        """Initialize solution list."""
+        self.__solutions: List[Solution] = []
 
-    def solve(self, matrix):
-        """Solve exact cover problem."""
+    def solve(self, matrix: DLXMatrix) -> List[Solution]:
+        """Solve exact cover problem for given matrix."""
+        self.__solutions.clear()
         self._search(matrix)
+        return self.__solutions
 
-    def _search(self, h):
+    def _search(self, matrix: DLXMatrix, partial: Solution = None) -> None:
         """Perform algorithm X recursively.
 
         Algorithm:
@@ -31,11 +35,14 @@ class DLX(AlgorithmX):
             - Remove row from partial solution
         - Uncover column c
         """
-        if h.right == h:
-            self.solutions.append(copy(self.partial))
+        if not partial:
+            partial: Solution = []
+
+        if matrix.right == matrix:
+            self.__solutions.append(partial[:])
             return
 
-        c = self._choose_optimal_column_object(h)
+        c = self._choose_optimal_column_object(matrix)
 
         if not c.size:
             return
@@ -44,36 +51,36 @@ class DLX(AlgorithmX):
 
         r = c.down
         while r != c:
-            self.partial.add(r.row)
+            partial.append(r.row)
             j = r.right
             while j != r:
                 self._cover(j.column)
                 j = j.right
-            self._search(h)
+            self._search(matrix, partial)
             j = r.left
             while j != r:
                 self._uncover(j.column)
                 j = j.left
-            self.partial.remove(r.row)
+            partial.pop()
             r = r.down
         self._uncover(c)
 
     @staticmethod
-    def _choose_optimal_column_object(h):
+    def _choose_optimal_column_object(matrix: DLXMatrix) -> ColumnObject:
         """Find column with smallest number of 1s.
 
         This is done to minimize the branching factor.
         """
-        j = h.right
+        j = matrix.right
         c = j
         s = j.size
-        while j != h:
+        while j != matrix:
             c, s = (j, j.size) if j.size < s else (c, s)
             j = j.right
         return c
 
     @staticmethod
-    def _cover(c):
+    def _cover(c: ColumnObject) -> None:
         """Cover given column c.
 
         First remove c from the header list and then remove all rows in c's own list
@@ -91,7 +98,7 @@ class DLX(AlgorithmX):
             i = i.down
 
     @staticmethod
-    def _uncover(c):
+    def _uncover(c: ColumnObject) -> None:
         """Uncover given column c.
 
         Uncovering is done from bottom to top and right to left manner in order to undo

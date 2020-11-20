@@ -15,12 +15,11 @@ def test_correct_single_solution_is_found():
     ]
     matrix = DLXMatrix(universe, set_collection)
     dlx = DLX()
-    dlx.solve(matrix)
+    solutions = dlx.solve(matrix)
 
-    assert len(dlx.solutions) == 1
-
-    assert "B" and "D" and "F" in dlx.solutions[0]
-    assert "A" and "C" and "E" not in dlx.solutions[0]
+    assert len(solutions) == 1
+    assert "B" and "D" and "F" in solutions[0]
+    assert "A" and "C" and "E" not in solutions[0]
 
 
 def test_no_solution_is_found_with_unsolvable_collection():
@@ -34,6 +33,6 @@ def test_no_solution_is_found_with_unsolvable_collection():
 
     matrix = DLXMatrix(universe, set_collection)
     dlx = DLX()
-    dlx.solve(matrix)
+    solutions = dlx.solve(matrix)
 
-    assert not dlx.solutions
+    assert not solutions
