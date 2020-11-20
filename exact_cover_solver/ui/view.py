@@ -4,6 +4,7 @@ from tkinter import ttk, constants
 
 class View:
     """Base class for UI views."""
+
     def __init__(self) -> None:
         """Set up frame and type hint."""
         self._frame: Optional[ttk.Frame] = None

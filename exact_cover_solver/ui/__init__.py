@@ -1,15 +1,9 @@
 """Package for handling UI-related functionality."""
-from tkinter import Tk, ttk, constants, Menu
-from abc import ABC, abstractmethod
+from tkinter import Tk, ttk, constants
 from typing import Optional
-
-
-class View(ABC):
-    """Abstract base class for UI views."""
-
-    @abstractmethod
-    def destroy(self):
-        """Abstract solving method that should be implemented by subclasses."""
+from .menu import AppMenu
+from .nav import Nav
+from .view import View
 
 
 class UI:
@@ -19,6 +13,8 @@ class UI:
         """Initialize ui components"""
         self.__root = root
         self.__current_view: Optional[View] = None
+        self.__app_menu: Optional[AppMenu] = None
+        self.__nav: Optional[Nav] = None
 
     def hide_current_view(self):
         """Destroy and hide current view."""
@@ -27,17 +23,12 @@ class UI:
         self.__current_view = None
 
     def start(self):
-        """Starts UI with greeting view set as default."""
-        menu = Menu(self.__root)
-        self.__root.config(menu=menu)
-
-        file_menu = Menu(menu)
-        menu.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="Exit", command=self.exit)
-
-        help_menu = Menu(menu)
-        menu.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="About")
+        """Starts UI, sets some initial configurations and shows default view."""
+        self.__app_menu = AppMenu(self.__root, self.quit_app, self.show_about)
+        self.__root.config(menu=self.__app_menu.menu)
+        self.__nav = Nav(
+            self.__root, self.change_current_problem, self.change_current_algo
+        )
 
         vasen = ttk.Frame(master=self.__root)
         heading_label = ttk.Label(master=vasen, text="Login")
@@ -48,30 +39,29 @@ class UI:
         button = ttk.Button(master=vasen, text="Button")
         heading_label.grid(columnspan=2, sticky=constants.W, padx=5, pady=5)
         username_label.grid(padx=5, pady=5)
-        username_entry.grid(row=1, column=1, sticky=(constants.E, constants.W), padx=5, pady=5)
+        username_entry.grid(
+            row=1, column=1, sticky=(constants.E, constants.W), padx=5, pady=5
+        )
         password_label.grid(padx=5, pady=5)
-        password_entry.grid(row=2, column=1, sticky=(constants.E, constants.W), padx=5, pady=5)
+        password_entry.grid(
+            row=2, column=1, sticky=(constants.E, constants.W), padx=5, pady=5
+        )
         button.grid(columnspan=2, sticky=(constants.E, constants.W), padx=5, pady=5)
         vasen.grid_columnconfigure(1, weight=1)
 
-        oikea = ttk.Frame(master=self.__root)
-        heading_label_oik = ttk.Label(master=oikea, text="Login")
-        username_label_oik = ttk.Label(master=oikea, text="Username")
-        username_entry_oik = ttk.Entry(master=oikea)
-        password_label_oik = ttk.Label(master=oikea, text="Password")
-        password_entry_oik = ttk.Entry(master=oikea)
-        button_oik = ttk.Button(master=oikea, text="Button")
-        heading_label_oik.grid(columnspan=2, sticky=constants.W, padx=5, pady=5)
-        username_label_oik.grid(padx=5, pady=5)
-        username_entry_oik.grid(row=1, column=1, sticky=(constants.E, constants.W), padx=5, pady=5)
-        password_label_oik.grid(padx=5, pady=5)
-        password_entry_oik.grid(row=2, column=1, sticky=(constants.E, constants.W), padx=5, pady=5)
-        button_oik.grid(columnspan=2, sticky=(constants.E, constants.W), padx=5, pady=5)
-        oikea.grid_columnconfigure(1, weight=1)
-
         vasen.pack(fill=constants.X, side=constants.LEFT)
-        oikea.pack(fill=constants.X, side=constants.RIGHT)
+        self.__nav.pack(side=constants.RIGHT)
 
-    def exit(self):
+    def quit_app(self) -> None:
         """Exit the program."""
         self.__root.quit()
+
+    def show_about(self) -> None:
+        """Show about info."""
+        raise NotImplementedError
+
+    def change_current_problem(self, problem: str) -> None:
+        print("Problem will be", problem)
+
+    def change_current_algo(self, algo: str) -> None:
+        print("Algo will be", algo)
