@@ -1,9 +1,9 @@
 """Service for generating universe and set collection for pentomino problems."""
-from typing import Final, Tuple, List, Dict
+from typing import Tuple, List, Dict
 from exact_cover_solver.types import Universe, SetCollection
 
-NUMBER_OF_PENTOMINOES: Final = 12
-NUMBER_OF_CELLS: Final = 60
+NUMBER_OF_PENTOMINOES = 12
+NUMBER_OF_CELLS = 60
 
 Pentomino = List[List[int]]
 Point = Tuple[int, int]
@@ -18,6 +18,7 @@ class PentominoGenerator:
             num for num in range(NUMBER_OF_PENTOMINOES + NUMBER_OF_CELLS)
         ]
         self.__set_collection: SetCollection = []
+        # TODO turn into tuples so these can be hashed
         self.__pentominoes: Dict[str, Pentomino] = {
             "V": [[1, 1, 1], [1, 0, 0], [1, 0, 0]],
             "U": [[1, 0, 1], [1, 1, 1]],
@@ -106,3 +107,7 @@ class PentominoGenerator:
     def _flip_left_right(pentomino: Pentomino) -> Pentomino:
         """Return pentomino with each row reversed."""
         return [row[::-1] for row in pentomino]
+
+    @property
+    def pentominoes(self) -> List[Pentomino]:
+        return [pentomino for pentomino in self.__pentominoes.values()]
