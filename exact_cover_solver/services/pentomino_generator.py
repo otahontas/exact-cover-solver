@@ -107,5 +107,5 @@ class PentominoGenerator:
         return [row[::-1] for row in pentomino]
 
     @property
-    def pentominoes(self) -> List[Pentomino]:
-        return [pentomino for pentomino in self.__pentominoes.values()]
+    def pentominoes(self) -> Dict[str, Pentomino]:
+        return self.__pentominoes
