@@ -1,38 +1,110 @@
 """Unit tests for dlx implementation of algo X."""
+import pytest
+
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.algos.dlx import DLX
 
 
-def test_correct_single_solution_is_found():
-    universe = [1, 2, 3, 4, 5, 6, 7]
-    set_collection = [
-        ("A", [1, 4, 7]),
-        ("B", [1, 4]),
-        ("C", [4, 5, 7]),
-        ("D", [3, 5, 6]),
-        ("E", [2, 3, 6, 7]),
-        ("F", [2, 7]),
+@pytest.fixture
+def universe():
+    return [num for num in range(1, 8)]
+
+
+@pytest.fixture
+def collection_with_single_solution():
+    return [
+        ("1", [1, 4, 7]),
+        ("2", [1, 4]),
+        ("3", [4, 5, 7]),
+        ("4", [3, 5, 6]),
+        ("5", [2, 3, 6, 7]),
+        ("6", [2, 7]),
     ]
-    matrix = DLXMatrix(universe, set_collection)
+
+
+@pytest.fixture
+def collection_without_solution():
+    return [
+        ("1", [1, 6, 7]),
+        ("2", [2, 6, 7]),
+        ("3", [3, 6, 7]),
+        ("4", [4, 6, 7]),
+    ]
+
+
+@pytest.fixture
+def collection_with_multiple_solutions():
+    return [
+        ("1", [4, 7]),
+        ("2", [3]),
+        ("3", [2, 6]),
+        ("4", [1, 3, 5]),
+        ("5", [1, 4, 5, 7]),
+        ("5", [1, 2, 4, 5, 6, 7]),
+    ]
+
+
+def test_correct_single_solution_is_found(universe, collection_with_single_solution):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
     dlx = DLX()
     solutions = dlx.solve(matrix)
-
     assert len(solutions) == 1
-    assert "B" and "D" and "F" in solutions[0]
-    assert "A" and "C" and "E" not in solutions[0]
+    assert "2" and "4" and "6" in solutions[0]
+    assert "1" and "3" and "5" not in solutions[0]
 
 
-def test_no_solution_is_found_with_unsolvable_collection():
-    universe = [1, 2, 3, 4, 5, 6, 7]
-    set_collection = [
-        ("A", [1, 6, 7]),
-        ("B", [2, 6, 7]),
-        ("C", [3, 6, 7]),
-        ("D", [4, 6, 7]),
-    ]
-
-    matrix = DLXMatrix(universe, set_collection)
+def test_no_solution_is_found_with_unsolvable_collection(
+    universe, collection_without_solution
+):
+    matrix = DLXMatrix(universe, collection_without_solution)
     dlx = DLX()
     solutions = dlx.solve(matrix)
-
     assert not solutions
+
+
+def test_all_solutions_are_found_with_multiple_solutions(
+    universe, collection_with_multiple_solutions
+):
+    matrix = DLXMatrix(universe, collection_with_multiple_solutions)
+    dlx = DLX()
+    solutions = dlx.solve(matrix)
+    assert len(solutions) == 3
+
+
+def test_optimal_column_is_chosen(universe, collection_with_single_solution):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
+    dlx = DLX()
+    chosen_column = dlx._choose_optimal_column_object(matrix)
+    assert chosen_column.id == 1
+
+
+def test_covering_detaches_correct_amount_of_nodes(
+    universe, collection_with_single_solution
+):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
+    dlx = DLX()
+
+    def calc_node_amount(matrix):
+        amount = 0
+        column = matrix.right
+        while column != matrix:
+            amount += column.size
+            column = column.right
+        return amount
+
+    amount = calc_node_amount(matrix)
+    assert amount == 17
+    dlx._cover(matrix.right)
+    amount = calc_node_amount(matrix)
+    assert amount == 12
+
+
+def test_uncovering_restores_correct_nodes(universe, collection_with_single_solution):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
+    original_repr = str(matrix)
+    dlx = DLX()
+    column = matrix.right
+    dlx._cover(column)
+    assert original_repr != str(matrix)
+    dlx._uncover(column)
+    assert original_repr == str(matrix)
