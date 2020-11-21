@@ -4,8 +4,11 @@
 [![Coverage](https://coveralls.io/repos/github/otahontas/exact-cover-solver/badge.svg?branch=master)](https://coveralls.io/github/otahontas/exact-cover-solver?branch=master)
 [![Code style](https://github.com/otahontas/exact-cover-solver/workflows/Code%20style/badge.svg)](https://github.com/otahontas/exact-cover-solver/actions?query=workflow%3A%22Code+style%22)
 [![Docs](https://github.com/otahontas/exact-cover-solver/workflows/Docs/badge.svg)](https://github.com/otahontas/exact-cover-solver/actions?query=workflow%4ADocs)
+[![Performance tests](https://github.com/otahontas/exact-cover-solver/workflows/Performance%20tests/badge.svg)](https://github.com/otahontas/exact-cover-solver/actions?query=workflow%3A%22Performance+tests%22)
 
 Project for Helsinki University's Data structures and algorithms -project course. Repository docs are written in Finnish.
+
+Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä täsmäpeiteongelmaksi kääntyviä ongelmia, mm. pentomino-pelejä. Ohjelmassa on toteutettu Donald Knuthin Algorithm X dancing links -implementaatiolla.
 
 ## Dokumentaatio
 - [Määrittelydokumentti](docs/maarittely.md)
@@ -16,12 +19,14 @@ Project for Helsinki University's Data structures and algorithms -project course
 - [Viikko 1](docs/raportit/viikko1.md)
 - [Viikko 2](docs/raportit/viikko2.md)
 - [Viikko 3](docs/raportit/viikko3.md)
+- [Viikko 4](docs/raportit/viikko4.md)
 
 ## Käyttöohje
 
 Ohjelmistovaatimukset:
 - `Pypy 3.7+` / `Python 3.6+`. 
-  - Koska ohjelma on toteutettu puhtaasti pythonilla, Pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti. Esimerkiksi vastausten lukumäärän etsiminen [pentomino-pelissä](https://en.wikipedia.org/wiki/Pentomino) 6x10-kokoisen ruudukolla kestää Pypyllä n. 30 sek ja cpythonilla n. 10 minuuttia (Intel 3.4Ghz i5 cpu:lla)
+  - Koska ohjelma on toteutettu puhtaasti pythonilla, Pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti. Esimerkiksi vastausten lukumäärän etsiminen [pentomino-pelissä](https://en.wikipedia.org/wiki/Pentomino) 6x10-kokoisen ruudukolla kestää Pypyllä n. 30 sek ja cpythonilla n. 10 minuuttia (ks. [suorituskykytestit Github actioneista](https://github.com/otahontas/exact-cover-solver/actions?query=workflow%3A%22Performance+tests%22
+))
   - Pypyn voit ladata [projektin nettisivuilta](https://www.pypy.org/download.html), [pyenvin avulla](https://github.com/pyenv/pyenv) tai todennäköisesti käyttöjärjestelmäsi paketinhallinnasta.
 
 Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjätyökaluja seuraavasti (korvaa komennoissa oleva `pypy3` komennolla `python3`, jos et halua / voi käyttää pypyä):
@@ -30,7 +35,7 @@ Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjät
 - Päivitä pip: `pypy3 -m pip install --upgrade pip`
 - Asenna ohjelma `pypy3 -m pip install .`
 - Käynnistä ohjelma `pypy3 exact_cover_solver/main.py`
-- Voit vaihtoehtoisesti ajaa pelkästään ohjelman suorituskykytestit komennolla `pypy3 performance_tests/test_pentominoes_with_dlx.py`
+- Voit vaihtoehtoisesti ohjelman suorituskykytestit suoraan komentoriviltä komennolla `pypy3 performance_tests/test_pentominoes_with_dlx.py`
 
 ## Kehittäminen
 Ohjelmistovaatimukset:
