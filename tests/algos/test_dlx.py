@@ -12,35 +12,23 @@ def universe():
 
 @pytest.fixture
 def collection_with_single_solution():
-    return [
-        ("1", [1, 4, 7]),
-        ("2", [1, 4]),
-        ("3", [4, 5, 7]),
-        ("4", [3, 5, 6]),
-        ("5", [2, 3, 6, 7]),
-        ("6", [2, 7]),
-    ]
+    return [[1, 4, 7], [1, 4], [4, 5, 7], [3, 5, 6], [2, 3, 6, 7], [2, 7]]
 
 
 @pytest.fixture
 def collection_without_solution():
-    return [
-        ("1", [1, 6, 7]),
-        ("2", [2, 6, 7]),
-        ("3", [3, 6, 7]),
-        ("4", [4, 6, 7]),
-    ]
+    return [[1, 6, 7], [2, 6, 7], [3, 6, 7], [4, 6, 7]]
 
 
 @pytest.fixture
 def collection_with_multiple_solutions():
     return [
-        ("1", [4, 7]),
-        ("2", [3]),
-        ("3", [2, 6]),
-        ("4", [1, 3, 5]),
-        ("5", [1, 4, 5, 7]),
-        ("5", [1, 2, 4, 5, 6, 7]),
+        [4, 7],
+        [3],
+        [2, 6],
+        [1, 3, 5],
+        [1, 4, 5, 7],
+        [1, 2, 4, 5, 6, 7],
     ]
 
 
@@ -49,8 +37,7 @@ def test_correct_single_solution_is_found(universe, collection_with_single_solut
     dlx = DLX()
     solutions = dlx.solve(matrix)
     assert len(solutions) == 1
-    assert "2" and "4" and "6" in solutions[0]
-    assert "1" and "3" and "5" not in solutions[0]
+    assert 1 and 3 and 5 in solutions[0]
 
 
 def test_no_solution_is_found_with_unsolvable_collection(
@@ -84,13 +71,13 @@ def test_covering_detaches_correct_amount_of_nodes(
     matrix = DLXMatrix(universe, collection_with_single_solution)
     dlx = DLX()
 
-    def calc_node_amount(matrix):
-        amount = 0
-        column = matrix.right
-        while column != matrix:
-            amount += column.size
+    def calc_node_amount(changed_matrix):
+        tmp_amount = 0
+        column = changed_matrix.right
+        while column != changed_matrix:
+            tmp_amount += column.size
             column = column.right
-        return amount
+        return tmp_amount
 
     amount = calc_node_amount(matrix)
     assert amount == 17

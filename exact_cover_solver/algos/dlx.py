@@ -16,26 +16,16 @@ class DLX(AlgorithmX):
         self.__solutions: List[Solution] = []
 
     def solve(self, matrix: DLXMatrix) -> List[Solution]:
-        """Solve exact cover problem for given matrix."""
+        """Solve exact cover problem for given matrix.
+
+        Algorithm X is performed recursively on matrix with helper method.
+        """
         self.__solutions.clear()
         self._search(matrix)
         return self.__solutions
 
     def _search(self, matrix: DLXMatrix, partial: Solution = None) -> None:
-        """Perform algorithm X recursively.
-
-        Algorithm:
-        - If R[h] = h, solution has been found
-        - Otherwise choose column c optimally. If column doesn't have 1s, terminate.
-        - Cover column c
-        - Go through rows of column c
-            - Include row in partial solution
-            - Cover each column on row
-            - Search for solution recursively
-            - Uncover each column on row
-            - Remove row from partial solution
-        - Uncover column c
-        """
+        """Perform algorithm X recursively and collect partial solutions."""
         if not partial:
             partial: Solution = []
 
