@@ -29,7 +29,7 @@ jobs:
         poetry run invoke test
     - name: Push to coveralls.io with python-coveralls
       run: |
-        poetry install coveralls
+        poetry add coveralls
         poetry run coveralls
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
