@@ -2,7 +2,7 @@
 
 import pytest
 
-from exact_cover_solver.services.pentomino_generator import PentominoGenerator
+from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 
 
 @pytest.fixture
