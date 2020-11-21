@@ -1,5 +1,6 @@
 """Service for generating universe and set collection for pentomino problems."""
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Set
+
 from exact_cover_solver.types import Universe, SetCollection
 
 NUMBER_OF_PENTOMINOES = 12
@@ -18,7 +19,6 @@ class PentominoGenerator:
             num for num in range(NUMBER_OF_PENTOMINOES + NUMBER_OF_CELLS)
         ]
         self.__set_collection: SetCollection = []
-        # TODO turn into tuples so these can be hashed
         self.__pentominoes: Dict[str, Pentomino] = {
             "V": [[1, 1, 1], [1, 0, 0], [1, 0, 0]],
             "U": [[1, 0, 1], [1, 1, 1]],
@@ -39,7 +39,6 @@ class PentominoGenerator:
     ) -> Tuple[Universe, SetCollection]:
         """Generate universe and set collection with given board size."""
         self.__set_collection.clear()
-        set_number = 0  # TODO: do we even need this?
         for pentomino_index, pentomino in enumerate(self.__pentominoes.values()):
             for orientation in self._generate_all_orientations(pentomino):
                 pentomino_height = len(orientation)
@@ -55,8 +54,7 @@ class PentominoGenerator:
                                 )
                             ],
                         ]
-                        self.__set_collection.append((str(set_number), covered))
-                        set_number += 1
+                        self.__set_collection.append(covered)
         return (
             self.__universe,
             self.__set_collection,
@@ -68,7 +66,7 @@ class PentominoGenerator:
     ) -> List[int]:
         """Find which cells this pentomino will cover."""
         y, x = start
-        covered = []
+        covered: List[int] = []
         pentomino_height = len(pentomino)
         pentomino_width = len(pentomino[0])
         for r in range(pentomino_height):
@@ -79,7 +77,7 @@ class PentominoGenerator:
 
     def _generate_all_orientations(self, pentomino: Pentomino) -> List[Pentomino]:
         """Generate different orientations for this pentomino."""
-        seen = set()
+        seen: Set[str] = set()
         orientations = []
         for transposed in (pentomino, self._transpose(pentomino)):
             for left_right_flipped in (transposed, self._flip_left_right(transposed)):

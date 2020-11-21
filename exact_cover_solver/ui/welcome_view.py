@@ -1,5 +1,6 @@
-from .view import View
 from tkinter import Tk, ttk, Message
+
+from .view import View
 
 
 class WelcomeView(View):

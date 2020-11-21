@@ -1,6 +1,7 @@
 """Package for handling UI-related functionality."""
-from tkinter import Tk, ttk, constants
+from tkinter import Tk, constants
 from typing import Optional
+
 from .menu import AppMenu
 from .nav import Nav
 from .view import View

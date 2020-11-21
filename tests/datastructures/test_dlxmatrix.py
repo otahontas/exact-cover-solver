@@ -1,5 +1,6 @@
 """Unit tests for dlx matrix."""
 import pytest
+
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 

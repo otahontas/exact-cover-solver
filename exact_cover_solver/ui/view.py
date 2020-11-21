@@ -1,6 +1,6 @@
-from typing import Optional, Union
-from tkinter import Tk, ttk, constants
 from abc import abstractmethod
+from tkinter import Tk, ttk, constants
+from typing import Optional, Union
 
 
 class View:

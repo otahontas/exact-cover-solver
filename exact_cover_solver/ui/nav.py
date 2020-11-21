@@ -1,5 +1,6 @@
 from tkinter import Tk, ttk, constants
 from typing import Callable
+
 from .view import View
 
 

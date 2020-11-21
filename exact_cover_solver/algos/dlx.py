@@ -1,11 +1,11 @@
 """Dancing links implementation for algorithm X."""
 
-from exact_cover_solver.algos import AlgorithmX
-from exact_cover_solver.types import Solution
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
-
 from typing import List
+
+from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.types import Solution
 
 
 class DLX(AlgorithmX):

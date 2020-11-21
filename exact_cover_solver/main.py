@@ -1,6 +1,7 @@
 """Main entrypoint for program."""
-from exact_cover_solver.ui import UI
 from tkinter import Tk
+
+from exact_cover_solver.ui import UI
 
 
 def main() -> None:
