@@ -5,7 +5,7 @@ from typing import Optional, List
 from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.types import Solution
+from exact_cover_solver.custom_types import Solution
 from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 
 
@@ -14,7 +14,7 @@ class Solver:
 
     def __init__(self):
         """Initialize algorithm."""
-        self.__algorithm: Optional[AlgorithmX] = None
+        self.__algorithm: Optional[AlgorithmX] = DLX()
         self.__problem: Optional[str] = None
 
     @property
@@ -48,7 +48,7 @@ class Solver:
         else:
             raise ValueError("Problem not valid")
 
-    def solve(self, board_width=None, board_height=None) -> List[Solution]:
+    def solve(self, board_height, board_width) -> List[Solution]:
         """Solves exact cover problem, input should correspond to current algo used."""
         if self.__problem == "pentomino":
             pg = PentominoGenerator()

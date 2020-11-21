@@ -1,7 +1,7 @@
 """Service for generating universe and set collection for pentomino problems."""
 from typing import Tuple, List, Dict, Set
 
-from exact_cover_solver.types import Universe, SetCollection
+from exact_cover_solver.custom_types import Universe, SetCollection
 
 NUMBER_OF_PENTOMINOES = 12
 NUMBER_OF_CELLS = 60

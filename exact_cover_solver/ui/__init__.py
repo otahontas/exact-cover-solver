@@ -13,7 +13,7 @@ class UI:
     """Main UI class."""
 
     def __init__(self, root: Tk, solver):
-        """Initialize ui components"""
+        """Initialize ui components."""
         self.__root = root
         self.__solver = solver
         self.__current_view: Optional[View] = None
@@ -21,14 +21,14 @@ class UI:
         self.__nav: Optional[Nav] = None
 
     def start(self):
-        """Starts UI, sets some initial configurations and shows default view."""
+        """Start UI, set some initial configurations and show default view."""
         self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
         self.__root.config(menu=self.__app_menu.menu)
         self._set_current_nav()
         self._set_current_view()
 
     def _set_current_view(self):
-        """Set view"""
+        """Set view."""
         self._hide_current_view()
         current_problem = self.__solver.problem
         if not current_problem:
@@ -44,7 +44,7 @@ class UI:
         self.__current_view = None
 
     def _set_current_nav(self):
-        """Set nav"""
+        """Set nav."""
         self._hide_current_nav()
         current_problem = self.__solver.problem
         current_algo = self.__solver.algorithm
@@ -72,10 +72,12 @@ class UI:
         raise NotImplementedError
 
     def _change_current_problem(self, problem: str) -> None:
+        """Change current problem in program logic and app."""
         self.__solver.problem = problem
         self._set_current_nav()
         self._set_current_view()
 
     def _change_current_algo(self, algo: str) -> None:
+        """Change current algo in program logic and app."""
         self.__solver.algorithm = algo
         self._set_current_nav()

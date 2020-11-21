@@ -13,7 +13,7 @@ class Nav(View):
         current_problem: Optional[str],
         current_algo: Optional[str],
     ) -> None:
-        """initialize nav object."""
+        """Initialize nav object."""
         self.__current_problem = current_problem
         self.__current_algo = current_algo
         self.__change_current_problem = change_current_problem

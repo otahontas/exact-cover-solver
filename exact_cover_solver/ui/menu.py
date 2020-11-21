@@ -5,7 +5,7 @@ from typing import Callable
 
 class AppMenu:
     def __init__(self, root: Tk, quit_app: Callable, show_about: Callable) -> None:
-        """initialize menu object."""
+        """Initialize menu object."""
         self.__menu = Menu(root)
         self.__quit_app = quit_app
         self.__show_about = show_about
@@ -23,5 +23,5 @@ class AppMenu:
 
     @property
     def menu(self) -> Menu:
-        """Return menu object"""
+        """Return menu object."""
         return self.__menu
