@@ -1,6 +1,6 @@
 """Module for defining custom types used in app."""
-from typing import List, Tuple
+from typing import List
 
-Solution = List[str]
+Solution = List[int]
 Universe = List[int]
-SetCollection = List[Tuple[str, List[int]]]
+SetCollection = List[List[int]]

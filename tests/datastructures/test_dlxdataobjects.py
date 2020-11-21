@@ -20,12 +20,12 @@ def test_column_object_gets_id_from_args():
 
 def test_data_object_is_linked_to_self_on_init():
     column = ColumnObject(1)
-    data = DataObject(column, "1")
+    data = DataObject(column, 0)
     assert data.up is data.down is data.left is data.right is data
     assert data.column is column
 
 
 def test_data_object_gets_row_from_args():
     column = ColumnObject(1)
-    data = DataObject(column, "1")
-    assert data.row == "1"
+    data = DataObject(column, 0)
+    assert data.row == 0

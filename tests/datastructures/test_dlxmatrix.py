@@ -3,35 +3,30 @@ import pytest
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 
-def test_matrix_columns_are_linked_together_correctly():
-    universe = [1, 2, 3, 4, 5, 6, 7]
-    set_collection = [
-        ("A", [1, 4, 7]),
-        ("B", [1, 4]),
-        ("C", [4, 5, 7]),
-        ("D", [3, 5, 6]),
-        ("E", [2, 3, 6, 7]),
-        ("F", [2, 7]),
-    ]
+@pytest.fixture
+def universe():
+    return [num for num in range(1, 8)]
 
-    matrix = DLXMatrix(universe, set_collection)
+
+@pytest.fixture
+def collection_with_single_solution():
+    return [[1, 4, 7], [1, 4], [4, 5, 7], [3, 5, 6], [2, 3, 6, 7], [2, 7]]
+
+
+def test_matrix_columns_are_linked_together_correctly(
+    universe, collection_with_single_solution
+):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
     assert matrix is not None
     assert matrix.id == "root"
     assert matrix.right.id == 1
     assert matrix.left.id == 7
 
 
-def test_each_column_in_matrix_has_correct_size():
-    universe = [1, 2, 3, 4, 5, 6, 7]
-    set_collection = [
-        ("A", [1, 4, 7]),
-        ("B", [1, 4]),
-        ("C", [4, 5, 7]),
-        ("D", [3, 5, 6]),
-        ("E", [2, 3, 6, 7]),
-        ("F", [2, 7]),
-    ]
-    matrix = DLXMatrix(universe, set_collection)
+def test_each_column_in_matrix_has_correct_size(
+    universe, collection_with_single_solution
+):
+    matrix = DLXMatrix(universe, collection_with_single_solution)
 
     column_1 = matrix.right
     assert column_1.size == 2
@@ -62,9 +57,6 @@ def test_matrix_is_not_created_when_giving_empty_args():
 
 def test_matrix_has_correct_string_representation():
     universe = [1, 2]
-    set_collection = [
-        ("A", [1]),
-        ("B", [1]),
-    ]
+    set_collection = [[1], [1]]
     matrix = DLXMatrix(universe, set_collection)
-    assert str(matrix) == "Column 1 has 2 objects: A B\nColumn 2 has 0 objects:\n"
+    assert str(matrix) == "Column 1 has 2 rows: 0 1\nColumn 2 has 0 rows:\n"

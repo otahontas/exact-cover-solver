@@ -12,10 +12,8 @@ class DLXMatrix:
     def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
         """Create column and data objects and link them to this matrix object.
 
-        Universe is expected to contain integers identifying
-        some collection of elements.
-        Set collection is collection of sets where sets are created
-        from elements of this universe.
+        Universe should contain all elements considered to be covered.
+        Set collection is collection of sets made from elements in this universe.
         """
         if not universe or not set_collection:
             raise ValueError(
@@ -54,12 +52,12 @@ class DLXMatrix:
                 correct_column = correct_column.right
             return correct_column
 
-        for set_name, set_elements in set_collection:
+        for set_number, set_elements in enumerate(set_collection):
             previous = None
             first = None
             for element in set_elements:
                 column = find_column(element)
-                cell = DataObject(column, row=set_name)
+                cell = DataObject(column, row=set_number)
                 prev_up = column.up
                 prev_up.down = cell
                 cell.up = prev_up
@@ -85,6 +83,6 @@ class DLXMatrix:
             while data != column:
                 data_str = f"{data_str} {data.row}"
                 data = data.down
-            s = f"{s}Column {column.id} has {column.size} objects:{data_str}\n"
+            s = f"{s}Column {column.id} has {column.size} rows:{data_str}\n"
             column = column.right
         return s
