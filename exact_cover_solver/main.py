@@ -2,13 +2,17 @@
 from tkinter import Tk
 
 from exact_cover_solver.ui import UI
+from exact_cover_solver.services.solver import Solver
 
 
 def main() -> None:
-    """Launch UI from main."""
+    """Launch UI from main, initialize objects program is using."""
     window = Tk()
-    window.title("TkInter example")
-    ui = UI(window)
+    window.title("Exact cover solver")
+
+    solver = Solver()
+
+    ui = UI(window, solver)
     ui.start()
     window.mainloop()
 

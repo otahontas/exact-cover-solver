@@ -3,8 +3,10 @@
 from typing import Optional, List
 
 from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.types import Solution
+from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 
 
 class Solver:
@@ -13,6 +15,7 @@ class Solver:
     def __init__(self):
         """Initialize algorithm."""
         self.__algorithm: Optional[AlgorithmX] = None
+        self.__problem: Optional[str] = None
 
     @property
     def algorithm(self) -> AlgorithmX:
@@ -23,10 +26,32 @@ class Solver:
         return self.__algorithm
 
     @algorithm.setter
-    def algorithm(self, algorithm: AlgorithmX) -> None:
+    def algorithm(self, algorithm_name: str) -> None:
         """Replace algorithm object at runtime."""
-        self.__algorithm = algorithm
+        if algorithm_name == "dlx":
+            self.__algorithm = DLX()
+        else:
+            raise ValueError("Algorithm not valid")
 
-    def solve(self, data: DLXMatrix) -> List[Solution]:
+    @property
+    def problem(self) -> str:
+        """Maintain reference to problem."""
+        return self.__problem
+
+    @problem.setter
+    def problem(self, problem: str) -> None:
+        """Replace algorithm object at runtime."""
+        if problem == "pentomino":
+            self.__problem = problem
+        else:
+            raise ValueError("Problem not valid")
+
+    def solve(self, board_width=None, board_height=None) -> List[Solution]:
         """Solves exact cover problem, input should correspond to current algo used."""
-        return self.__algorithm.solve(data)
+        if self.__problem == "pentomino":
+            pg = PentominoGenerator()
+            universe, set_collection = pg.generate(board_height, board_width)
+            matrix = DLXMatrix(universe, set_collection)
+            return self.__algorithm.solve(matrix)
+        else:
+            raise ValueError("Not possible to solve, something is not right")

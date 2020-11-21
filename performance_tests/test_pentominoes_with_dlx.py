@@ -4,7 +4,7 @@ Correct solution amounts are from wikipedia:
 https://en.wikipedia.org/wiki/Pentomino#Constructing_rectangular_dimensions
 """
 
-from exact_cover_solver.services.pentomino_generator import PentominoGenerator
+from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.algos.dlx import DLX
 import time

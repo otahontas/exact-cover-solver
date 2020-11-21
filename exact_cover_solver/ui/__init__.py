@@ -11,9 +11,10 @@ from .welcome_view import WelcomeView
 class UI:
     """Main UI class."""
 
-    def __init__(self, root: Tk):
+    def __init__(self, root: Tk, solver):
         """Initialize ui components"""
         self.__root = root
+        self.__solver = solver
         self.__current_view: Optional[View] = None
         self.__app_menu: Optional[AppMenu] = None
         self.__nav: Optional[Nav] = None
@@ -39,7 +40,6 @@ class UI:
         else:
             # TODO: should really show error, not raise errors
             raise ValueError("Unknown problem type.")
-        print(self.__current_view)
         self.__current_view.pack(side=constants.LEFT)
 
     def _hide_current_view(self):
@@ -57,7 +57,7 @@ class UI:
         raise NotImplementedError
 
     def _change_current_problem(self, problem: str) -> None:
-        print("Problem will be", problem)
+        self.__solver.problem = problem
 
     def _change_current_algo(self, algo: str) -> None:
-        print("Algo will be", algo)
+        self.__solver.algo = algo
