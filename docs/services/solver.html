@@ -29,23 +29,63 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Solver service, handles different solving modes.&#34;&#34;&#34;
 
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from typing import Optional, List
+
+from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.custom_types import Solution
+from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 
 
 class Solver:
-    &#34;&#34;&#34;Service for solving an exact cover problem from given input.&#34;&#34;&#34;
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
 
-    @staticmethod
-    def solve(universe, set_collection):
-        &#34;&#34;&#34;Solves exact cover problem.
+    def __init__(self):
+        &#34;&#34;&#34;Initialize algorithm.&#34;&#34;&#34;
+        self.__algorithm: Optional[AlgorithmX] = DLX()
+        self.__problem: Optional[str] = None
 
-        Input should be universe of elements (such as numbers from 1 to seven)
-        and collection of sets consisting elements from universe.
+    @property
+    def algorithm(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
+
+        Concrete class is set during runtime.
         &#34;&#34;&#34;
-        matrix = DLXMatrix(universe, set_collection)
-        dlx = DLX()
-        dlx.solve(matrix)</code></pre>
+        if isinstance(self.__algorithm, DLX):
+            return &#34;dlx&#34;
+        return None
+
+    @algorithm.setter
+    def algorithm(self, algorithm_name: str) -&gt; None:
+        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
+        if algorithm_name == &#34;dlx&#34;:
+            self.__algorithm = DLX()
+        else:
+            raise ValueError(&#34;Algorithm not valid&#34;)
+
+    @property
+    def problem(self) -&gt; str:
+        &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
+        return self.__problem
+
+    @problem.setter
+    def problem(self, problem: str) -&gt; None:
+        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
+        if problem == &#34;pentomino&#34;:
+            self.__problem = problem
+        else:
+            raise ValueError(&#34;Problem not valid&#34;)
+
+    def solve(self, board_height, board_width) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
+        if self.__problem == &#34;pentomino&#34;:
+            pg = PentominoGenerator()
+            universe, set_collection = pg.generate(board_height, board_width)
+            matrix = DLXMatrix(universe, set_collection)
+            return self.__algorithm.solve(matrix)
+        else:
+            raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
 </details>
 </section>
 <section>
@@ -61,48 +101,116 @@ class Solver:
 <span>class <span class="ident">Solver</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Service for solving an exact cover problem from given input.</p></div>
+<div class="desc"><p>Class for solving an exact cover problem from given input.</p>
+<p>Initialize algorithm.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Solver:
-    &#34;&#34;&#34;Service for solving an exact cover problem from given input.&#34;&#34;&#34;
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
 
-    @staticmethod
-    def solve(universe, set_collection):
-        &#34;&#34;&#34;Solves exact cover problem.
+    def __init__(self):
+        &#34;&#34;&#34;Initialize algorithm.&#34;&#34;&#34;
+        self.__algorithm: Optional[AlgorithmX] = DLX()
+        self.__problem: Optional[str] = None
 
-        Input should be universe of elements (such as numbers from 1 to seven)
-        and collection of sets consisting elements from universe.
+    @property
+    def algorithm(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
+
+        Concrete class is set during runtime.
         &#34;&#34;&#34;
-        matrix = DLXMatrix(universe, set_collection)
-        dlx = DLX()
-        dlx.solve(matrix)</code></pre>
+        if isinstance(self.__algorithm, DLX):
+            return &#34;dlx&#34;
+        return None
+
+    @algorithm.setter
+    def algorithm(self, algorithm_name: str) -&gt; None:
+        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
+        if algorithm_name == &#34;dlx&#34;:
+            self.__algorithm = DLX()
+        else:
+            raise ValueError(&#34;Algorithm not valid&#34;)
+
+    @property
+    def problem(self) -&gt; str:
+        &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
+        return self.__problem
+
+    @problem.setter
+    def problem(self, problem: str) -&gt; None:
+        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
+        if problem == &#34;pentomino&#34;:
+            self.__problem = problem
+        else:
+            raise ValueError(&#34;Problem not valid&#34;)
+
+    def solve(self, board_height, board_width) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
+        if self.__problem == &#34;pentomino&#34;:
+            pg = PentominoGenerator()
+            universe, set_collection = pg.generate(board_height, board_width)
+            matrix = DLXMatrix(universe, set_collection)
+            return self.__algorithm.solve(matrix)
+        else:
+            raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
 </details>
-<h3>Static methods</h3>
+<h3>Instance variables</h3>
 <dl>
-<dt id="exact_cover_solver.services.solver.Solver.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>universe, set_collection)</span>
-</code></dt>
+<dt id="exact_cover_solver.services.solver.Solver.algorithm"><code class="name">var <span class="ident">algorithm</span> : Union[str, NoneType]</code></dt>
 <dd>
-<div class="desc"><p>Solves exact cover problem.</p>
-<p>Input should be universe of elements (such as numbers from 1 to seven)
-and collection of sets consisting elements from universe.</p></div>
+<div class="desc"><p>Maintain a reference to one of the algoX objects. Returns algo name when asked.</p>
+<p>Concrete class is set during runtime.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@staticmethod
-def solve(universe, set_collection):
-    &#34;&#34;&#34;Solves exact cover problem.
+<pre><code class="python">@property
+def algorithm(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
 
-    Input should be universe of elements (such as numbers from 1 to seven)
-    and collection of sets consisting elements from universe.
+    Concrete class is set during runtime.
     &#34;&#34;&#34;
-    matrix = DLXMatrix(universe, set_collection)
-    dlx = DLX()
-    dlx.solve(matrix)</code></pre>
+    if isinstance(self.__algorithm, DLX):
+        return &#34;dlx&#34;
+    return None</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.solver.Solver.problem"><code class="name">var <span class="ident">problem</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Maintain reference to problem.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def problem(self) -&gt; str:
+    &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
+    return self.__problem</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.services.solver.Solver.solve"><code class="name flex">
+<span>def <span class="ident">solve</span></span>(<span>self, board_height, board_width) ‑> List[List[int]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Solves exact cover problem, input should correspond to current algo used.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve(self, board_height, board_width) -&gt; List[Solution]:
+    &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
+    if self.__problem == &#34;pentomino&#34;:
+        pg = PentominoGenerator()
+        universe, set_collection = pg.generate(board_height, board_width)
+        matrix = DLXMatrix(universe, set_collection)
+        return self.__algorithm.solve(matrix)
+    else:
+        raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
 </details>
 </dd>
 </dl>
@@ -126,6 +234,8 @@ def solve(universe, set_collection):
 <li>
 <h4><code><a title="exact_cover_solver.services.solver.Solver" href="#exact_cover_solver.services.solver.Solver">Solver</a></code></h4>
 <ul class="">
+<li><code><a title="exact_cover_solver.services.solver.Solver.algorithm" href="#exact_cover_solver.services.solver.Solver.algorithm">algorithm</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.problem" href="#exact_cover_solver.services.solver.Solver.problem">problem</a></code></li>
 <li><code><a title="exact_cover_solver.services.solver.Solver.solve" href="#exact_cover_solver.services.solver.Solver.solve">solve</a></code></li>
 </ul>
 </li>

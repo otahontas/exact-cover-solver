@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
-<title>exact_cover_solver.algos API documentation</title>
-<meta name="description" content="Package for algorithms, defines interface for algorithm X implementations." />
+<title>exact_cover_solver.ui.view API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,40 +19,43 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>exact_cover_solver.algos</code></h1>
+<h1 class="title">Module <code>exact_cover_solver.ui.view</code></h1>
 </header>
 <section id="section-intro">
-<p>Package for algorithms, defines interface for algorithm X implementations.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Package for algorithms, defines interface for algorithm X implementations.&#34;&#34;&#34;
+<pre><code class="python">from abc import abstractmethod
+from tkinter import Tk, Frame, constants
+from typing import Optional, Union
 
-from abc import ABC, abstractmethod
-from typing import Any
 
+class View:
+    &#34;&#34;&#34;Base class for UI views.&#34;&#34;&#34;
 
-class AlgorithmX(ABC):
-    &#34;&#34;&#34;Abstract base class for algorithm X for solving the exact cover problem.
+    def __init__(self, root: Tk) -&gt; None:
+        &#34;&#34;&#34;Set up frame and type hint.&#34;&#34;&#34;
+        self._root = root
+        self._frame: Optional[Frame] = None
+        self._initialize()
 
-    Algorithm X is a straightforward recursive, nondeterministic, depth-first
-    and backtracking algorithm, implemented usually with dancing links technique.
-    &#34;&#34;&#34;
+    def pack(
+        self, fill: Optional[Union[constants.X, constants.BOTH]] = constants.X
+    ) -&gt; None:
+        &#34;&#34;&#34;Show all components.&#34;&#34;&#34;
+        self._frame.pack(fill=fill, expand=True)
+
+    def destroy(self) -&gt; None:
+        &#34;&#34;&#34;Hide all components.&#34;&#34;&#34;
+        self._frame.destroy()
 
     @abstractmethod
-    def solve(self, *args, **kwargs) -&gt; Any:
-        &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+    def _initialize(self) -&gt; None:
+        pass</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
-<dl>
-<dt><code class="name"><a title="exact_cover_solver.algos.dlx" href="dlx.html">exact_cover_solver.algos.dlx</a></code></dt>
-<dd>
-<div class="desc"><p>Dancing links implementation for algorithm X.</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -61,50 +64,76 @@ class AlgorithmX(ABC):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="exact_cover_solver.algos.AlgorithmX"><code class="flex name class">
-<span>class <span class="ident">AlgorithmX</span></span>
+<dt id="exact_cover_solver.ui.view.View"><code class="flex name class">
+<span>class <span class="ident">View</span></span>
+<span>(</span><span>root: tkinter.Tk)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Abstract base class for algorithm X for solving the exact cover problem.</p>
-<p>Algorithm X is a straightforward recursive, nondeterministic, depth-first
-and backtracking algorithm, implemented usually with dancing links technique.</p></div>
+<div class="desc"><p>Base class for UI views.</p>
+<p>Set up frame and type hint.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AlgorithmX(ABC):
-    &#34;&#34;&#34;Abstract base class for algorithm X for solving the exact cover problem.
+<pre><code class="python">class View:
+    &#34;&#34;&#34;Base class for UI views.&#34;&#34;&#34;
 
-    Algorithm X is a straightforward recursive, nondeterministic, depth-first
-    and backtracking algorithm, implemented usually with dancing links technique.
-    &#34;&#34;&#34;
+    def __init__(self, root: Tk) -&gt; None:
+        &#34;&#34;&#34;Set up frame and type hint.&#34;&#34;&#34;
+        self._root = root
+        self._frame: Optional[Frame] = None
+        self._initialize()
+
+    def pack(
+        self, fill: Optional[Union[constants.X, constants.BOTH]] = constants.X
+    ) -&gt; None:
+        &#34;&#34;&#34;Show all components.&#34;&#34;&#34;
+        self._frame.pack(fill=fill, expand=True)
+
+    def destroy(self) -&gt; None:
+        &#34;&#34;&#34;Hide all components.&#34;&#34;&#34;
+        self._frame.destroy()
 
     @abstractmethod
-    def solve(self, *args, **kwargs) -&gt; Any:
-        &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+    def _initialize(self) -&gt; None:
+        pass</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>abc.ABC</li>
-</ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="exact_cover_solver.algos.dlx.DLX" href="dlx.html#exact_cover_solver.algos.dlx.DLX">DLX</a></li>
+<li><a title="exact_cover_solver.ui.nav.Nav" href="nav.html#exact_cover_solver.ui.nav.Nav">Nav</a></li>
+<li><a title="exact_cover_solver.ui.pentomino_view.PentominoView" href="pentomino_view.html#exact_cover_solver.ui.pentomino_view.PentominoView">PentominoView</a></li>
+<li><a title="exact_cover_solver.ui.welcome_view.WelcomeView" href="welcome_view.html#exact_cover_solver.ui.welcome_view.WelcomeView">WelcomeView</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="exact_cover_solver.algos.AlgorithmX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, *args, **kwargs) ‑> Any</span>
+<dt id="exact_cover_solver.ui.view.View.destroy"><code class="name flex">
+<span>def <span class="ident">destroy</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Abstract solving method that should be implemented by subclasses.</p></div>
+<div class="desc"><p>Hide all components.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@abstractmethod
-def solve(self, *args, **kwargs) -&gt; Any:
-    &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+<pre><code class="python">def destroy(self) -&gt; None:
+    &#34;&#34;&#34;Hide all components.&#34;&#34;&#34;
+    self._frame.destroy()</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.ui.view.View.pack"><code class="name flex">
+<span>def <span class="ident">pack</span></span>(<span>self, fill: Union[_ForwardRef('x'), _ForwardRef('both'), NoneType] = 'x')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Show all components.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pack(
+    self, fill: Optional[Union[constants.X, constants.BOTH]] = constants.X
+) -&gt; None:
+    &#34;&#34;&#34;Show all components.&#34;&#34;&#34;
+    self._frame.pack(fill=fill, expand=True)</code></pre>
 </details>
 </dd>
 </dl>
@@ -120,20 +149,16 @@ def solve(self, *args, **kwargs) -&gt; Any:
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="exact_cover_solver" href="../index.html">exact_cover_solver</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="exact_cover_solver.algos.dlx" href="dlx.html">exact_cover_solver.algos.dlx</a></code></li>
+<li><code><a title="exact_cover_solver.ui" href="index.html">exact_cover_solver.ui</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="exact_cover_solver.algos.AlgorithmX" href="#exact_cover_solver.algos.AlgorithmX">AlgorithmX</a></code></h4>
+<h4><code><a title="exact_cover_solver.ui.view.View" href="#exact_cover_solver.ui.view.View">View</a></code></h4>
 <ul class="">
-<li><code><a title="exact_cover_solver.algos.AlgorithmX.solve" href="#exact_cover_solver.algos.AlgorithmX.solve">solve</a></code></li>
+<li><code><a title="exact_cover_solver.ui.view.View.destroy" href="#exact_cover_solver.ui.view.View.destroy">destroy</a></code></li>
+<li><code><a title="exact_cover_solver.ui.view.View.pack" href="#exact_cover_solver.ui.view.View.pack">pack</a></code></li>
 </ul>
 </li>
 </ul>

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
-<title>exact_cover_solver.algos API documentation</title>
-<meta name="description" content="Package for algorithms, defines interface for algorithm X implementations." />
+<title>exact_cover_solver.ui.menu API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,40 +19,43 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>exact_cover_solver.algos</code></h1>
+<h1 class="title">Module <code>exact_cover_solver.ui.menu</code></h1>
 </header>
 <section id="section-intro">
-<p>Package for algorithms, defines interface for algorithm X implementations.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Package for algorithms, defines interface for algorithm X implementations.&#34;&#34;&#34;
+<pre><code class="python">from tkinter import Menu, Tk
 
-from abc import ABC, abstractmethod
-from typing import Any
+from typing import Callable
 
 
-class AlgorithmX(ABC):
-    &#34;&#34;&#34;Abstract base class for algorithm X for solving the exact cover problem.
+class AppMenu:
+    def __init__(self, root: Tk, quit_app: Callable, show_about: Callable) -&gt; None:
+        &#34;&#34;&#34;Initialize menu object.&#34;&#34;&#34;
+        self.__menu = Menu(root)
+        self.__quit_app = quit_app
+        self.__show_about = show_about
+        self._initialize()
 
-    Algorithm X is a straightforward recursive, nondeterministic, depth-first
-    and backtracking algorithm, implemented usually with dancing links technique.
-    &#34;&#34;&#34;
+    def _initialize(self) -&gt; None:
+        &#34;&#34;&#34;Initialize needed menus and their functionalities.&#34;&#34;&#34;
+        file_menu = Menu(self.__menu)
+        self.__menu.add_cascade(label=&#34;File&#34;, menu=file_menu)
+        file_menu.add_command(label=&#34;Exit&#34;, command=self.__quit_app)
 
-    @abstractmethod
-    def solve(self, *args, **kwargs) -&gt; Any:
-        &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+        help_menu = Menu(self.__menu)
+        self.__menu.add_cascade(label=&#34;Help&#34;, menu=help_menu)
+        help_menu.add_command(label=&#34;About&#34;, command=self.__show_about)
+
+    @property
+    def menu(self) -&gt; Menu:
+        &#34;&#34;&#34;Return menu object.&#34;&#34;&#34;
+        return self.__menu</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
-<dl>
-<dt><code class="name"><a title="exact_cover_solver.algos.dlx" href="dlx.html">exact_cover_solver.algos.dlx</a></code></dt>
-<dd>
-<div class="desc"><p>Dancing links implementation for algorithm X.</p></div>
-</dd>
-</dl>
 </section>
 <section>
 </section>
@@ -61,50 +64,52 @@ class AlgorithmX(ABC):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="exact_cover_solver.algos.AlgorithmX"><code class="flex name class">
-<span>class <span class="ident">AlgorithmX</span></span>
+<dt id="exact_cover_solver.ui.menu.AppMenu"><code class="flex name class">
+<span>class <span class="ident">AppMenu</span></span>
+<span>(</span><span>root: tkinter.Tk, quit_app: Callable, show_about: Callable)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Abstract base class for algorithm X for solving the exact cover problem.</p>
-<p>Algorithm X is a straightforward recursive, nondeterministic, depth-first
-and backtracking algorithm, implemented usually with dancing links technique.</p></div>
+<div class="desc"><p>Initialize menu object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class AlgorithmX(ABC):
-    &#34;&#34;&#34;Abstract base class for algorithm X for solving the exact cover problem.
+<pre><code class="python">class AppMenu:
+    def __init__(self, root: Tk, quit_app: Callable, show_about: Callable) -&gt; None:
+        &#34;&#34;&#34;Initialize menu object.&#34;&#34;&#34;
+        self.__menu = Menu(root)
+        self.__quit_app = quit_app
+        self.__show_about = show_about
+        self._initialize()
 
-    Algorithm X is a straightforward recursive, nondeterministic, depth-first
-    and backtracking algorithm, implemented usually with dancing links technique.
-    &#34;&#34;&#34;
+    def _initialize(self) -&gt; None:
+        &#34;&#34;&#34;Initialize needed menus and their functionalities.&#34;&#34;&#34;
+        file_menu = Menu(self.__menu)
+        self.__menu.add_cascade(label=&#34;File&#34;, menu=file_menu)
+        file_menu.add_command(label=&#34;Exit&#34;, command=self.__quit_app)
 
-    @abstractmethod
-    def solve(self, *args, **kwargs) -&gt; Any:
-        &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+        help_menu = Menu(self.__menu)
+        self.__menu.add_cascade(label=&#34;Help&#34;, menu=help_menu)
+        help_menu.add_command(label=&#34;About&#34;, command=self.__show_about)
+
+    @property
+    def menu(self) -&gt; Menu:
+        &#34;&#34;&#34;Return menu object.&#34;&#34;&#34;
+        return self.__menu</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="exact_cover_solver.algos.dlx.DLX" href="dlx.html#exact_cover_solver.algos.dlx.DLX">DLX</a></li>
-</ul>
-<h3>Methods</h3>
+<h3>Instance variables</h3>
 <dl>
-<dt id="exact_cover_solver.algos.AlgorithmX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, *args, **kwargs) ‑> Any</span>
-</code></dt>
+<dt id="exact_cover_solver.ui.menu.AppMenu.menu"><code class="name">var <span class="ident">menu</span> : tkinter.Menu</code></dt>
 <dd>
-<div class="desc"><p>Abstract solving method that should be implemented by subclasses.</p></div>
+<div class="desc"><p>Return menu object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@abstractmethod
-def solve(self, *args, **kwargs) -&gt; Any:
-    &#34;&#34;&#34;Abstract solving method that should be implemented by subclasses.&#34;&#34;&#34;</code></pre>
+<pre><code class="python">@property
+def menu(self) -&gt; Menu:
+    &#34;&#34;&#34;Return menu object.&#34;&#34;&#34;
+    return self.__menu</code></pre>
 </details>
 </dd>
 </dl>
@@ -120,20 +125,15 @@ def solve(self, *args, **kwargs) -&gt; Any:
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="exact_cover_solver" href="../index.html">exact_cover_solver</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
-<ul>
-<li><code><a title="exact_cover_solver.algos.dlx" href="dlx.html">exact_cover_solver.algos.dlx</a></code></li>
+<li><code><a title="exact_cover_solver.ui" href="index.html">exact_cover_solver.ui</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="exact_cover_solver.algos.AlgorithmX" href="#exact_cover_solver.algos.AlgorithmX">AlgorithmX</a></code></h4>
+<h4><code><a title="exact_cover_solver.ui.menu.AppMenu" href="#exact_cover_solver.ui.menu.AppMenu">AppMenu</a></code></h4>
 <ul class="">
-<li><code><a title="exact_cover_solver.algos.AlgorithmX.solve" href="#exact_cover_solver.algos.AlgorithmX.solve">solve</a></code></li>
+<li><code><a title="exact_cover_solver.ui.menu.AppMenu.menu" href="#exact_cover_solver.ui.menu.AppMenu.menu">menu</a></code></li>
 </ul>
 </li>
 </ul>

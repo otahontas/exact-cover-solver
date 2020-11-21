@@ -27,16 +27,229 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Package for handling UI-related functionality.&#34;&#34;&#34;</code></pre>
+<pre><code class="python">&#34;&#34;&#34;Package for handling UI-related functionality.&#34;&#34;&#34;
+from tkinter import Tk
+from typing import Optional
+
+from .menu import AppMenu
+from .nav import Nav
+from .view import View
+from .welcome_view import WelcomeView
+from .pentomino_view import PentominoView
+
+
+class UI:
+    &#34;&#34;&#34;Main UI class.&#34;&#34;&#34;
+
+    def __init__(self, root: Tk, solver):
+        &#34;&#34;&#34;Initialize ui components.&#34;&#34;&#34;
+        self.__root = root
+        self.__solver = solver
+        self.__current_view: Optional[View] = None
+        self.__app_menu: Optional[AppMenu] = None
+        self.__nav: Optional[Nav] = None
+
+    def start(self):
+        &#34;&#34;&#34;Start UI, set some initial configurations and show default view.&#34;&#34;&#34;
+        self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
+        self.__root.config(menu=self.__app_menu.menu)
+        self._set_current_nav()
+        self._set_current_view()
+
+    def _set_current_view(self):
+        &#34;&#34;&#34;Set view.&#34;&#34;&#34;
+        self._hide_current_view()
+        current_problem = self.__solver.problem
+        if not current_problem:
+            self.__current_view = WelcomeView(self.__root)
+        elif current_problem == &#34;pentomino&#34;:
+            self.__current_view = PentominoView(self.__root, self.__solver)
+        self.__current_view.pack()
+
+    def _hide_current_view(self):
+        &#34;&#34;&#34;Destroy and hide current view.&#34;&#34;&#34;
+        if self.__current_view:
+            self.__current_view.destroy()
+        self.__current_view = None
+
+    def _set_current_nav(self):
+        &#34;&#34;&#34;Set nav.&#34;&#34;&#34;
+        self._hide_current_nav()
+        current_problem = self.__solver.problem
+        current_algo = self.__solver.algorithm
+        self.__nav = Nav(
+            self.__root,
+            self._change_current_problem,
+            self._change_current_algo,
+            current_problem,
+            current_algo,
+        )
+        self.__nav.pack()
+
+    def _hide_current_nav(self):
+        &#34;&#34;&#34;Destroy and hide current nav.&#34;&#34;&#34;
+        if self.__nav:
+            self.__nav.destroy()
+        self.__nav = None
+
+    def _quit_app(self) -&gt; None:
+        &#34;&#34;&#34;Exit the program.&#34;&#34;&#34;
+        self.__root.quit()
+
+    def _show_about(self) -&gt; None:
+        &#34;&#34;&#34;Show about info.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _change_current_problem(self, problem: str) -&gt; None:
+        &#34;&#34;&#34;Change current problem in program logic and app.&#34;&#34;&#34;
+        self.__solver.problem = problem
+        self._set_current_nav()
+        self._set_current_view()
+
+    def _change_current_algo(self, algo: str) -&gt; None:
+        &#34;&#34;&#34;Change current algo in program logic and app.&#34;&#34;&#34;
+        self.__solver.algorithm = algo
+        self._set_current_nav()</code></pre>
 </details>
 </section>
 <section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="exact_cover_solver.ui.menu" href="menu.html">exact_cover_solver.ui.menu</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="exact_cover_solver.ui.nav" href="nav.html">exact_cover_solver.ui.nav</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="exact_cover_solver.ui.pentomino_view" href="pentomino_view.html">exact_cover_solver.ui.pentomino_view</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="exact_cover_solver.ui.view" href="view.html">exact_cover_solver.ui.view</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="exact_cover_solver.ui.welcome_view" href="welcome_view.html">exact_cover_solver.ui.welcome_view</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </section>
 <section>
 </section>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="exact_cover_solver.ui.UI"><code class="flex name class">
+<span>class <span class="ident">UI</span></span>
+<span>(</span><span>root: tkinter.Tk, solver)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Main UI class.</p>
+<p>Initialize ui components.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UI:
+    &#34;&#34;&#34;Main UI class.&#34;&#34;&#34;
+
+    def __init__(self, root: Tk, solver):
+        &#34;&#34;&#34;Initialize ui components.&#34;&#34;&#34;
+        self.__root = root
+        self.__solver = solver
+        self.__current_view: Optional[View] = None
+        self.__app_menu: Optional[AppMenu] = None
+        self.__nav: Optional[Nav] = None
+
+    def start(self):
+        &#34;&#34;&#34;Start UI, set some initial configurations and show default view.&#34;&#34;&#34;
+        self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
+        self.__root.config(menu=self.__app_menu.menu)
+        self._set_current_nav()
+        self._set_current_view()
+
+    def _set_current_view(self):
+        &#34;&#34;&#34;Set view.&#34;&#34;&#34;
+        self._hide_current_view()
+        current_problem = self.__solver.problem
+        if not current_problem:
+            self.__current_view = WelcomeView(self.__root)
+        elif current_problem == &#34;pentomino&#34;:
+            self.__current_view = PentominoView(self.__root, self.__solver)
+        self.__current_view.pack()
+
+    def _hide_current_view(self):
+        &#34;&#34;&#34;Destroy and hide current view.&#34;&#34;&#34;
+        if self.__current_view:
+            self.__current_view.destroy()
+        self.__current_view = None
+
+    def _set_current_nav(self):
+        &#34;&#34;&#34;Set nav.&#34;&#34;&#34;
+        self._hide_current_nav()
+        current_problem = self.__solver.problem
+        current_algo = self.__solver.algorithm
+        self.__nav = Nav(
+            self.__root,
+            self._change_current_problem,
+            self._change_current_algo,
+            current_problem,
+            current_algo,
+        )
+        self.__nav.pack()
+
+    def _hide_current_nav(self):
+        &#34;&#34;&#34;Destroy and hide current nav.&#34;&#34;&#34;
+        if self.__nav:
+            self.__nav.destroy()
+        self.__nav = None
+
+    def _quit_app(self) -&gt; None:
+        &#34;&#34;&#34;Exit the program.&#34;&#34;&#34;
+        self.__root.quit()
+
+    def _show_about(self) -&gt; None:
+        &#34;&#34;&#34;Show about info.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def _change_current_problem(self, problem: str) -&gt; None:
+        &#34;&#34;&#34;Change current problem in program logic and app.&#34;&#34;&#34;
+        self.__solver.problem = problem
+        self._set_current_nav()
+        self._set_current_view()
+
+    def _change_current_algo(self, algo: str) -&gt; None:
+        &#34;&#34;&#34;Change current algo in program logic and app.&#34;&#34;&#34;
+        self.__solver.algorithm = algo
+        self._set_current_nav()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.ui.UI.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Start UI, set some initial configurations and show default view.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def start(self):
+    &#34;&#34;&#34;Start UI, set some initial configurations and show default view.&#34;&#34;&#34;
+    self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
+    self.__root.config(menu=self.__app_menu.menu)
+    self._set_current_nav()
+    self._set_current_view()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -48,6 +261,25 @@
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="exact_cover_solver" href="../index.html">exact_cover_solver</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="exact_cover_solver.ui.menu" href="menu.html">exact_cover_solver.ui.menu</a></code></li>
+<li><code><a title="exact_cover_solver.ui.nav" href="nav.html">exact_cover_solver.ui.nav</a></code></li>
+<li><code><a title="exact_cover_solver.ui.pentomino_view" href="pentomino_view.html">exact_cover_solver.ui.pentomino_view</a></code></li>
+<li><code><a title="exact_cover_solver.ui.view" href="view.html">exact_cover_solver.ui.view</a></code></li>
+<li><code><a title="exact_cover_solver.ui.welcome_view" href="welcome_view.html">exact_cover_solver.ui.welcome_view</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="exact_cover_solver.ui.UI" href="#exact_cover_solver.ui.UI">UI</a></code></h4>
+<ul class="">
+<li><code><a title="exact_cover_solver.ui.UI.start" href="#exact_cover_solver.ui.UI.start">start</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

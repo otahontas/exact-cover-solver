@@ -30,44 +30,54 @@
 <pre><code class="python">&#34;&#34;&#34;Circular doubly linked list object definitions.&#34;&#34;&#34;
 
 
-class DataObject:
-    &#34;&#34;&#34;Data object representing 1s in matrix.&#34;&#34;&#34;
-
-    def __init__(self, column, row=None):
-        &#34;&#34;&#34;Link data object to column object, optionally set row name.&#34;&#34;&#34;
-        self.column = column
-        self.row = row
-        self.up = self.down = self.left = self.right = self
-
-    def detach(self):
-        &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
-        self.down.up = self.up
-        self.up.down = self.down
-        self.column.size -= 1
-
-    def attach(self):
-        &#34;&#34;&#34;Attach data object back to its original position in linked list.&#34;&#34;&#34;
-        self.column.size += 1
-        self.up.down = self.down.up = self
-
-
-class ColumnObject(DataObject):
+class ColumnObject:
     &#34;&#34;&#34;Column object representing matrix columns.&#34;&#34;&#34;
 
-    def __init__(self, _id=None):
-        &#34;&#34;&#34;Set column size, link column object to itself.&#34;&#34;&#34;
-        super(ColumnObject, self).__init__(self)
+    def __init__(self, _id: int) -&gt; None:
+        &#34;&#34;&#34;Set column size, column id, link column object to itself.&#34;&#34;&#34;
         self.id = _id
         self.size = 0
+        self.row = -1
+        self.column = self
+        self.up = self.down = self.left = self.right = self
 
-    def detach(self):
+    def detach(self) -&gt; None:
         &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.right.left = self.left
         self.left.right = self.right
 
-    def attach(self):
+    def attach(self) -&gt; None:
         &#34;&#34;&#34;Attach column object back to its original position in header list.&#34;&#34;&#34;
-        self.left.right = self.right.left = self</code></pre>
+        self.left.right = self.right.left = self
+
+    def increase_size(self) -&gt; None:
+        &#34;&#34;&#34;Increase size when attaching new node to column.&#34;&#34;&#34;
+        self.size += 1
+
+    def decrease_size(self) -&gt; None:
+        &#34;&#34;&#34;Decrease size when detaching node from column.&#34;&#34;&#34;
+        self.size -= 1
+
+
+class DataObject:
+    &#34;&#34;&#34;Data object representing 1s in matrix.&#34;&#34;&#34;
+
+    def __init__(self, column: ColumnObject, row: int) -&gt; None:
+        &#34;&#34;&#34;Link data object to column object, set row identifier.&#34;&#34;&#34;
+        self.column = column
+        self.row = row
+        self.up = self.down = self.left = self.right = self
+
+    def detach(self) -&gt; None:
+        &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
+        self.down.up = self.up
+        self.up.down = self.down
+        self.column.decrease_size()
+
+    def attach(self) -&gt; None:
+        &#34;&#34;&#34;Attach data object back to its original position in linked list.&#34;&#34;&#34;
+        self.column.increase_size()
+        self.up.down = self.down.up = self</code></pre>
 </details>
 </section>
 <section>
@@ -81,40 +91,47 @@ class ColumnObject(DataObject):
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject"><code class="flex name class">
 <span>class <span class="ident">ColumnObject</span></span>
+<span>(</span><span>_id: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Column object representing matrix columns.</p>
-<p>Set column size, link column object to itself.</p></div>
+<p>Set column size, column id, link column object to itself.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ColumnObject(DataObject):
+<pre><code class="python">class ColumnObject:
     &#34;&#34;&#34;Column object representing matrix columns.&#34;&#34;&#34;
 
-    def __init__(self, _id=None):
-        &#34;&#34;&#34;Set column size, link column object to itself.&#34;&#34;&#34;
-        super(ColumnObject, self).__init__(self)
+    def __init__(self, _id: int) -&gt; None:
+        &#34;&#34;&#34;Set column size, column id, link column object to itself.&#34;&#34;&#34;
         self.id = _id
         self.size = 0
+        self.row = -1
+        self.column = self
+        self.up = self.down = self.left = self.right = self
 
-    def detach(self):
+    def detach(self) -&gt; None:
         &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.right.left = self.left
         self.left.right = self.right
 
-    def attach(self):
+    def attach(self) -&gt; None:
         &#34;&#34;&#34;Attach column object back to its original position in header list.&#34;&#34;&#34;
-        self.left.right = self.right.left = self</code></pre>
+        self.left.right = self.right.left = self
+
+    def increase_size(self) -&gt; None:
+        &#34;&#34;&#34;Increase size when attaching new node to column.&#34;&#34;&#34;
+        self.size += 1
+
+    def decrease_size(self) -&gt; None:
+        &#34;&#34;&#34;Decrease size when detaching node from column.&#34;&#34;&#34;
+        self.size -= 1</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="exact_cover_solver.datastructures.dlxdataobjects.DataObject" href="#exact_cover_solver.datastructures.dlxdataobjects.DataObject">DataObject</a></li>
-</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.attach"><code class="name flex">
-<span>def <span class="ident">attach</span></span>(<span>self)</span>
+<span>def <span class="ident">attach</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Attach column object back to its original position in header list.</p></div>
@@ -122,13 +139,27 @@ class ColumnObject(DataObject):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def attach(self):
+<pre><code class="python">def attach(self) -&gt; None:
     &#34;&#34;&#34;Attach column object back to its original position in header list.&#34;&#34;&#34;
     self.left.right = self.right.left = self</code></pre>
 </details>
 </dd>
+<dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.decrease_size"><code class="name flex">
+<span>def <span class="ident">decrease_size</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Decrease size when detaching node from column.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def decrease_size(self) -&gt; None:
+    &#34;&#34;&#34;Decrease size when detaching node from column.&#34;&#34;&#34;
+    self.size -= 1</code></pre>
+</details>
+</dd>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach"><code class="name flex">
-<span>def <span class="ident">detach</span></span>(<span>self)</span>
+<span>def <span class="ident">detach</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Detach column object from header list, but don't erase it from memory.</p></div>
@@ -136,21 +167,35 @@ class ColumnObject(DataObject):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def detach(self):
+<pre><code class="python">def detach(self) -&gt; None:
     &#34;&#34;&#34;Detach column object from header list, but don&#39;t erase it from memory.&#34;&#34;&#34;
     self.right.left = self.left
     self.left.right = self.right</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.increase_size"><code class="name flex">
+<span>def <span class="ident">increase_size</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Increase size when attaching new node to column.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def increase_size(self) -&gt; None:
+    &#34;&#34;&#34;Increase size when attaching new node to column.&#34;&#34;&#34;
+    self.size += 1</code></pre>
 </details>
 </dd>
 </dl>
 </dd>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.DataObject"><code class="flex name class">
 <span>class <span class="ident">DataObject</span></span>
-<span>(</span><span>column, row=None)</span>
+<span>(</span><span>column: <a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a>, row: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Data object representing 1s in matrix.</p>
-<p>Link data object to column object, optionally set row name.</p></div>
+<p>Link data object to column object, set row identifier.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -158,31 +203,27 @@ class ColumnObject(DataObject):
 <pre><code class="python">class DataObject:
     &#34;&#34;&#34;Data object representing 1s in matrix.&#34;&#34;&#34;
 
-    def __init__(self, column, row=None):
-        &#34;&#34;&#34;Link data object to column object, optionally set row name.&#34;&#34;&#34;
+    def __init__(self, column: ColumnObject, row: int) -&gt; None:
+        &#34;&#34;&#34;Link data object to column object, set row identifier.&#34;&#34;&#34;
         self.column = column
         self.row = row
         self.up = self.down = self.left = self.right = self
 
-    def detach(self):
+    def detach(self) -&gt; None:
         &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
         self.down.up = self.up
         self.up.down = self.down
-        self.column.size -= 1
+        self.column.decrease_size()
 
-    def attach(self):
+    def attach(self) -&gt; None:
         &#34;&#34;&#34;Attach data object back to its original position in linked list.&#34;&#34;&#34;
-        self.column.size += 1
+        self.column.increase_size()
         self.up.down = self.down.up = self</code></pre>
 </details>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a></li>
-</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.DataObject.attach"><code class="name flex">
-<span>def <span class="ident">attach</span></span>(<span>self)</span>
+<span>def <span class="ident">attach</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Attach data object back to its original position in linked list.</p></div>
@@ -190,14 +231,14 @@ class ColumnObject(DataObject):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def attach(self):
+<pre><code class="python">def attach(self) -&gt; None:
     &#34;&#34;&#34;Attach data object back to its original position in linked list.&#34;&#34;&#34;
-    self.column.size += 1
+    self.column.increase_size()
     self.up.down = self.down.up = self</code></pre>
 </details>
 </dd>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.DataObject.detach"><code class="name flex">
-<span>def <span class="ident">detach</span></span>(<span>self)</span>
+<span>def <span class="ident">detach</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Detach data object from linked list, but don't erase it from memory.</p></div>
@@ -205,11 +246,11 @@ class ColumnObject(DataObject):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def detach(self):
+<pre><code class="python">def detach(self) -&gt; None:
     &#34;&#34;&#34;Detach data object from linked list, but don&#39;t erase it from memory.&#34;&#34;&#34;
     self.down.up = self.up
     self.up.down = self.down
-    self.column.size -= 1</code></pre>
+    self.column.decrease_size()</code></pre>
 </details>
 </dd>
 </dl>
@@ -234,7 +275,9 @@ class ColumnObject(DataObject):
 <h4><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a></code></h4>
 <ul class="">
 <li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.attach" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.attach">attach</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.decrease_size" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.decrease_size">decrease_size</a></code></li>
 <li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.detach">detach</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.increase_size" href="#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject.increase_size">increase_size</a></code></li>
 </ul>
 </li>
 <li>

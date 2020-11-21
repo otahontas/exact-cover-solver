@@ -29,111 +29,113 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
 
+from typing import List
+
 from exact_cover_solver.algos import AlgorithmX
-from copy import copy
+from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.custom_types import Solution
 
 
 class DLX(AlgorithmX):
     &#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
 
-    def __init__(self):
-        &#34;&#34;&#34;Set up solution counter.&#34;&#34;&#34;
-        self.solutions = []
-        self.partial = set()
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize solution list.&#34;&#34;&#34;
+        self.__solutions: List[Solution] = []
 
-    def solve(self, matrix):
-        &#34;&#34;&#34;Solve exact cover problem.&#34;&#34;&#34;
-        self._search(matrix)
+    def solve(self, matrix: DLXMatrix) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solve exact cover problem for given matrix.
 
-    def _search(self, h):
-        &#34;&#34;&#34;Perform algorithm X recursively.
-
-        Algorithm:
-        - If R[h] = h, solution has been found
-        - Otherwise choose column c optimally. If column doesn&#39;t have 1s, terminate.
-        - Cover column c
-        - Go through rows of column c
-            - Include row in partial solution
-            - Cover each column on row
-            - Search for solution recursively
-            - Uncover each column on row
-            - Remove row from partial solution
-        - Uncover column c
+        Algorithm X is performed recursively on matrix with helper method.
         &#34;&#34;&#34;
-        if h.right == h:
-            self.solutions.append(copy(self.partial))
+        self.__solutions.clear()
+        self._search(matrix)
+        return self.__solutions
+
+    def _search(self, matrix: DLXMatrix, partial: Solution = None) -&gt; None:
+        &#34;&#34;&#34;Perform algorithm X recursively and collect partial solutions.&#34;&#34;&#34;
+        if not partial:
+            partial: Solution = []
+
+        if matrix.right == matrix:
+            self.__solutions.append(partial[:])
             return
 
-        c = self._choose_optimal_column_object(h)
+        column = self._choose_optimal_column_object(matrix)
 
-        if not c.size:
+        if not column.size:
             return
 
-        self._cover(c)
+        self._cover(column)
 
-        r = c.down
-        while r != c:
-            self.partial.add(r.row)
-            j = r.right
-            while j != r:
-                self._cover(j.column)
-                j = j.right
-            self._search(h)
-            j = r.left
-            while j != r:
-                self._uncover(j.column)
-                j = j.left
-            self.partial.remove(r.row)
-            r = r.down
-        self._uncover(c)
+        row = column.down
+        while row != column:
+            partial.append(row.row)
+            node = row.right
+            while node != row:
+                self._cover(node.column)
+                node = node.right
+            self._search(matrix, partial)
+            node = row.left
+            while node != row:
+                self._uncover(node.column)
+                node = node.left
+            partial.pop()
+            row = row.down
+        self._uncover(column)
 
     @staticmethod
-    def _choose_optimal_column_object(h):
+    def _choose_optimal_column_object(matrix: DLXMatrix) -&gt; ColumnObject:
         &#34;&#34;&#34;Find column with smallest number of 1s.
 
         This is done to minimize the branching factor.
         &#34;&#34;&#34;
-        j = h.right
-        c = j
-        s = j.size
-        while j != h:
-            c, s = (j, j.size) if j.size &lt; s else (c, s)
-            j = j.right
-        return c
+        current_column = matrix.right
+        column = current_column
+        size = current_column.size
+        while current_column != matrix:
+            column, size = (
+                (current_column, current_column.size)
+                if current_column.size &lt; size
+                else (column, size)
+            )
+            current_column = current_column.right
+        return column
 
     @staticmethod
-    def _cover(c):
-        &#34;&#34;&#34;Cover given column c.
+    def _cover(column: ColumnObject) -&gt; None:
+        &#34;&#34;&#34;Cover given column.
 
-        First remove c from the header list and then remove all rows in c&#39;s own list
-        from other column lists they&#39;re in.
+        First remove column from the header list and then remove all rows
+        in column from other column lists rows are in.
 
         Covering is done from top to bottom and left to right manner.
         &#34;&#34;&#34;
-        c.detach()
-        i = c.down
-        while i != c:
-            j = i.right
-            while j != i:
-                j.detach()
-                j = j.right
-            i = i.down
+        column.detach()
+        row = column.down
+        while row != column:
+            node = row.right
+            while node != row:
+                node.detach()
+                node = node.right
+            row = row.down
 
     @staticmethod
-    def _uncover(c):
-        &#34;&#34;&#34;Uncover given column c.
+    def _uncover(column: ColumnObject) -&gt; None:
+        &#34;&#34;&#34;Uncover given column.
 
         Uncovering is done from bottom to top and right to left manner in order to undo
         covering steps.
         &#34;&#34;&#34;
-        i = c.up
-        while i != c:
-            j = i.left
-            while j != i:
-                j.attach()
-                j = j.left
-            i = i.up
-        c.attach()</code></pre>
+        row = column.up
+        while row != column:
+            node = row.left
+            while node != row:
+                node.attach()
+                node = node.left
+            row = row.up
+        column.attach()</code></pre>
 </details>
 </section>
 <section>
@@ -150,7 +152,7 @@ class DLX(AlgorithmX):
 </code></dt>
 <dd>
 <div class="desc"><p>Dancing links implementation for algorithm X.</p>
-<p>Set up solution counter.</p></div>
+<p>Initialize solution list.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -158,104 +160,102 @@ class DLX(AlgorithmX):
 <pre><code class="python">class DLX(AlgorithmX):
     &#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
 
-    def __init__(self):
-        &#34;&#34;&#34;Set up solution counter.&#34;&#34;&#34;
-        self.solutions = []
-        self.partial = set()
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize solution list.&#34;&#34;&#34;
+        self.__solutions: List[Solution] = []
 
-    def solve(self, matrix):
-        &#34;&#34;&#34;Solve exact cover problem.&#34;&#34;&#34;
-        self._search(matrix)
+    def solve(self, matrix: DLXMatrix) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solve exact cover problem for given matrix.
 
-    def _search(self, h):
-        &#34;&#34;&#34;Perform algorithm X recursively.
-
-        Algorithm:
-        - If R[h] = h, solution has been found
-        - Otherwise choose column c optimally. If column doesn&#39;t have 1s, terminate.
-        - Cover column c
-        - Go through rows of column c
-            - Include row in partial solution
-            - Cover each column on row
-            - Search for solution recursively
-            - Uncover each column on row
-            - Remove row from partial solution
-        - Uncover column c
+        Algorithm X is performed recursively on matrix with helper method.
         &#34;&#34;&#34;
-        if h.right == h:
-            self.solutions.append(copy(self.partial))
+        self.__solutions.clear()
+        self._search(matrix)
+        return self.__solutions
+
+    def _search(self, matrix: DLXMatrix, partial: Solution = None) -&gt; None:
+        &#34;&#34;&#34;Perform algorithm X recursively and collect partial solutions.&#34;&#34;&#34;
+        if not partial:
+            partial: Solution = []
+
+        if matrix.right == matrix:
+            self.__solutions.append(partial[:])
             return
 
-        c = self._choose_optimal_column_object(h)
+        column = self._choose_optimal_column_object(matrix)
 
-        if not c.size:
+        if not column.size:
             return
 
-        self._cover(c)
+        self._cover(column)
 
-        r = c.down
-        while r != c:
-            self.partial.add(r.row)
-            j = r.right
-            while j != r:
-                self._cover(j.column)
-                j = j.right
-            self._search(h)
-            j = r.left
-            while j != r:
-                self._uncover(j.column)
-                j = j.left
-            self.partial.remove(r.row)
-            r = r.down
-        self._uncover(c)
+        row = column.down
+        while row != column:
+            partial.append(row.row)
+            node = row.right
+            while node != row:
+                self._cover(node.column)
+                node = node.right
+            self._search(matrix, partial)
+            node = row.left
+            while node != row:
+                self._uncover(node.column)
+                node = node.left
+            partial.pop()
+            row = row.down
+        self._uncover(column)
 
     @staticmethod
-    def _choose_optimal_column_object(h):
+    def _choose_optimal_column_object(matrix: DLXMatrix) -&gt; ColumnObject:
         &#34;&#34;&#34;Find column with smallest number of 1s.
 
         This is done to minimize the branching factor.
         &#34;&#34;&#34;
-        j = h.right
-        c = j
-        s = j.size
-        while j != h:
-            c, s = (j, j.size) if j.size &lt; s else (c, s)
-            j = j.right
-        return c
+        current_column = matrix.right
+        column = current_column
+        size = current_column.size
+        while current_column != matrix:
+            column, size = (
+                (current_column, current_column.size)
+                if current_column.size &lt; size
+                else (column, size)
+            )
+            current_column = current_column.right
+        return column
 
     @staticmethod
-    def _cover(c):
-        &#34;&#34;&#34;Cover given column c.
+    def _cover(column: ColumnObject) -&gt; None:
+        &#34;&#34;&#34;Cover given column.
 
-        First remove c from the header list and then remove all rows in c&#39;s own list
-        from other column lists they&#39;re in.
+        First remove column from the header list and then remove all rows
+        in column from other column lists rows are in.
 
         Covering is done from top to bottom and left to right manner.
         &#34;&#34;&#34;
-        c.detach()
-        i = c.down
-        while i != c:
-            j = i.right
-            while j != i:
-                j.detach()
-                j = j.right
-            i = i.down
+        column.detach()
+        row = column.down
+        while row != column:
+            node = row.right
+            while node != row:
+                node.detach()
+                node = node.right
+            row = row.down
 
     @staticmethod
-    def _uncover(c):
-        &#34;&#34;&#34;Uncover given column c.
+    def _uncover(column: ColumnObject) -&gt; None:
+        &#34;&#34;&#34;Uncover given column.
 
         Uncovering is done from bottom to top and right to left manner in order to undo
         covering steps.
         &#34;&#34;&#34;
-        i = c.up
-        while i != c:
-            j = i.left
-            while j != i:
-                j.attach()
-                j = j.left
-            i = i.up
-        c.attach()</code></pre>
+        row = column.up
+        while row != column:
+            node = row.left
+            while node != row:
+                node.attach()
+                node = node.left
+            row = row.up
+        column.attach()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -265,17 +265,23 @@ class DLX(AlgorithmX):
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.algos.dlx.DLX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, matrix)</span>
+<span>def <span class="ident">solve</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="../datastructures/dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a>) ‑> List[List[int]]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Solve exact cover problem.</p></div>
+<div class="desc"><p>Solve exact cover problem for given matrix.</p>
+<p>Algorithm X is performed recursively on matrix with helper method.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def solve(self, matrix):
-    &#34;&#34;&#34;Solve exact cover problem.&#34;&#34;&#34;
-    self._search(matrix)</code></pre>
+<pre><code class="python">def solve(self, matrix: DLXMatrix) -&gt; List[Solution]:
+    &#34;&#34;&#34;Solve exact cover problem for given matrix.
+
+    Algorithm X is performed recursively on matrix with helper method.
+    &#34;&#34;&#34;
+    self.__solutions.clear()
+    self._search(matrix)
+    return self.__solutions</code></pre>
 </details>
 </dd>
 </dl>
