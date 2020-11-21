@@ -66,25 +66,25 @@ def correct_orientation_amounts():
 
 def test_transpose_works_correctly(correct_transposed_pentominoes):
     pg = PentominoGenerator(6, 10)
-    transposed = list(map(pg.transpose, pg.pentominoes))
+    transposed = list(map(pg._transpose, pg.pentominoes))
     assert transposed == correct_transposed_pentominoes
 
 
 def test_left_right_flip_works_correctly(correct_left_right_flipped_pentominoes):
     pg = PentominoGenerator(6, 10)
-    transposed = list(map(pg.flip_left_right, pg.pentominoes))
+    transposed = list(map(pg._flip_left_right, pg.pentominoes))
     assert transposed == correct_left_right_flipped_pentominoes
 
 
 def test_up_down_flip_works_correctly(correct_up_down_flipped_pentominoes):
     pg = PentominoGenerator(6, 10)
-    transposed = list(map(pg.flip_up_down, pg.pentominoes))
+    transposed = list(map(pg._flip_up_down, pg.pentominoes))
     assert transposed == correct_up_down_flipped_pentominoes
 
 
 def test_correct_amount_of_orientations_is_generated(correct_orientation_amounts):
     pg = PentominoGenerator(6, 10)
-    amounts = [len(x) for x in list(map(pg.generate_all_orientations, pg.pentominoes))]
+    amounts = [len(x) for x in list(map(pg._generate_all_orientations, pg.pentominoes))]
     assert amounts == correct_orientation_amounts
 
 
@@ -93,12 +93,12 @@ def test_correct_cells_are_covered():
     pentomino = [[1, 1, 1], [1, 0, 0], [1, 0, 0]]
 
     start = (0, 0)
-    covered = pg.solve_covered_cells(pentomino, start)
+    covered = pg._solve_covered_cells(pentomino, start)
     assert covered == [0, 1, 2, 10, 20]
 
     pentomino = [[1, 1, 1, 1], [1, 0, 0, 0]]
     start = (4, 6)
-    covered = pg.solve_covered_cells(pentomino, start)
+    covered = pg._solve_covered_cells(pentomino, start)
     assert covered == [46, 47, 48, 49, 56]
 
 
