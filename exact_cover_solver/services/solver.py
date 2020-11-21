@@ -18,12 +18,14 @@ class Solver:
         self.__problem: Optional[str] = None
 
     @property
-    def algorithm(self) -> AlgorithmX:
-        """Maintain a reference to one of the algoX objects.
+    def algorithm(self) -> Optional[str]:
+        """Maintain a reference to one of the algoX objects. Returns algo name when asked.
 
         Concrete class is set during runtime.
         """
-        return self.__algorithm
+        if isinstance(self.__algorithm, DLX):
+            return "dlx"
+        return None
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -> None:

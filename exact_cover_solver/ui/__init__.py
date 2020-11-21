@@ -23,23 +23,13 @@ class UI:
         """Starts UI, sets some initial configurations and shows default view."""
         self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
         self.__root.config(menu=self.__app_menu.menu)
-        self.__nav = Nav(
-            self.__root, self._change_current_problem, self._change_current_algo
-        )
-        self.__nav.pack(side=constants.RIGHT)
         self._set_current_view()
+        self._set_current_nav()
 
-    def _set_current_view(self, problem: str = ""):
+    def _set_current_view(self):
+        """Set view"""
         self._hide_current_view()
-        if not problem:
-            self.__current_view = WelcomeView(self.__root)
-        elif problem == "pentomino":
-            pass
-        elif problem == "sudoku":
-            pass
-        else:
-            # TODO: should really show error, not raise errors
-            raise ValueError("Unknown problem type.")
+        self.__current_view = WelcomeView(self.__root)
         self.__current_view.pack(side=constants.LEFT)
 
     def _hide_current_view(self):
@@ -47,6 +37,26 @@ class UI:
         if self.__current_view:
             self.__current_view.destroy()
         self.__current_view = None
+
+    def _set_current_nav(self):
+        """Set nav"""
+        self._hide_current_nav()
+        current_problem = self.__solver.problem
+        current_algo = self.__solver.algorithm
+        self.__nav = Nav(
+            self.__root,
+            self._change_current_problem,
+            self._change_current_algo,
+            current_problem,
+            current_algo,
+        )
+        self.__nav.pack(side=constants.RIGHT)
+
+    def _hide_current_nav(self):
+        """Destroy and hide current nav."""
+        if self.__nav:
+            self.__nav.destroy()
+        self.__nav = None
 
     def _quit_app(self) -> None:
         """Exit the program."""
@@ -58,6 +68,10 @@ class UI:
 
     def _change_current_problem(self, problem: str) -> None:
         self.__solver.problem = problem
+        self._set_current_nav()
+        self._set_current_view()
 
     def _change_current_algo(self, algo: str) -> None:
-        self.__solver.algo = algo
+        print("trying to set algo to", algo)
+        self.__solver.algorithm = algo
+        self._set_current_nav()

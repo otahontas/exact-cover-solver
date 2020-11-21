@@ -11,7 +11,7 @@ import time
 
 
 def generate_pentomino_board_solutions(
-        pg: PentominoGenerator, board_height: int, board_width: int, correct_amount: int
+    pg: PentominoGenerator, board_height: int, board_width: int, correct_amount: int
 ) -> None:
     """Test that 6x10 board gets correct amount of solutions."""
     universe, set_collection = pg.generate(board_height, board_width)
