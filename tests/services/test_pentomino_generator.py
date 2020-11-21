@@ -73,7 +73,7 @@ def correct_orientation_amounts():
         "P": 8,
         "W": 4,
         "Z": 4,
-        "N": 8,
+        "N": 4,
         "L": 8,
     }
 
@@ -128,8 +128,39 @@ def test_correct_cells_are_covered():
     assert covered == [46, 47, 48, 49, 56]
 
 
-def test_generator_generates_correct_amount_of_set_collections_for_6_10_board():
+def test_generator_generates_correct_amount_of_set_collections_for_3_20_board():
+    """Generate 3x20 board collections.
+
+    For info about correct amounts, see following link:
+    https://boyetblog.s3.amazonaws.com/PCPlus/294.pentominoes.pdf.
+    """
+    correct_amounts = {
+        "V": 72,
+        "U": 110,
+        "X": 18,
+        "T": 72,
+        "Y": 136,
+        "I": 48,
+        "F": 144,
+        "P": 220,
+        "W": 72,
+        "Z": 72,
+        "N": 68,
+        "L": 136,
+    }
+    correct_total_amount = 1168
+    correct_universe_size = 72
+
     pg = PentominoGenerator()
-    universe, set_collection = pg.generate(6, 10)
-    assert len(universe) == 72
-    assert len(set_collection) == 1168
+    universe, set_collection = pg.generate(3, 20)
+
+    assert len(universe) == correct_universe_size
+    for pos in [row for row in set_collection if row[0] == 10]:
+        print(pos)
+    indexes = pg.pentomino_indexes
+    for pentomino in correct_amounts:
+        assert (
+            len([row for row in set_collection if row[0] == indexes[pentomino]])
+            == correct_amounts[pentomino]
+        )
+    assert len(set_collection) == correct_total_amount

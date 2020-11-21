@@ -14,7 +14,11 @@ class PentominoGenerator:
     """Universe and set generator for different size pentominoes."""
 
     def __init__(self) -> None:
-        """Initialize generator."""
+        """Initialize generator.
+
+        Set up returnable universe, initialize set collection, pentomino representations
+        and pentomino numbers for consistency.
+        """
         self.__universe: Universe = [
             num for num in range(NUMBER_OF_PENTOMINOES + NUMBER_OF_CELLS)
         ]
@@ -33,28 +37,43 @@ class PentominoGenerator:
             "N": [[1, 1, 0, 0], [0, 1, 1, 1]],
             "L": [[1, 1, 1, 1], [1, 0, 0, 0]],
         }
+        self.__pentomino_indexes: Dict[str, int] = {
+            "V": 0,
+            "U": 1,
+            "X": 2,
+            "T": 3,
+            "Y": 4,
+            "I": 5,
+            "F": 6,
+            "P": 7,
+            "W": 8,
+            "Z": 9,
+            "N": 10,
+            "L": 11,
+        }
 
     def generate(
         self, board_height: int, board_width: int
     ) -> Tuple[Universe, SetCollection]:
         """Generate universe and set collection with given board size."""
         self.__set_collection.clear()
-        for pentomino_index, pentomino in enumerate(self.__pentominoes.values()):
-            for orientation in self._generate_all_orientations(pentomino):
+        for pentomino in self.__pentominoes:
+            for orientation in self._generate_all_orientations(
+                self.__pentominoes[pentomino]
+            ):
                 pentomino_height = len(orientation)
                 pentomino_width = len(orientation[0])
                 for r in range(board_height + 1 - pentomino_height):
                     for c in range(board_width + 1 - pentomino_width):
-                        covered = [
-                            pentomino_index,
-                            *[
-                                (NUMBER_OF_PENTOMINOES + x)
-                                for x in self._solve_covered_cells(
-                                    orientation, (r, c), board_width
-                                )
-                            ],
-                        ]
-                        self.__set_collection.append(covered)
+                        covered = self._solve_covered_cells(
+                            orientation, (r, c), board_width
+                        )
+                        self.__set_collection.append(
+                            [
+                                self.__pentomino_indexes[pentomino],
+                                *[(NUMBER_OF_PENTOMINOES + x) for x in covered],
+                            ]
+                        )
         return (
             self.__universe,
             self.__set_collection,
@@ -71,12 +90,19 @@ class PentominoGenerator:
         pentomino_width = len(pentomino[0])
         for r in range(pentomino_height):
             for c in range(pentomino_width):
+                cell_number = (y + r) * board_width + x + c
+                if cell_number > NUMBER_OF_CELLS:
+                    return []
                 if pentomino[r][c] == 1:
                     covered.append((y + r) * board_width + x + c)
         return covered
 
     def _generate_all_orientations(self, pentomino: Pentomino) -> List[Pentomino]:
-        """Generate different orientations for this pentomino."""
+        """Generate different orientations for this pentomino.
+
+        If pentomino is N, prune half of the orientations away. This helps pruning
+        algoX branches.
+        """
         seen: Set[str] = set()
         orientations = []
         for transposed in (pentomino, self._transpose(pentomino)):
@@ -89,6 +115,8 @@ class PentominoGenerator:
                     if orientation_as_string not in seen:
                         seen.add(orientation_as_string)
                         orientations.append(up_down_flipped)
+        if pentomino == self.__pentominoes["N"]:
+            return orientations[::2]
         return orientations
 
     @staticmethod
@@ -108,4 +136,10 @@ class PentominoGenerator:
 
     @property
     def pentominoes(self) -> Dict[str, Pentomino]:
+        """Return pentominoes."""
         return self.__pentominoes
+
+    @property
+    def pentomino_indexes(self) -> Dict[str, int]:
+        """Return pentomino indexes."""
+        return self.__pentomino_indexes

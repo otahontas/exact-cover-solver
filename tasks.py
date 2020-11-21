@@ -1,10 +1,12 @@
 """Invoke-based tasks."""
 from invoke import task
 
+stuff_to_analyze = "exact_cover_solver/ performance_tests/ tests/ tasks.py"
+
 
 @task
 def start(ctx):
-    """Start program with pypy implementation of python."""
+    """Start program with cpython."""
     ctx.run("python3 exact_cover_solver/main.py")
 
 
@@ -17,13 +19,13 @@ def test(ctx):
 @task
 def format(ctx):
     """Format project with black code formatter."""
-    ctx.run("black .")
+    ctx.run(f"black {stuff_to_analyze}")
 
 
 @task
 def lint(ctx):
     """Lint project with flake8 and black. This does not modify code, only checks."""
-    ctx.run("flake8 . && black --check .")
+    ctx.run(f"flake8 {stuff_to_analyze} && black --check {stuff_to_analyze}")
 
 
 @task
