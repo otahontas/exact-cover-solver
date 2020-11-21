@@ -1,0 +1,25 @@
+name: Performance tests
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        python-version: [3.6, pypy3]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install packages with pip
+      run: |
+        pip install --upgrade pip
+        pip install .
+    - name: Run performance tests 
+      run: |
+        python performance_tests/test_pentominoes_with_dlx.py

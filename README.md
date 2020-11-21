@@ -21,7 +21,7 @@ Project for Helsinki University's Data structures and algorithms -project course
 
 Ohjelmistovaatimukset:
 - `Pypy 3.7+` / `Python 3.6+`. 
-  - Koska ohjelma on toteutettu puhtaasti pythonilla, Pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti. Esimerkiksi vastausten lukumäärän etsiminen [pentomino-pelissä](https://en.wikipedia.org/wiki/Pentomino) 6x10-kokoisen ruudukolla kestää pypyllä n. 
+  - Koska ohjelma on toteutettu puhtaasti pythonilla, Pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti. Esimerkiksi vastausten lukumäärän etsiminen [pentomino-pelissä](https://en.wikipedia.org/wiki/Pentomino) 6x10-kokoisen ruudukolla kestää Pypyllä n. 30 sek ja cpythonilla n. 10 minuuttia (Intel 3.4Ghz i5 cpu:lla)
   - Pypyn voit ladata [projektin nettisivuilta](https://www.pypy.org/download.html), [pyenvin avulla](https://github.com/pyenv/pyenv) tai todennäköisesti käyttöjärjestelmäsi paketinhallinnasta.
 
 Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjätyökaluja seuraavasti (korvaa komennoissa oleva `pypy3` komennolla `python3`, jos et halua / voi käyttää pypyä):
@@ -30,6 +30,7 @@ Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjät
 - Päivitä pip: `pypy3 -m pip install --upgrade pip`
 - Asenna ohjelma `pypy3 -m pip install .`
 - Käynnistä ohjelma `pypy3 exact_cover_solver/main.py`
+- Voit vaihtoehtoisesti ajaa pelkästään ohjelman suorituskykytestit komennolla `pypy3 performance_tests/test_pentominoes_with_dlx.py`
 
 ## Kehittäminen
 Ohjelmistovaatimukset:
