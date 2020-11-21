@@ -1,4 +1,4 @@
-from tkinter import Tk, ttk, constants, messagebox
+from tkinter import Tk, Frame, Button, Label, messagebox
 from typing import Callable, Optional
 
 from .view import View
@@ -22,79 +22,68 @@ class Nav(View):
 
     def _initialize(self) -> None:
         """Initialize navigation buttons and their functionalities."""
-        self._frame = ttk.Frame(master=self._root)
+        self._frame = Frame(master=self._root)
 
-        style = ttk.Style()
-        style.configure("W.TButton", background="green")
-        pentomino_button_style = (
-            "W.TButton" if self.__current_problem == "pentomino" else None
+        pentomino_button_background = (
+            "green" if self.__current_problem == "pentomino" else None
         )
-        sudoku_button_style = (
-            "W.TButton" if self.__current_problem == "sudoku" else None
+        sudoku_button_background = (
+            "green" if self.__current_problem == "sudoku" else None
         )
-        print("current algo", self.__current_algo)
-        dlx_button_style = "W.TButton" if self.__current_algo == "dlx" else None
-        dictx_button_style = "W.TButton" if self.__current_algo == "dictx" else None
+        dlx_button_background = "green" if self.__current_algo == "dlx" else None
+        dictx_button_background = "green" if self.__current_algo == "dictx" else None
 
-        problem_label = ttk.Label(master=self._frame, text="Select problem to solve")
-        pentomino_button = ttk.Button(
+        problem_label = Label(master=self._frame, text="Select problem to solve")
+        pentomino_button = Button(
             master=self._frame,
             text="Pentomino",
             command=self._set_problem_to_pentomino,
-            style=pentomino_button_style,
+            background=pentomino_button_background,
         )
-        sudoku_button = ttk.Button(
+        sudoku_button = Button(
             master=self._frame,
             text="Sudoku",
             command=self._set_problem_to_sudoku,
-            style=sudoku_button_style,
+            background=sudoku_button_background,
         )
 
-        algo_label = ttk.Label(master=self._frame, text="Select algorithm to use")
-        dlx_button = ttk.Button(
+        algo_label = Label(master=self._frame, text="Select algorithm to use")
+        dlx_button = Button(
             master=self._frame,
             text="DLX",
             command=self._set_algo_to_dlx,
-            style=dlx_button_style,
+            background=dlx_button_background,
         )
-        dictx_button = ttk.Button(
+        dictx_button = Button(
             master=self._frame,
             text="DictX",
             command=self._set_algo_to_dictx,
-            style=dictx_button_style,
+            background=dictx_button_background,
         )
 
         problem_label.grid(row=0, column=0)
         pentomino_button.grid(
-            columnspan=2,
-            row=1,
-            column=0,
-            sticky=(constants.E, constants.W),
+            row=0,
+            column=1,
             padx=5,
             pady=5,
         )
         sudoku_button.grid(
-            columnspan=2,
-            row=2,
-            column=0,
-            sticky=(constants.E, constants.W),
+            row=0,
+            column=2,
             padx=5,
             pady=5,
         )
-        algo_label.grid(row=4, column=0)
+        algo_label.grid(row=0, column=3)
         dlx_button.grid(
-            columnspan=2,
-            row=5,
-            column=0,
-            sticky=(constants.E, constants.W),
+            row=0,
+            column=4,
             padx=5,
             pady=5,
         )
         dictx_button.grid(
-            columnspan=2,
-            row=6,
-            column=0,
-            sticky=(constants.E, constants.W),
+            row=0,
+            column=5,
             padx=5,
             pady=5,
         )

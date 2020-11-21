@@ -1,4 +1,4 @@
-from tkinter import Tk, ttk, Message
+from tkinter import Tk, Frame, Message
 
 from .view import View
 
@@ -8,7 +8,7 @@ class WelcomeView(View):
         super().__init__(root)
 
     def _initialize(self):
-        self._frame = ttk.Frame(master=self._root)
+        self._frame = Frame(master=self._root)
         message = Message(
             master=self._frame,
             text=(

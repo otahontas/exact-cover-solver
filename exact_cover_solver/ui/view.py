@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from tkinter import Tk, ttk, constants
+from tkinter import Tk, Frame, constants
 from typing import Optional, Union
 
 
@@ -9,12 +9,14 @@ class View:
     def __init__(self, root: Tk) -> None:
         """Set up frame and type hint."""
         self._root = root
-        self._frame: Optional[ttk.Frame] = None
+        self._frame: Optional[Frame] = None
         self._initialize()
 
-    def pack(self, side: Union[constants.LEFT, constants.RIGHT]) -> None:
+    def pack(
+        self, fill: Optional[Union[constants.X, constants.BOTH]] = constants.X
+    ) -> None:
         """Show all components."""
-        self._frame.pack(fill=constants.X, side=side)
+        self._frame.pack(fill=fill, expand=True)
 
     def destroy(self) -> None:
         """Hide all components."""
