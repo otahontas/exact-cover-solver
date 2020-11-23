@@ -33,9 +33,15 @@
 class ColumnObject:
     &#34;&#34;&#34;Column object representing matrix columns.&#34;&#34;&#34;
 
-    def __init__(self, _id: int) -&gt; None:
-        &#34;&#34;&#34;Set column size, column id, link column object to itself.&#34;&#34;&#34;
-        self.id = _id
+    def __init__(self, column_id: int) -&gt; None:
+        &#34;&#34;&#34;Initialize column node, links and other details.
+
+        Row is set to -1, since first real row is 0.
+
+        Args:
+            column_id: Which set element this column represents.
+        &#34;&#34;&#34;
+        self.id = column_id
         self.size = 0
         self.row = -1
         self.column = self
@@ -63,7 +69,12 @@ class DataObject:
     &#34;&#34;&#34;Data object representing 1s in matrix.&#34;&#34;&#34;
 
     def __init__(self, column: ColumnObject, row: int) -&gt; None:
-        &#34;&#34;&#34;Link data object to column object, set row identifier.&#34;&#34;&#34;
+        &#34;&#34;&#34;Initialize data node, links and other details.
+
+        Args:
+            column: Object which represents index of this nodes column
+            row: Index of this nodes row.
+        &#34;&#34;&#34;
         self.column = column
         self.row = row
         self.up = self.down = self.left = self.right = self
@@ -91,11 +102,17 @@ class DataObject:
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject"><code class="flex name class">
 <span>class <span class="ident">ColumnObject</span></span>
-<span>(</span><span>_id: int)</span>
+<span>(</span><span>column_id: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Column object representing matrix columns.</p>
-<p>Set column size, column id, link column object to itself.</p></div>
+<p>Initialize column node, links and other details.</p>
+<p>Row is set to -1, since first real row is 0.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>column_id</code></strong></dt>
+<dd>Which set element this column represents.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -103,9 +120,15 @@ class DataObject:
 <pre><code class="python">class ColumnObject:
     &#34;&#34;&#34;Column object representing matrix columns.&#34;&#34;&#34;
 
-    def __init__(self, _id: int) -&gt; None:
-        &#34;&#34;&#34;Set column size, column id, link column object to itself.&#34;&#34;&#34;
-        self.id = _id
+    def __init__(self, column_id: int) -&gt; None:
+        &#34;&#34;&#34;Initialize column node, links and other details.
+
+        Row is set to -1, since first real row is 0.
+
+        Args:
+            column_id: Which set element this column represents.
+        &#34;&#34;&#34;
+        self.id = column_id
         self.size = 0
         self.row = -1
         self.column = self
@@ -195,7 +218,14 @@ class DataObject:
 </code></dt>
 <dd>
 <div class="desc"><p>Data object representing 1s in matrix.</p>
-<p>Link data object to column object, set row identifier.</p></div>
+<p>Initialize data node, links and other details.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>column</code></strong></dt>
+<dd>Object which represents index of this nodes column</dd>
+<dt><strong><code>row</code></strong></dt>
+<dd>Index of this nodes row.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -204,7 +234,12 @@ class DataObject:
     &#34;&#34;&#34;Data object representing 1s in matrix.&#34;&#34;&#34;
 
     def __init__(self, column: ColumnObject, row: int) -&gt; None:
-        &#34;&#34;&#34;Link data object to column object, set row identifier.&#34;&#34;&#34;
+        &#34;&#34;&#34;Initialize data node, links and other details.
+
+        Args:
+            column: Object which represents index of this nodes column
+            row: Index of this nodes row.
+        &#34;&#34;&#34;
         self.column = column
         self.row = row
         self.up = self.down = self.left = self.right = self

@@ -29,63 +29,90 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Solver service, handles different solving modes.&#34;&#34;&#34;
 
-from typing import Optional, List
+from typing import Optional
 
 from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dlx import DLX
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.custom_types import Solution
-from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
+from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.data_creators import Universe, SetCollection
+
+
+class AlgorithmNotChosenError(Exception):
+    &#34;&#34;&#34;Exception raised when algorithm is not chosen.
+
+    Attributes:
+        message -- explanation of the error
+    &#34;&#34;&#34;
+
+    def __init__(self, message=&#34;Algorithm is not chosen.&#34;):
+        &#34;&#34;&#34;Initialize error with message.&#34;&#34;&#34;
+        self.message = message
+        super().__init__(self.message)
 
 
 class Solver:
-    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.
+
+    Algorithms list define possible algorithms used by class instances.
+    &#34;&#34;&#34;
+
+    _algorithms = [DLX, DictX]
 
     def __init__(self):
-        &#34;&#34;&#34;Initialize algorithm.&#34;&#34;&#34;
-        self.__algorithm: Optional[AlgorithmX] = DLX()
-        self.__problem: Optional[str] = None
+        &#34;&#34;&#34;Initialize algorithm variable.&#34;&#34;&#34;
+        self._algorithm: Optional[AlgorithmX] = None
 
     @property
     def algorithm(self) -&gt; Optional[str]:
-        &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
+        &#34;&#34;&#34;Maintain a reference to one of the algorithm X objects.
 
-        Concrete class is set during runtime.
+        Returns:
+            Name of the algorithm currently in use.
+
+        Raises:
+            AlgorithmNotChosenError: Raised if algorithm not chosen.
         &#34;&#34;&#34;
-        if isinstance(self.__algorithm, DLX):
-            return &#34;dlx&#34;
-        return None
+        try:
+            return self._algorithm.__name__
+        except AttributeError:
+            raise AlgorithmNotChosenError
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -&gt; None:
-        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
-        if algorithm_name == &#34;dlx&#34;:
-            self.__algorithm = DLX()
-        else:
-            raise ValueError(&#34;Algorithm not valid&#34;)
+        &#34;&#34;&#34;Replace algorithm object at runtime.
 
-    @property
-    def problem(self) -&gt; str:
-        &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
-        return self.__problem
+        Try to filter correct algorithm class, then create instance of that class.
 
-    @problem.setter
-    def problem(self, problem: str) -&gt; None:
-        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
-        if problem == &#34;pentomino&#34;:
-            self.__problem = problem
-        else:
-            raise ValueError(&#34;Problem not valid&#34;)
+        Args:
+            algorithm_name: Name of the algorithm to be used
+        &#34;&#34;&#34;
+        try:
+            algo_class = next(
+                algo_class
+                for algo_class in self._algorithms
+                if algo_class.__name__ == algorithm_name
+            )
+        except StopIteration:
+            valid_names = [algo_class.__name__ for algo_class in self._algorithms]
+            raise ValueError(
+                f&#34;Algorithm {algorithm_name} is not valid algorithm. &#34;
+                f&#34;Valid algorithms are: {valid_names}&#34;
+            )
+        self._algorithm = algo_class()
 
-    def solve(self, board_height, board_width) -&gt; List[Solution]:
-        &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
-        if self.__problem == &#34;pentomino&#34;:
-            pg = PentominoGenerator()
-            universe, set_collection = pg.generate(board_height, board_width)
-            matrix = DLXMatrix(universe, set_collection)
-            return self.__algorithm.solve(matrix)
-        else:
-            raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
+    def solve_generic_problem(
+        self, universe: Universe, set_collection: SetCollection
+    ) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def solve_sudoku_problem(self) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
 </details>
 </section>
 <section>
@@ -97,120 +124,189 @@ class Solver:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="exact_cover_solver.services.solver.AlgorithmNotChosenError"><code class="flex name class">
+<span>class <span class="ident">AlgorithmNotChosenError</span></span>
+<span>(</span><span>message='Algorithm is not chosen.')</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised when algorithm is not chosen.</p>
+<h2 id="attributes">Attributes</h2>
+<p>message &ndash; explanation of the error
+Initialize error with message.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlgorithmNotChosenError(Exception):
+    &#34;&#34;&#34;Exception raised when algorithm is not chosen.
+
+    Attributes:
+        message -- explanation of the error
+    &#34;&#34;&#34;
+
+    def __init__(self, message=&#34;Algorithm is not chosen.&#34;):
+        &#34;&#34;&#34;Initialize error with message.&#34;&#34;&#34;
+        self.message = message
+        super().__init__(self.message)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="exact_cover_solver.services.solver.Solver"><code class="flex name class">
 <span>class <span class="ident">Solver</span></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Class for solving an exact cover problem from given input.</p>
-<p>Initialize algorithm.</p></div>
+<p>Algorithms list define possible algorithms used by class instances.</p>
+<p>Initialize algorithm variable.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Solver:
-    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.
+
+    Algorithms list define possible algorithms used by class instances.
+    &#34;&#34;&#34;
+
+    _algorithms = [DLX, DictX]
 
     def __init__(self):
-        &#34;&#34;&#34;Initialize algorithm.&#34;&#34;&#34;
-        self.__algorithm: Optional[AlgorithmX] = DLX()
-        self.__problem: Optional[str] = None
+        &#34;&#34;&#34;Initialize algorithm variable.&#34;&#34;&#34;
+        self._algorithm: Optional[AlgorithmX] = None
 
     @property
     def algorithm(self) -&gt; Optional[str]:
-        &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
+        &#34;&#34;&#34;Maintain a reference to one of the algorithm X objects.
 
-        Concrete class is set during runtime.
+        Returns:
+            Name of the algorithm currently in use.
+
+        Raises:
+            AlgorithmNotChosenError: Raised if algorithm not chosen.
         &#34;&#34;&#34;
-        if isinstance(self.__algorithm, DLX):
-            return &#34;dlx&#34;
-        return None
+        try:
+            return self._algorithm.__name__
+        except AttributeError:
+            raise AlgorithmNotChosenError
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -&gt; None:
-        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
-        if algorithm_name == &#34;dlx&#34;:
-            self.__algorithm = DLX()
-        else:
-            raise ValueError(&#34;Algorithm not valid&#34;)
+        &#34;&#34;&#34;Replace algorithm object at runtime.
 
-    @property
-    def problem(self) -&gt; str:
-        &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
-        return self.__problem
+        Try to filter correct algorithm class, then create instance of that class.
 
-    @problem.setter
-    def problem(self, problem: str) -&gt; None:
-        &#34;&#34;&#34;Replace algorithm object at runtime.&#34;&#34;&#34;
-        if problem == &#34;pentomino&#34;:
-            self.__problem = problem
-        else:
-            raise ValueError(&#34;Problem not valid&#34;)
+        Args:
+            algorithm_name: Name of the algorithm to be used
+        &#34;&#34;&#34;
+        try:
+            algo_class = next(
+                algo_class
+                for algo_class in self._algorithms
+                if algo_class.__name__ == algorithm_name
+            )
+        except StopIteration:
+            valid_names = [algo_class.__name__ for algo_class in self._algorithms]
+            raise ValueError(
+                f&#34;Algorithm {algorithm_name} is not valid algorithm. &#34;
+                f&#34;Valid algorithms are: {valid_names}&#34;
+            )
+        self._algorithm = algo_class()
 
-    def solve(self, board_height, board_width) -&gt; List[Solution]:
-        &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
-        if self.__problem == &#34;pentomino&#34;:
-            pg = PentominoGenerator()
-            universe, set_collection = pg.generate(board_height, board_width)
-            matrix = DLXMatrix(universe, set_collection)
-            return self.__algorithm.solve(matrix)
-        else:
-            raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
+    def solve_generic_problem(
+        self, universe: Universe, set_collection: SetCollection
+    ) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError
+
+    def solve_sudoku_problem(self) -&gt; None:
+        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
 <dt id="exact_cover_solver.services.solver.Solver.algorithm"><code class="name">var <span class="ident">algorithm</span> : Union[str, NoneType]</code></dt>
 <dd>
-<div class="desc"><p>Maintain a reference to one of the algoX objects. Returns algo name when asked.</p>
-<p>Concrete class is set during runtime.</p></div>
+<div class="desc"><p>Maintain a reference to one of the algorithm X objects.</p>
+<h2 id="returns">Returns</h2>
+<p>Name of the algorithm currently in use.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="exact_cover_solver.services.solver.AlgorithmNotChosenError" href="#exact_cover_solver.services.solver.AlgorithmNotChosenError">AlgorithmNotChosenError</a></code></dt>
+<dd>Raised if algorithm not chosen.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
 def algorithm(self) -&gt; Optional[str]:
-    &#34;&#34;&#34;Maintain a reference to one of the algoX objects. Returns algo name when asked.
+    &#34;&#34;&#34;Maintain a reference to one of the algorithm X objects.
 
-    Concrete class is set during runtime.
+    Returns:
+        Name of the algorithm currently in use.
+
+    Raises:
+        AlgorithmNotChosenError: Raised if algorithm not chosen.
     &#34;&#34;&#34;
-    if isinstance(self.__algorithm, DLX):
-        return &#34;dlx&#34;
-    return None</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.services.solver.Solver.problem"><code class="name">var <span class="ident">problem</span> : str</code></dt>
-<dd>
-<div class="desc"><p>Maintain reference to problem.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def problem(self) -&gt; str:
-    &#34;&#34;&#34;Maintain reference to problem.&#34;&#34;&#34;
-    return self.__problem</code></pre>
+    try:
+        return self._algorithm.__name__
+    except AttributeError:
+        raise AlgorithmNotChosenError</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="exact_cover_solver.services.solver.Solver.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, board_height, board_width) ‑> List[List[int]]</span>
+<dt id="exact_cover_solver.services.solver.Solver.solve_generic_problem"><code class="name flex">
+<span>def <span class="ident">solve_generic_problem</span></span>(<span>self, universe: List[int], set_collection: List[List[int]]) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Solves exact cover problem, input should correspond to current algo used.</p></div>
+<div class="desc"><p>Not implemented.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def solve(self, board_height, board_width) -&gt; List[Solution]:
-    &#34;&#34;&#34;Solves exact cover problem, input should correspond to current algo used.&#34;&#34;&#34;
-    if self.__problem == &#34;pentomino&#34;:
-        pg = PentominoGenerator()
-        universe, set_collection = pg.generate(board_height, board_width)
-        matrix = DLXMatrix(universe, set_collection)
-        return self.__algorithm.solve(matrix)
-    else:
-        raise ValueError(&#34;Not possible to solve, something is not right&#34;)</code></pre>
+<pre><code class="python">def solve_generic_problem(
+    self, universe: Universe, set_collection: SetCollection
+) -&gt; None:
+    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.solver.Solver.solve_pentomino_problem"><code class="name flex">
+<span>def <span class="ident">solve_pentomino_problem</span></span>(<span>self, board_height: int, board_width: int) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Not implemented.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
+    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.solver.Solver.solve_sudoku_problem"><code class="name flex">
+<span>def <span class="ident">solve_sudoku_problem</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Not implemented.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_sudoku_problem(self) -&gt; None:
+    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
 </details>
 </dd>
 </dl>
@@ -232,11 +328,15 @@ def problem(self) -&gt; str:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="exact_cover_solver.services.solver.AlgorithmNotChosenError" href="#exact_cover_solver.services.solver.AlgorithmNotChosenError">AlgorithmNotChosenError</a></code></h4>
+</li>
+<li>
 <h4><code><a title="exact_cover_solver.services.solver.Solver" href="#exact_cover_solver.services.solver.Solver">Solver</a></code></h4>
 <ul class="">
 <li><code><a title="exact_cover_solver.services.solver.Solver.algorithm" href="#exact_cover_solver.services.solver.Solver.algorithm">algorithm</a></code></li>
-<li><code><a title="exact_cover_solver.services.solver.Solver.problem" href="#exact_cover_solver.services.solver.Solver.problem">problem</a></code></li>
-<li><code><a title="exact_cover_solver.services.solver.Solver.solve" href="#exact_cover_solver.services.solver.Solver.solve">solve</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_generic_problem" href="#exact_cover_solver.services.solver.Solver.solve_generic_problem">solve_generic_problem</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_pentomino_problem" href="#exact_cover_solver.services.solver.Solver.solve_pentomino_problem">solve_pentomino_problem</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_sudoku_problem" href="#exact_cover_solver.services.solver.Solver.solve_sudoku_problem">solve_sudoku_problem</a></code></li>
 </ul>
 </li>
 </ul>

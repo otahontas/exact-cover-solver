@@ -32,7 +32,7 @@
 from typing import Optional
 
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.custom_types import Universe, SetCollection
+from exact_cover_solver.data_creators import Universe, SetCollection
 
 
 class DLXMatrix:
@@ -41,32 +41,38 @@ class DLXMatrix:
     def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
         &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
 
-        Universe should contain all elements considered to be covered.
-        Set collection is collection of sets made from elements in this universe.
+        Args:
+            universe: a list of integers representing some set of elements
+            set_collection: a list of lists, each made from integers in the universe
+
+        Raises:
+            ValueError: Error is raised if universe or set_collection is empty.
         &#34;&#34;&#34;
-        if not universe or not set_collection:
-            raise ValueError(
-                &#34;Not possible to create matrix without universe or set collection.&#34;
-            )
+        if not universe:
+            raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
+        if not set_collection:
+            raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
 
         self.id = &#34;root&#34;
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._create_columns(universe)
-        self._create_nodes(set_collection)
+        self._universe = universe
+        self._set_collection = set_collection
+        self._create_columns()
+        self._create_nodes()
 
-    def _create_columns(self, universe: Universe) -&gt; None:
+    def _create_columns(self) -&gt; None:
         &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
         previous = self
-        for element in universe:
-            column = ColumnObject(_id=element)
+        for element in self._universe:
+            column = ColumnObject(column_id=element)
             column.left = previous
             previous.right = column
             previous = column
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self, set_collection: SetCollection) -&gt; None:
+    def _create_nodes(self) -&gt; None:
         &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is
@@ -74,14 +80,14 @@ class DLXMatrix:
         also linked together to form a circular row.
         &#34;&#34;&#34;
 
-        def find_column(_id) -&gt; ColumnObject:
+        def find_column(_id: int) -&gt; ColumnObject:
             &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
             correct_column = self
             while correct_column.id != _id:
                 correct_column = correct_column.right
             return correct_column
 
-        for set_number, set_elements in enumerate(set_collection):
+        for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
             for element in set_elements:
@@ -114,7 +120,15 @@ class DLXMatrix:
                 data = data.down
             s = f&#34;{s}Column {column.id} has {column.size} rows:{data_str}\n&#34;
             column = column.right
-        return s</code></pre>
+        return s
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f&#34;DLXMatrix.{func}&#34;: True
+    for func in dir(DLXMatrix)
+    if callable(getattr(DLXMatrix, func)) and func.startswith(&#34;_&#34;)
+}</code></pre>
 </details>
 </section>
 <section>
@@ -128,13 +142,22 @@ class DLXMatrix:
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix"><code class="flex name class">
 <span>class <span class="ident">DLXMatrix</span></span>
-<span>(</span><span>universe: List[int], set_collection: List[List[int]])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Matrix representation and initialization methods for circular linked lists.</p>
 <p>Create column and data objects and link them to this matrix object.</p>
-<p>Universe should contain all elements considered to be covered.
-Set collection is collection of sets made from elements in this universe.</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>universe</code></strong></dt>
+<dd>a list of integers representing some set of elements</dd>
+<dt><strong><code>set_collection</code></strong></dt>
+<dd>a list of lists, each made from integers in the universe</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Error is raised if universe or set_collection is empty.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -145,32 +168,38 @@ Set collection is collection of sets made from elements in this universe.</p></d
     def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
         &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
 
-        Universe should contain all elements considered to be covered.
-        Set collection is collection of sets made from elements in this universe.
+        Args:
+            universe: a list of integers representing some set of elements
+            set_collection: a list of lists, each made from integers in the universe
+
+        Raises:
+            ValueError: Error is raised if universe or set_collection is empty.
         &#34;&#34;&#34;
-        if not universe or not set_collection:
-            raise ValueError(
-                &#34;Not possible to create matrix without universe or set collection.&#34;
-            )
+        if not universe:
+            raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
+        if not set_collection:
+            raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
 
         self.id = &#34;root&#34;
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._create_columns(universe)
-        self._create_nodes(set_collection)
+        self._universe = universe
+        self._set_collection = set_collection
+        self._create_columns()
+        self._create_nodes()
 
-    def _create_columns(self, universe: Universe) -&gt; None:
+    def _create_columns(self) -&gt; None:
         &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
         previous = self
-        for element in universe:
-            column = ColumnObject(_id=element)
+        for element in self._universe:
+            column = ColumnObject(column_id=element)
             column.left = previous
             previous.right = column
             previous = column
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self, set_collection: SetCollection) -&gt; None:
+    def _create_nodes(self) -&gt; None:
         &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is
@@ -178,14 +207,14 @@ Set collection is collection of sets made from elements in this universe.</p></d
         also linked together to form a circular row.
         &#34;&#34;&#34;
 
-        def find_column(_id) -&gt; ColumnObject:
+        def find_column(_id: int) -&gt; ColumnObject:
             &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
             correct_column = self
             while correct_column.id != _id:
                 correct_column = correct_column.right
             return correct_column
 
-        for set_number, set_elements in enumerate(set_collection):
+        for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
             for element in set_elements:
@@ -220,6 +249,148 @@ Set collection is collection of sets made from elements in this universe.</p></d
             column = column.right
         return s</code></pre>
 </details>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, universe: List[int], set_collection: List[List[int]]) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create column and data objects and link them to this matrix object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>universe</code></strong></dt>
+<dd>a list of integers representing some set of elements</dd>
+<dt><strong><code>set_collection</code></strong></dt>
+<dd>a list of lists, each made from integers in the universe</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Error is raised if universe or set_collection is empty.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
+    &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
+
+    Args:
+        universe: a list of integers representing some set of elements
+        set_collection: a list of lists, each made from integers in the universe
+
+    Raises:
+        ValueError: Error is raised if universe or set_collection is empty.
+    &#34;&#34;&#34;
+    if not universe:
+        raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
+    if not set_collection:
+        raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
+
+    self.id = &#34;root&#34;
+    self.right: Optional[ColumnObject] = None
+    self.left: Optional[ColumnObject] = None
+    self._universe = universe
+    self._set_collection = set_collection
+    self._create_columns()
+    self._create_nodes()</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__"><code class="name flex">
+<span>def <span class="ident">__repr__</span></span>(<span>self) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return printable representation of matrix.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def __repr__(self) -&gt; str:
+    &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
+    s = &#34;&#34;
+    column = self.right
+    while column != self:
+        data = column.down
+        data_str = &#34;&#34;
+        while data != column:
+            data_str = f&#34;{data_str} {data.row}&#34;
+            data = data.down
+        s = f&#34;{s}Column {column.id} has {column.size} rows:{data_str}\n&#34;
+        column = column.right
+    return s</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns"><code class="name flex">
+<span>def <span class="ident">_create_columns</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create column columns and attach them to root.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _create_columns(self) -&gt; None:
+    &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
+    previous = self
+    for element in self._universe:
+        column = ColumnObject(column_id=element)
+        column.left = previous
+        previous.right = column
+        previous = column
+    self.left = previous
+    previous.right = self</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes"><code class="name flex">
+<span>def <span class="ident">_create_nodes</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create nodes representing elements in each set in set collection.</p>
+<p>All sets are iterated through. For each element in set the element is
+linked to the correct column and columns column. Elements in set are
+also linked together to form a circular row.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _create_nodes(self) -&gt; None:
+    &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
+
+    All sets are iterated through. For each element in set the element is
+    linked to the correct column and columns column. Elements in set are
+    also linked together to form a circular row.
+    &#34;&#34;&#34;
+
+    def find_column(_id: int) -&gt; ColumnObject:
+        &#34;&#34;&#34;Find column with given id.&#34;&#34;&#34;
+        correct_column = self
+        while correct_column.id != _id:
+            correct_column = correct_column.right
+        return correct_column
+
+    for set_number, set_elements in enumerate(self._set_collection):
+        previous = None
+        first = None
+        for element in set_elements:
+            column = find_column(element)
+            cell = DataObject(column, row=set_number)
+            prev_up = column.up
+            prev_up.down = cell
+            cell.up = prev_up
+            cell.down = column
+            column.up = cell
+            if previous:
+                previous.right = cell
+                cell.left = previous
+            else:
+                first = cell
+            previous = cell
+            column.size += 1
+        previous.right = first
+        first.left = previous</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -239,6 +410,12 @@ Set collection is collection of sets made from elements in this universe.</p></d
 <ul>
 <li>
 <h4><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a></code></h4>
+<ul class="">
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__">__init__</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__">__repr__</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns">_create_columns</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes">_create_nodes</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
