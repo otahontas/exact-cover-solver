@@ -1,39 +1,55 @@
 """Dancing links implementation for algorithm X."""
 
-from typing import List
+from typing import List, Optional
 
-from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.algos import AlgorithmX, Solution
 from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.custom_types import Solution
 
 
 class DLX(AlgorithmX):
     """Dancing links implementation for algorithm X."""
 
     def __init__(self) -> None:
-        """Initialize solution list."""
-        self.__solutions: List[Solution] = []
+        self._solutions: List[Solution] = []
+        self._matrix: Optional[DLXMatrix] = None
 
     def solve(self, matrix: DLXMatrix) -> List[Solution]:
-        """Solve exact cover problem for given matrix.
+        """Solve which rows cover the given matrix.
 
-        Algorithm X is performed recursively on matrix with helper method.
+        Clears solutions bookkeeping and used matrix from previous runs, then calls
+        recursive method.
+
+        Args:
+            matrix: Matrix representation implemented as circular doubly linked lists.
+
+        Returns:
+            List of solutions. Each solution is a list of indexes of rows that will
+                exactly cover the given matrix.
+        Raises:
+            ValueError: Error is raised if given matrix has wrong type.
         """
-        self.__solutions.clear()
-        self._search(matrix)
-        return self.__solutions
+        if not isinstance(matrix, DLXMatrix):
+            raise ValueError("Given matrix can't be processed by DLX algorithm.")
+        self._solutions.clear()
+        self._matrix = matrix
+        self._search()
+        return self._solutions
 
-    def _search(self, matrix: DLXMatrix, partial: Solution = None) -> None:
-        """Perform algorithm X recursively and collect partial solutions."""
+    def _search(self, partial: Solution = None) -> None:
+        """Perform algorithm X recursively and collect solutions.
+
+        Args:
+            partial: List including rows collected this far in recursion.
+        """
         if not partial:
             partial: Solution = []
 
-        if matrix.right == matrix:
-            self.__solutions.append(partial[:])
+        if self._matrix.right == self._matrix:
+            self._solutions.append(partial[:])
             return
 
-        column = self._choose_optimal_column_object(matrix)
+        column = self._choose_optimal_column_object()
 
         if not column.size:
             return
@@ -47,7 +63,7 @@ class DLX(AlgorithmX):
             while node != row:
                 self._cover(node.column)
                 node = node.right
-            self._search(matrix, partial)
+            self._search(partial)
             node = row.left
             while node != row:
                 self._uncover(node.column)
@@ -56,16 +72,16 @@ class DLX(AlgorithmX):
             row = row.down
         self._uncover(column)
 
-    @staticmethod
-    def _choose_optimal_column_object(matrix: DLXMatrix) -> ColumnObject:
-        """Find column with smallest number of 1s.
+    def _choose_optimal_column_object(self) -> ColumnObject:
+        """Find column with smallest number of 1s to minimize the branching factor.
 
-        This is done to minimize the branching factor.
+        Returns:
+            Linked list column node representing column with smallest number of 1s.
         """
-        current_column = matrix.right
+        current_column = self._matrix.right
         column = current_column
         size = current_column.size
-        while current_column != matrix:
+        while current_column != self._matrix:
             column, size = (
                 (current_column, current_column.size)
                 if current_column.size < size
@@ -79,9 +95,11 @@ class DLX(AlgorithmX):
         """Cover given column.
 
         First remove column from the header list and then remove all rows
-        in column from other column lists rows are in.
+        in column from other column lists rows are in. Covering is done from top to
+        bottom and from left to right.
 
-        Covering is done from top to bottom and left to right manner.
+        Args:
+            Linked list column node.
         """
         column.detach()
         row = column.down
@@ -96,8 +114,11 @@ class DLX(AlgorithmX):
     def _uncover(column: ColumnObject) -> None:
         """Uncover given column.
 
-        Uncovering is done from bottom to top and right to left manner in order to undo
-        covering steps.
+        Uncovering is done from bottom to top and from right to left in order to undo
+        steps done during column covering.
+
+        Args:
+            Linked list column node.
         """
         row = column.up
         while row != column:

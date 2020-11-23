@@ -1,16 +1,36 @@
-"""Package for algorithms, defines interface for algorithm X implementations."""
+"""Package for algorithms.
+
+Defines the interface for algorithm X implementations and custom types used in
+this package.
+"""
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, List
+
+Solution = List[int]
 
 
 class AlgorithmX(ABC):
-    """Abstract base class for algorithm X for solving the exact cover problem.
+    """Abstract base class for algorithm X that solves the exact cover problem.
 
     Algorithm X is a straightforward recursive, nondeterministic, depth-first
-    and backtracking algorithm, implemented usually with dancing links technique.
+    and backtracking algorithm.
     """
 
     @abstractmethod
-    def solve(self, *args, **kwargs) -> Any:
-        """Abstract solving method that should be implemented by subclasses."""
+    def solve(self, matrix: Any) -> List[Solution]:
+        """Abstract solving method that should be implemented by a subclass.
+
+        Args:
+            matrix: Representation of an exact cover problem matrix that can be consumed
+                by a subclass.
+
+        Returns:
+            List of solutions. Each solution is a list of indexes of rows that will
+                exactly cover the given matrix.
+
+        Raises:
+            NotImplementedError: Error is raised if this abstract method is called
+                directly.
+        """
+        raise NotImplementedError

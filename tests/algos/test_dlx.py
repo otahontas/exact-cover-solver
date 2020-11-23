@@ -61,7 +61,8 @@ def test_all_solutions_are_found_with_multiple_solutions(
 def test_optimal_column_is_chosen(universe, collection_with_single_solution):
     matrix = DLXMatrix(universe, collection_with_single_solution)
     dlx = DLX()
-    chosen_column = dlx._choose_optimal_column_object(matrix)
+    dlx._matrix = matrix
+    chosen_column = dlx._choose_optimal_column_object()
     assert chosen_column.id == 1
 
 
@@ -95,3 +96,9 @@ def test_uncovering_restores_correct_nodes(universe, collection_with_single_solu
     assert original_repr != str(matrix)
     dlx._uncover(column)
     assert original_repr == str(matrix)
+
+
+def test_solve_errors_when_trying_to_give_wrong_matrix():
+    dlx = DLX()
+    with pytest.raises(ValueError):
+        dlx.solve(None)
