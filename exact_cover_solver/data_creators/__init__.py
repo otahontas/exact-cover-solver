@@ -1,6 +1,6 @@
 """Package for data creators.
 
-Defines the interface for data creators for different type of problems, such as 
+Defines the interface for data creators for different type of problems, such as
 pentomino and sudoku. Also defines custom types used to represent data.
 """
 
@@ -14,7 +14,7 @@ SetCollection = List[List[int]]
 class DataCreator(ABC):
     """Abstract base class for data creator.
 
-    Creator generates universe and collection of sets that together represent some 
+    Creator generates universe and collection of sets that together represent some
     problem reduced to exact cover problem.
     """
 
