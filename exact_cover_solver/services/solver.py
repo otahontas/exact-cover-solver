@@ -2,11 +2,8 @@
 
 from typing import Optional, List
 
-from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.algos import AlgorithmX, Solution
 from exact_cover_solver.algos.dlx import DLX
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.custom_types import Solution
-from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
 
 
 class Solver:
@@ -19,7 +16,9 @@ class Solver:
 
     @property
     def algorithm(self) -> Optional[str]:
-        """Maintain a reference to one of the algoX objects. Returns algo name when asked.
+        """Maintain a reference to one of the algoX objects.
+
+        Returns algo name when asked.
 
         Concrete class is set during runtime.
         """
@@ -50,10 +49,12 @@ class Solver:
 
     def solve(self, board_height, board_width) -> List[Solution]:
         """Solves exact cover problem, input should correspond to current algo used."""
-        if self.__problem == "pentomino":
-            pg = PentominoGenerator()
-            universe, set_collection = pg.generate(board_height, board_width)
-            matrix = DLXMatrix(universe, set_collection)
-            return self.__algorithm.solve(matrix)
-        else:
-            raise ValueError("Not possible to solve, something is not right")
+        pass
+        # if self.__problem == "pentomino":
+        #     pg = PentominoGenerator()
+        #     universe, set_collection =
+        #     pg.create_universe_and_set_collections(board_height, board_width)
+        #     matrix = DLXMatrix(universe, set_collection)
+        #     return self.__algorithm.solve(matrix)
+        # else:
+        #     raise ValueError("Not possible to solve, something is not right")

@@ -1,5 +1,5 @@
 """Universe and set collection creator for pentomino problem."""
-from typing import Tuple, List, Dict, Set, Optional, Literal
+from typing import Tuple, List, Dict, Set, Optional
 
 from exact_cover_solver.data_creators import DataCreator, Universe, SetCollection
 
@@ -67,10 +67,9 @@ class PentominoCreator(DataCreator):
         """Create data representing the pentomino problem in certain board size.
 
         Returns:
-            Tuple containing:
-            - universe, a list of integers representing some set of elements
-            - collection of sets, a list of lists, each made from integers in
-            the universe
+            Tuple containing universe, a list of integers representing some set of
+                elements and collection of sets, a list of lists, each made from
+                integers in the universe
 
         Raises:
             BoardSizeNotInitializedError: Raised if current height or width is None.
@@ -79,9 +78,7 @@ class PentominoCreator(DataCreator):
             raise BoardSizeNotInitializedError()
         return self._universe, self._set_collection
 
-    def change_board_size(
-        self, height: Literal[6, 5, 4, 3], width: Literal[10, 12, 15, 20]
-    ) -> None:
+    def change_board_size(self, height: int, width: int) -> None:
         """Change board size and generate collection of sets in advance.
 
         This means that collection of sets can be kept in memory as long as board size
@@ -89,7 +86,7 @@ class PentominoCreator(DataCreator):
 
         Args:
             height: Height of the pentomino board, must be 6, 5, 4 or 3
-            width: Height of the pentomino board, must be 10, 12, 15 or 20
+            width: Width of the pentomino board, must be 10, 12, 15 or 20
 
         Raises:
             ValueError: Error is raised if wrong size or width is given
@@ -116,7 +113,7 @@ class PentominoCreator(DataCreator):
         self._set_collection.clear()
         for pentomino in self._pentominoes:
             for orientation in self._generate_all_orientations(
-                self._pentominoes[pentomino]
+                    self._pentominoes[pentomino]
             ):
                 pentomino_height = len(orientation)
                 pentomino_width = len(orientation[0])
@@ -133,14 +130,15 @@ class PentominoCreator(DataCreator):
 
     def _solve_covered_cells(self, pentomino: Pentomino, start: Point) -> List[int]:
         """Find which cells this pentomino will cover."""
-        y, x = start
+        start_y, start_x = start
         covered: List[int] = []
         pentomino_height = len(pentomino)
         pentomino_width = len(pentomino[0])
-        for r in range(pentomino_height):
-            for c in range(pentomino_width):
-                if pentomino[r][c] == 1:
-                    covered.append((y + r) * self._width + x + c)
+        for row in range(pentomino_height):
+            for column in range(pentomino_width):
+                if pentomino[row][column] == 1:
+                    cell_index = (start_y + row) * self._width + start_x + column
+                    covered.append(cell_index)
         return covered
 
     def _generate_all_orientations(self, pentomino: Pentomino) -> List[Pentomino]:
@@ -154,8 +152,8 @@ class PentominoCreator(DataCreator):
         for transposed in (pentomino, self._transpose(pentomino)):
             for left_right_flipped in (transposed, self._flip_left_right(transposed)):
                 for up_down_flipped in (
-                    left_right_flipped,
-                    self._flip_up_down(left_right_flipped),
+                        left_right_flipped,
+                        self._flip_up_down(left_right_flipped),
                 ):
                     orientation_as_string = str(up_down_flipped)
                     if orientation_as_string not in seen:

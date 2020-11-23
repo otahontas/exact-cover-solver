@@ -4,14 +4,14 @@ Correct solution amounts are from wikipedia:
 https://en.wikipedia.org/wiki/Pentomino#Constructing_rectangular_dimensions
 """
 
-from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.algos.dlx import DLX
 import time
 
 
 def generate_pentomino_board_solutions(
-    pg: PentominoGenerator, board_height: int, board_width: int, correct_amount: int
+    pg: PentominoCreator, board_height: int, board_width: int, correct_amount: int
 ) -> None:
     """Test that 6x10 board gets correct amount of solutions."""
     universe, set_collection = pg.generate(board_height, board_width)
@@ -26,7 +26,7 @@ def generate_pentomino_board_solutions(
     )
 
 
-pg = PentominoGenerator()
+pg = PentominoCreator()
 generate_pentomino_board_solutions(pg, 3, 20, 2)
 generate_pentomino_board_solutions(pg, 4, 15, 368)
 generate_pentomino_board_solutions(pg, 5, 12, 1010)

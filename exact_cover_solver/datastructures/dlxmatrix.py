@@ -3,7 +3,7 @@
 from typing import Optional
 
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.custom_types import Universe, SetCollection
+from exact_cover_solver.data_creators import Universe, SetCollection
 
 
 class DLXMatrix:

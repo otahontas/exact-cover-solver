@@ -26,6 +26,7 @@ class DLX(AlgorithmX):
         Returns:
             List of solutions. Each solution is a list of indexes of rows that will
                 exactly cover the given matrix.
+
         Raises:
             ValueError: Error is raised if given matrix has wrong type.
         """

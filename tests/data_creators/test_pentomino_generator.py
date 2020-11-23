@@ -2,7 +2,7 @@
 
 import pytest
 
-from exact_cover_solver.data_creators.pentomino_generator import PentominoGenerator
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 
 
 @pytest.fixture
@@ -79,52 +79,53 @@ def correct_orientation_amounts():
 
 
 def test_transpose_works_correctly(correct_transposed_pentominoes):
-    pg = PentominoGenerator()
+    pg = PentominoCreator()
     transposed = {
-        label: pg._transpose(pentomino) for (label, pentomino) in pg.pentominoes.items()
+        label: pg._transpose(pentomino)
+        for (label, pentomino) in pg._pentominoes.items()
     }
     assert transposed == correct_transposed_pentominoes
 
 
 def test_left_right_flip_works_correctly(correct_left_right_flipped_pentominoes):
-    pg = PentominoGenerator()
+    pg = PentominoCreator()
     flipped = {
         label: pg._flip_left_right(pentomino)
-        for (label, pentomino) in pg.pentominoes.items()
+        for (label, pentomino) in pg._pentominoes.items()
     }
     assert flipped == correct_left_right_flipped_pentominoes
 
 
 def test_up_down_flip_works_correctly(correct_up_down_flipped_pentominoes):
-    pg = PentominoGenerator()
+    pg = PentominoCreator()
     flipped = {
         label: pg._flip_up_down(pentomino)
-        for (label, pentomino) in pg.pentominoes.items()
+        for (label, pentomino) in pg._pentominoes.items()
     }
     assert flipped == correct_up_down_flipped_pentominoes
 
 
 def test_correct_amount_of_orientations_is_generated(correct_orientation_amounts):
-    pg = PentominoGenerator()
+    pg = PentominoCreator()
     amounts = {
         label: len(pg._generate_all_orientations(pentomino))
-        for (label, pentomino) in pg.pentominoes.items()
+        for (label, pentomino) in pg._pentominoes.items()
     }
     assert amounts == correct_orientation_amounts
 
 
 def test_correct_cells_are_covered():
-    pg = PentominoGenerator()
-    board_width = 10
+    pg = PentominoCreator()
+    pg._width = 10
     pentomino = [[1, 1, 1], [1, 0, 0], [1, 0, 0]]
 
     start = (0, 0)
-    covered = pg._solve_covered_cells(pentomino, start, board_width)
+    covered = pg._solve_covered_cells(pentomino, start)
     assert covered == [0, 1, 2, 10, 20]
 
     pentomino = [[1, 1, 1, 1], [1, 0, 0, 0]]
     start = (4, 6)
-    covered = pg._solve_covered_cells(pentomino, start, board_width)
+    covered = pg._solve_covered_cells(pentomino, start)
     assert covered == [46, 47, 48, 49, 56]
 
 
@@ -151,16 +152,16 @@ def test_generator_generates_correct_amount_of_set_collections_for_3_20_board():
     correct_total_amount = 1168
     correct_universe_size = 72
 
-    pg = PentominoGenerator()
-    universe, set_collection = pg.create_universe_and_set_collections(3, 20)
+    pg = PentominoCreator()
+    pg._height = 3
+    pg._width = 20
+    pg._generate_set_collection()
 
-    assert len(universe) == correct_universe_size
-    for pos in [row for row in set_collection if row[0] == 10]:
-        print(pos)
-    indexes = pg.pentomino_indexes
+    assert len(pg._universe) == correct_universe_size
+    indexes = pg._pentomino_indexes
     for pentomino in correct_amounts:
         assert (
-            len([row for row in set_collection if row[0] == indexes[pentomino]])
+            len([row for row in pg._set_collection if row[0] == indexes[pentomino]])
             == correct_amounts[pentomino]
         )
-    assert len(set_collection) == correct_total_amount
+    assert len(pg._set_collection) == correct_total_amount
