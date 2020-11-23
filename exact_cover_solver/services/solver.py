@@ -1,60 +1,85 @@
 """Solver service, handles different solving modes."""
 
-from typing import Optional, List
+from typing import Optional
 
-from exact_cover_solver.algos import AlgorithmX, Solution
+from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.data_creators import Universe, SetCollection
+
+
+class AlgorithmNotChosenError(Exception):
+    """Exception raised when algorithm is not chosen.
+
+    Attributes:
+        message -- explanation of the error
+    """
+
+    def __init__(self, message="Algorithm is not chosen."):
+        """Initialize error with message."""
+        self.message = message
+        super().__init__(self.message)
 
 
 class Solver:
-    """Class for solving an exact cover problem from given input."""
+    """Class for solving an exact cover problem from given input.
+
+    Algorithms list define possible algorithms used by class instances.
+    """
+
+    _algorithms = [DLX, DictX]
 
     def __init__(self):
-        """Initialize algorithm."""
-        self.__algorithm: Optional[AlgorithmX] = DLX()
-        self.__problem: Optional[str] = None
+        """Initialize algorithm variable."""
+        self._algorithm: Optional[AlgorithmX] = None
 
     @property
     def algorithm(self) -> Optional[str]:
-        """Maintain a reference to one of the algoX objects.
+        """Maintain a reference to one of the algorithm X objects.
 
-        Returns algo name when asked.
+        Returns:
+            Name of the algorithm currently in use.
 
-        Concrete class is set during runtime.
+        Raises:
+            AlgorithmNotChosenError: Raised if algorithm not chosen.
         """
-        if isinstance(self.__algorithm, DLX):
-            return "dlx"
-        return None
+        try:
+            return self._algorithm.__name__
+        except AttributeError:
+            raise AlgorithmNotChosenError
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -> None:
-        """Replace algorithm object at runtime."""
-        if algorithm_name == "dlx":
-            self.__algorithm = DLX()
-        else:
-            raise ValueError("Algorithm not valid")
+        """Replace algorithm object at runtime.
 
-    @property
-    def problem(self) -> str:
-        """Maintain reference to problem."""
-        return self.__problem
+        Args:
+            algorithm_name: Name of the algorithm to be used
+        """
+        try:
+            next(
+                algo_class
+                for algo_class in self._algorithms
+                if algo_class.__name__ == algorithm_name
+            )
+        except ValueError:
+            valid_names = [algo_class.__name__ for algo_class in self._algorithms]
+            raise ValueError(
+                f"Algorithm {algorithm_name} is not valid algorithm. "
+                f"Valid algorithms are: {valid_names}"
+            )
+        algo_class = DLX
+        self._algorithm = algo_class()
 
-    @problem.setter
-    def problem(self, problem: str) -> None:
-        """Replace algorithm object at runtime."""
-        if problem == "pentomino":
-            self.__problem = problem
-        else:
-            raise ValueError("Problem not valid")
+    def solve_generic_problem(
+        self, universe: Universe, set_collection: SetCollection
+    ) -> None:
+        """Not implemented."""
+        raise NotImplementedError
 
-    def solve(self, board_height, board_width) -> List[Solution]:
-        """Solves exact cover problem, input should correspond to current algo used."""
-        pass
-        # if self.__problem == "pentomino":
-        #     pg = PentominoGenerator()
-        #     universe, set_collection =
-        #     pg.create_universe_and_set_collections(board_height, board_width)
-        #     matrix = DLXMatrix(universe, set_collection)
-        #     return self.__algorithm.solve(matrix)
-        # else:
-        #     raise ValueError("Not possible to solve, something is not right")
+    def solve_pentomino_problem(self, board_height: int, board_width: int) -> None:
+        """Not implemented."""
+        raise NotImplementedError
+
+    def solve_sudoku_problem(self) -> None:
+        """Not implemented."""
+        raise NotImplementedError
