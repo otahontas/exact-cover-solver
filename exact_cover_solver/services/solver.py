@@ -52,22 +52,23 @@ class Solver:
     def algorithm(self, algorithm_name: str) -> None:
         """Replace algorithm object at runtime.
 
+        Try to filter correct algorithm class, then create instance of that class.
+
         Args:
             algorithm_name: Name of the algorithm to be used
         """
         try:
-            next(
+            algo_class = next(
                 algo_class
                 for algo_class in self._algorithms
                 if algo_class.__name__ == algorithm_name
             )
-        except ValueError:
+        except StopIteration:
             valid_names = [algo_class.__name__ for algo_class in self._algorithms]
             raise ValueError(
                 f"Algorithm {algorithm_name} is not valid algorithm. "
                 f"Valid algorithms are: {valid_names}"
             )
-        algo_class = DLX
         self._algorithm = algo_class()
 
     def solve_generic_problem(
