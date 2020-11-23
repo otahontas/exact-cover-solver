@@ -84,10 +84,12 @@ Blackin huomaamat virheet voi korjata automaattisesti ajamalla `poetry run invok
 
 ### API-dokumentaatio
 
-Generoi ohjelman sisäinen dokumentaatio (vrt. Javadocit) komennolla:
+Ohjelman sisäisessä dokumentaatiossa (docstringit) käytetään [Googlen Python Style Guide](https://google.github.io/styleguide/pyguide.html) -konventiota.
+
+Generoi dokumentaatio (vrt. Javadocit) komennolla:
 
 ```
 poetry run invoke docs
 ```
 
-Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
+Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`. Projektin docstring-

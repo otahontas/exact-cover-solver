@@ -11,6 +11,7 @@ class DLX(AlgorithmX):
     """Dancing links implementation for algorithm X."""
 
     def __init__(self) -> None:
+        """Initialize DLX with empty solution counter and without matrix."""
         self._solutions: List[Solution] = []
         self._matrix: Optional[DLXMatrix] = None
 

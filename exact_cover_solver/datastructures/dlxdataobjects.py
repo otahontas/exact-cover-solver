@@ -4,9 +4,15 @@
 class ColumnObject:
     """Column object representing matrix columns."""
 
-    def __init__(self, _id: int) -> None:
-        """Set column size, column id, link column object to itself."""
-        self.id = _id
+    def __init__(self, column_id: int) -> None:
+        """Initialize column node, links and other details.
+
+        Row is set to -1, since first real row is 0.
+
+        Args:
+            column_id: Which set element this column represents.
+        """
+        self.id = column_id
         self.size = 0
         self.row = -1
         self.column = self
@@ -34,7 +40,12 @@ class DataObject:
     """Data object representing 1s in matrix."""
 
     def __init__(self, column: ColumnObject, row: int) -> None:
-        """Link data object to column object, set row identifier."""
+        """Initialize data node, links and other details.
+
+        Args:
+            column: Object which represents index of this nodes column
+            row: Index of this nodes row.
+        """
         self.column = column
         self.row = row
         self.up = self.down = self.left = self.right = self

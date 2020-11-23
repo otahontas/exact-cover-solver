@@ -12,32 +12,38 @@ class DLXMatrix:
     def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
         """Create column and data objects and link them to this matrix object.
 
-        Universe should contain all elements considered to be covered.
-        Set collection is collection of sets made from elements in this universe.
+        Args:
+            universe: a list of integers representing some set of elements
+            set_collection: a list of lists, each made from integers in the universe
+
+        Raises:
+            ValueError: Error is raised if universe or set_collection is empty.
         """
-        if not universe or not set_collection:
-            raise ValueError(
-                "Not possible to create matrix without universe or set collection."
-            )
+        if not universe:
+            raise ValueError("Not possible to create matrix with empty universe.")
+        if not set_collection:
+            raise ValueError("Not possible to create matrix with empty set collection.")
 
         self.id = "root"
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._create_columns(universe)
-        self._create_nodes(set_collection)
+        self._universe = universe
+        self._set_collection = set_collection
+        self._create_columns()
+        self._create_nodes()
 
-    def _create_columns(self, universe: Universe) -> None:
+    def _create_columns(self) -> None:
         """Create column columns and attach them to root."""
         previous = self
-        for element in universe:
-            column = ColumnObject(_id=element)
+        for element in self._universe:
+            column = ColumnObject(column_id=element)
             column.left = previous
             previous.right = column
             previous = column
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self, set_collection: SetCollection) -> None:
+    def _create_nodes(self) -> None:
         """Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is
@@ -45,14 +51,14 @@ class DLXMatrix:
         also linked together to form a circular row.
         """
 
-        def find_column(_id) -> ColumnObject:
+        def find_column(_id: int) -> ColumnObject:
             """Find column with given id."""
             correct_column = self
             while correct_column.id != _id:
                 correct_column = correct_column.right
             return correct_column
 
-        for set_number, set_elements in enumerate(set_collection):
+        for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
             for element in set_elements:

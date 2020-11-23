@@ -15,6 +15,7 @@ class BoardSizeNotInitializedError(Exception):
     """
 
     def __init__(self, message="Either board height or width is not initialized."):
+        """Initialize error with message."""
         self.message = message
         super().__init__(self.message)
 
@@ -59,6 +60,7 @@ class PentominoCreator(DataCreator):
     }
 
     def __init__(self) -> None:
+        """Initialize DLX with empty set collection and without dimensions."""
         self._set_collection: SetCollection = []
         self._width: Optional[int] = None
         self._height: Optional[int] = None
