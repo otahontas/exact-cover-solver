@@ -2,7 +2,7 @@
 
 import pytest
 
-from exact_cover_solver.utils.pentomino_generator import PentominoGenerator
+from exact_cover_solver.data_creators.pentomino_generator import PentominoGenerator
 
 
 @pytest.fixture
@@ -152,7 +152,7 @@ def test_generator_generates_correct_amount_of_set_collections_for_3_20_board():
     correct_universe_size = 72
 
     pg = PentominoGenerator()
-    universe, set_collection = pg.generate(3, 20)
+    universe, set_collection = pg.create_universe_and_set_collections(3, 20)
 
     assert len(universe) == correct_universe_size
     for pos in [row for row in set_collection if row[0] == 10]:

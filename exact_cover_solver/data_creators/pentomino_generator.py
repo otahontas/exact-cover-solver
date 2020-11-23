@@ -1,7 +1,7 @@
 """Service for generating universe and set collection for pentomino problems."""
-from typing import Tuple, List, Dict, Set
+from typing import Tuple, List, Dict, Set, Optional
 
-from exact_cover_solver.custom_types import Universe, SetCollection
+from exact_cover_solver.data_creators import DataCreator, Universe, SetCollection
 
 NUMBER_OF_PENTOMINOES = 12
 NUMBER_OF_CELLS = 60
@@ -10,7 +10,7 @@ Pentomino = List[List[int]]
 Point = Tuple[int, int]
 
 
-class PentominoGenerator:
+class PentominoGenerator(DataCreator):
     """Universe and set generator for different size pentominoes."""
 
     def __init__(self) -> None:
@@ -51,8 +51,10 @@ class PentominoGenerator:
             "N": 10,
             "L": 11,
         }
+        self.__width: Optional[int] = None
+        self.__height: Optional[int] = None
 
-    def generate(
+    def create_universe_and_set_collections(
         self, board_height: int, board_width: int
     ) -> Tuple[Universe, SetCollection]:
         """Generate universe and set collection with given board size."""
