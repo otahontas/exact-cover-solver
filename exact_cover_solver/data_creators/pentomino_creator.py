@@ -107,13 +107,13 @@ class PentominoCreator(DataCreator):
     def _generate_set_collection(self) -> None:
         """Generate all possible ways to place each pentomino on the board.
 
-        Each generated set includes index for pentomino and five cells pentomino
-        can be placed to.
+        Each generated set includes index for pentomino (value in range 0-11) and five
+        cells pentomino can be placed to (values in range 12-72).
         """
         self._set_collection.clear()
         for pentomino in self._pentominoes:
             for orientation in self._generate_all_orientations(
-                    self._pentominoes[pentomino]
+                self._pentominoes[pentomino]
             ):
                 pentomino_height = len(orientation)
                 pentomino_width = len(orientation[0])
@@ -129,7 +129,16 @@ class PentominoCreator(DataCreator):
                         )
 
     def _solve_covered_cells(self, pentomino: Pentomino, start: Point) -> List[int]:
-        """Find which cells this pentomino will cover."""
+        """Find cells this pentomino covers.
+
+        Args:
+            pentomino: Single pentomino polygon
+            start: Point where upper-left corner of pentomino grid is placed
+
+        Returns:
+            List of all cells (indexed 0-59) this pentomino covers.
+
+        """
         start_y, start_x = start
         covered: List[int] = []
         pentomino_height = len(pentomino)
@@ -146,14 +155,21 @@ class PentominoCreator(DataCreator):
 
         If pentomino is N, prune half of the orientations away. This helps pruning
         algoX branches.
+
+        Args:
+            pentomino: Single pentomino polygon
+
+        Returns:
+            List of all unique orientations for the given pentomino.
+
         """
         seen: Set[str] = set()
         orientations = []
         for transposed in (pentomino, self._transpose(pentomino)):
             for left_right_flipped in (transposed, self._flip_left_right(transposed)):
                 for up_down_flipped in (
-                        left_right_flipped,
-                        self._flip_up_down(left_right_flipped),
+                    left_right_flipped,
+                    self._flip_up_down(left_right_flipped),
                 ):
                     orientation_as_string = str(up_down_flipped)
                     if orientation_as_string not in seen:
@@ -165,15 +181,44 @@ class PentominoCreator(DataCreator):
 
     @staticmethod
     def _flip_up_down(pentomino: Pentomino) -> Pentomino:
-        """Return pentomino with rows reversed."""
+        """Reverse each column.
+
+        Args:
+            pentomino: Single pentomino polygon
+
+        Returns:
+            Pentomino with each column reversed.
+        """
         return pentomino[::-1]
 
     @staticmethod
-    def _transpose(pentomino: Pentomino) -> Pentomino:
-        """Return pentomino with rows and columns transposed."""
-        return [list(x) for x in zip(*pentomino)]
+    def _flip_left_right(pentomino: Pentomino) -> Pentomino:
+        """Reverse each row.
+
+        Args:
+            pentomino: Single pentomino polygon
+
+        Returns:
+            Pentomino with each row reversed.
+        """
+        return [row[::-1] for row in pentomino]
 
     @staticmethod
-    def _flip_left_right(pentomino: Pentomino) -> Pentomino:
-        """Return pentomino with each row reversed."""
-        return [row[::-1] for row in pentomino]
+    def _transpose(pentomino: Pentomino) -> Pentomino:
+        """Transpose whole pentomino.
+
+        Args:
+            pentomino: Single pentomino polygon
+
+        Returns:
+            Transposed pentomino.
+        """
+        return [list(x) for x in zip(*pentomino)]
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"PentominoCreator.{func}": True
+    for func in dir(PentominoCreator)
+    if callable(getattr(PentominoCreator, func)) and func.startswith("_")
+}

@@ -86,3 +86,11 @@ class DLXMatrix:
             s = f"{s}Column {column.id} has {column.size} rows:{data_str}\n"
             column = column.right
         return s
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"DLXMatrix.{func}": True
+    for func in dir(DLXMatrix)
+    if callable(getattr(DLXMatrix, func)) and func.startswith("_")
+}

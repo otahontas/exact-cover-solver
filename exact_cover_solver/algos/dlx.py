@@ -100,7 +100,7 @@ class DLX(AlgorithmX):
         bottom and from left to right.
 
         Args:
-            Linked list column node.
+            column: Linked list column node.
         """
         column.detach()
         row = column.down
@@ -129,3 +129,11 @@ class DLX(AlgorithmX):
                 node = node.left
             row = row.up
         column.attach()
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"DLX.{func}": True
+    for func in dir(DLX)
+    if callable(getattr(DLX, func)) and func.startswith("_")
+}
