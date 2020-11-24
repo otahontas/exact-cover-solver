@@ -6,6 +6,11 @@ from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.algos.dictx import DictX
 from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
+
+import time
 
 
 class AlgorithmNotChosenError(Exception):
@@ -77,9 +82,35 @@ class Solver:
         """Not implemented."""
         raise NotImplementedError
 
-    def solve_pentomino_problem(self, board_height: int, board_width: int) -> None:
-        """Not implemented."""
-        raise NotImplementedError
+    def solve_pentomino_problem(
+        self, board_height: int, board_width: int
+    ) -> PentominoBoardBrowser:
+        """Generate needed data, solve cover problem and return solution browser.
+
+        Currently only dlxmatrix is used.
+        TODO: change this to abstract version, which matches currently used algo.
+
+        Args:
+            board_height: Height of the pentomino board
+            board_width: Width of the pentomino board
+        """
+        print("starting to generate data")
+        start_time = time.time()
+        pc = PentominoCreator()
+        pc.change_board_size(board_height, board_width)
+        universe, set_collection = pc.create_universe_and_set_collection()
+        matrix = DLXMatrix(universe, set_collection)
+        print(f"data generated, took {time.time() - start_time} secs")
+
+        print("starting to solve")
+        start_time = time.time()
+        solutions = self._algorithm.solve(matrix)
+        print(f"solved, took {time.time() - start_time} secs")
+
+        print("returning board browser")
+        return PentominoBoardBrowser(
+            board_height, board_width, solutions, set_collection
+        )
 
     def solve_sudoku_problem(self) -> None:
         """Not implemented."""
