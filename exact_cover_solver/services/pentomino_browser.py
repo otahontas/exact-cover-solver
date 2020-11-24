@@ -1,3 +1,5 @@
+"""Classes used to browse pentomino solutions."""
+
 from exact_cover_solver.algos import Solution
 from typing import List, Dict
 
@@ -5,6 +7,8 @@ from exact_cover_solver.data_creators import SetCollection
 
 
 class PentominoBoard:
+    """Single pentomino board."""
+
     _pentomino_names: Dict[str, int] = {
         0: "V",
         1: "U",
@@ -27,6 +31,7 @@ class PentominoBoard:
         self._place_pentominoes(placements)
 
     def _place_pentominoes(self, placements):
+        """Add pentominoes to board based on given cell list."""
         for placement_list in placements:
             pentomino = self._pentomino_names[placement_list[0]]
             for cell in placement_list[1:]:
@@ -37,10 +42,13 @@ class PentominoBoard:
 
     @property
     def grid(self):
+        """Get pentomino board as grid."""
         return self._grid
 
 
 class PentominoBoardBrowser:
+    """Browser for pentomino boards based on created solutions."""
+
     def __init__(
         self,
         board_height: int,
@@ -58,6 +66,7 @@ class PentominoBoardBrowser:
 
     @property
     def previous_board(self):
+        """Generate previous board."""
         if self._current_board_index <= 0:
             return None
         self._current_board_index -= 1
@@ -65,10 +74,12 @@ class PentominoBoardBrowser:
 
     @property
     def current_board(self):
+        """Generate current board."""
         return self._boards[self._current_board_index].grid
 
     @property
     def next_board(self):
+        """Generate next board."""
         if self._current_board_index >= len(self._solutions) - 1:
             return None
         self._current_board_index += 1
@@ -78,18 +89,21 @@ class PentominoBoardBrowser:
 
     @property
     def has_previous_board(self):
+        """Check if previous board can be generated."""
         return self._current_board_index > 0
 
     @property
     def has_next_board(self):
+        """Check if next board can be generated."""
         return self._current_board_index < len(self._solutions) - 1
 
     @property
     def size(self):
+        """Get board size."""
         return self._board_height, self._board_width
 
-
     def _create_board_on_demand(self, solutions_index: int):
+        """Create next board if needed."""
         solution = self._solutions[solutions_index]
         placements = [self._set_collection[row] for row in solution]
         self._boards.append(

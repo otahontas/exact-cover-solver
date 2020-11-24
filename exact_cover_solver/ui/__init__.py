@@ -19,7 +19,7 @@ class UI:
         self._update_view()
 
     def run(self) -> None:
-        """Start event Loop to process "events" and get the "values" of the inputs"""
+        """Start event Loop to process "events" and get the "values" of the inputs."""
         while True:
             event, values = self._window.read()
             if event == sg.WIN_CLOSED or event == "Exit program":
@@ -38,7 +38,9 @@ class UI:
                 self._generate_board(grid)
             if event == "3x20":
                 try:
-                    self._pentomino_browser = self._solver.solve_pentomino_problem(3, 20)
+                    self._pentomino_browser = self._solver.solve_pentomino_problem(
+                        3, 20
+                    )
                 except AlgorithmNotChosenError:
                     sg.popup("Please select which algorithm to use.")
                     continue
@@ -52,7 +54,9 @@ class UI:
         size = self._pentomino_browser.size
         self._update_view("Pentomino", size, grid, prev, next)
 
-    def _update_view(self, problem=None, size=None, grid=None, prev=None, next=None) -> None:
+    def _update_view(
+        self, problem=None, size=None, grid=None, prev=None, next=None
+    ) -> None:
         """Create view based on current selections."""
         if self._window:
             self._window.close()
@@ -63,31 +67,24 @@ class UI:
         algos = [
             [sg.Text("Select algo to use")],
             [sg.Button("DLX"), sg.Button("DictX")],
-            [sg.Text("Algorithm currently in use: "),
-             sg.Text(algo_name, size=(15, 1), key='-CURRENT_ALGO-')]
+            [
+                sg.Text("Algorithm currently in use: "),
+                sg.Text(algo_name, size=(15, 1), key="-CURRENT_ALGO-"),
+            ],
         ]
         problems = [
             [sg.Text("Select problem to solve")],
-            [sg.Button("Generic"), sg.Button("Pentomino"), sg.Button("Sudoku")]
+            [sg.Button("Generic"), sg.Button("Pentomino"), sg.Button("Sudoku")],
         ]
         separator = [sg.Canvas(size=(500, 20))]
         main = self._create_main_view(problem, size, grid, prev, next)
-        footer = [
-            sg.Button("Exit program"),
-            sg.Text(size=(15, 1), key='-ERROR-')
-        ]
-        layout = [
-            *algos,
-            *problems,
-            separator,
-            *main,
-            footer
-        ]
+        footer = [sg.Button("Exit program"), sg.Text(size=(15, 1), key="-ERROR-")]
+        layout = [*algos, *problems, separator, *main, footer]
         self._window = sg.Window(self._title, layout)
 
     def _change_current_algo(self, algo_name: str) -> None:
         self._solver.algorithm = algo_name
-        self._window['-CURRENT_ALGO-'].update(self._solver.algorithm)
+        self._window["-CURRENT_ALGO-"].update(self._solver.algorithm)
 
     def _create_main_view(self, problem, size, grid, prev, next):
         if not problem:

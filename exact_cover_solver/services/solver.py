@@ -46,10 +46,9 @@ class Solver:
         Raises:
             AlgorithmNotChosenError: Raised if algorithm not chosen.
         """
-        try:
-            return self._algorithm.__class__.__name__
-        except AttributeError:
+        if not self._algorithm:
             raise AlgorithmNotChosenError
+        return self._algorithm.__class__.__name__
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -> None:
