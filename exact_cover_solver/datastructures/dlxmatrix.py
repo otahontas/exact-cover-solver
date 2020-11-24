@@ -2,11 +2,12 @@
 
 from typing import Optional
 
+from exact_cover_solver.datastructures import Matrix
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
 from exact_cover_solver.data_creators import Universe, SetCollection
 
 
-class DLXMatrix:
+class DLXMatrix(Matrix):
     """Matrix representation and initialization methods for circular linked lists."""
 
     def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
@@ -16,21 +17,10 @@ class DLXMatrix:
             universe: a list of integers representing some set of elements
             set_collection: a list of lists, each made from integers in the universe
 
-        Raises:
-            ValueError: Error is raised if universe or set_collection is empty.
         """
-        if not universe:
-            raise ValueError("Not possible to create matrix with empty universe.")
-        if not set_collection:
-            raise ValueError("Not possible to create matrix with empty set collection.")
-
-        self.id = "root"
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._universe = universe
-        self._set_collection = set_collection
-        self._create_columns()
-        self._create_nodes()
+        super().__init__(universe, set_collection)
 
     def _create_columns(self) -> None:
         """Create column columns and attach them to root."""

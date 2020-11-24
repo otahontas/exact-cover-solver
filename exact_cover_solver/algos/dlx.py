@@ -15,7 +15,7 @@ class DLX(AlgorithmX):
         self._solutions: List[Solution] = []
         self._matrix: Optional[DLXMatrix] = None
 
-    def solve(self, matrix: DLXMatrix) -> List[Solution]:
+    def solve(self, matrix: AlgorithmX[DLXMatrix]) -> List[Solution]:
         """Solve which rows cover the given matrix.
 
         Clears solutions bookkeeping and used matrix from previous runs, then calls
