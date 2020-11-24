@@ -30,6 +30,10 @@ class UI:
                 sg.popup("Not implemented yet.")
             if event == "Pentomino":
                 self._update_view("Pentomino")
+            if event == "Generic":
+                sg.popup("Not implemented yet.")
+            if event == "Sudoku":
+                sg.popup("Not implemented yet.")
             if event == "Next":
                 grid = self._pentomino_browser.next_board
                 self._generate_board(grid)
@@ -37,15 +41,13 @@ class UI:
                 grid = self._pentomino_browser.previous_board
                 self._generate_board(grid)
             if event == "3x20":
-                try:
-                    self._pentomino_browser = self._solver.solve_pentomino_problem(
-                        3, 20
-                    )
-                except AlgorithmNotChosenError:
-                    sg.popup("Please select which algorithm to use.")
-                    continue
-                grid = self._pentomino_browser.current_board
-                self._generate_board(grid)
+                self._generate_solutions(3, 20)
+            if event == "4x15":
+                self._generate_solutions(4, 15)
+            if event == "5x12":
+                self._generate_solutions(5, 12)
+            if event == "6x10":
+                self._generate_solutions(6, 10)
         self._window.close()
 
     def _generate_board(self, grid):
@@ -53,6 +55,17 @@ class UI:
         next = self._pentomino_browser.has_next_board
         size = self._pentomino_browser.size
         self._update_view("Pentomino", size, grid, prev, next)
+
+    def _generate_solutions(self, height, width):
+        try:
+            self._pentomino_browser = self._solver.solve_pentomino_problem(
+                height, width
+            )
+        except AlgorithmNotChosenError:
+            sg.popup("Please select which algorithm to use.")
+            return
+        grid = self._pentomino_browser.current_board
+        self._generate_board(grid)
 
     def _update_view(
         self, problem=None, size=None, grid=None, prev=None, next=None

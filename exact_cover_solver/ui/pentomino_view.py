@@ -11,9 +11,9 @@ pentomino_colors = {
     "F": "red",
     "P": "orange",
     "W": "misty rose",
-    "Z": "lavender blush",
-    "N": "navajo white",
-    "L": "azure",
+    "Z": "purple",
+    "N": "dark blue",
+    "L": "dark gray",
 }
 
 
