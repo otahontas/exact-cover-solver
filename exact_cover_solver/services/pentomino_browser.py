@@ -1,10 +1,25 @@
 from exact_cover_solver.algos import Solution
-from typing import List
+from typing import List, Dict
 
 from exact_cover_solver.data_creators import SetCollection
 
 
 class PentominoBoard:
+    _pentomino_names: Dict[str, int] = {
+        0: "V",
+        1: "U",
+        2: "X",
+        3: "T",
+        4: "Y",
+        5: "I",
+        6: "F",
+        7: "P",
+        8: "W",
+        9: "Z",
+        10: "N",
+        11: "L",
+    }
+
     def __init__(
         self, board_height: int, board_width: int, placements: List[List[int]]
     ):
@@ -13,8 +28,9 @@ class PentominoBoard:
 
     def _place_pentominoes(self, placements):
         for placement_list in placements:
-            pentomino = placement_list[0]
+            pentomino = self._pentomino_names[placement_list[0]]
             for cell in placement_list[1:]:
+                cell -= 12
                 y = cell // len(self._grid[0])
                 x = cell - (y * len(self._grid[0]))
                 self._grid[y][x] = pentomino
@@ -45,11 +61,11 @@ class PentominoBoardBrowser:
         if self._current_board_index <= 0:
             return None
         self._current_board_index -= 1
-        return self._boards[self._current_board_index]
+        return self._boards[self._current_board_index].grid
 
     @property
     def current_board(self):
-        return self._boards[self._current_board_index]
+        return self._boards[self._current_board_index].grid
 
     @property
     def next_board(self):
@@ -58,7 +74,12 @@ class PentominoBoardBrowser:
         self._current_board_index += 1
         if self._current_board_index >= len(self._boards) - 1:
             self._create_board_on_demand(self._current_board_index)
-        return self._boards[self._current_board_index]
+        return self._boards[self._current_board_index].grid
+
+    @property
+    def current_index(self):
+        return self._current_board_index
+
 
     def _create_board_on_demand(self, solutions_index: int):
         solution = self._solutions[solutions_index]

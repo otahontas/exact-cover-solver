@@ -12,7 +12,7 @@ def generate_pentomino_board_solutions(
 ) -> None:
     """Test that 6x10 board gets correct amount of solutions."""
     solver = Solver()
-    solver.algorithm = "dlx"
+    solver.algorithm = "DLX"
     browser = solver.solve_pentomino_problem(board_height, board_width)
     solutions = browser._solutions
     print(
@@ -20,11 +20,11 @@ def generate_pentomino_board_solutions(
         f"board. Algorithm found {len(solutions)} solutions"
     )
     print("first board:")
-    for row in browser.current_board.grid:
+    for row in browser.current_board:
         print(row)
 
 
 generate_pentomino_board_solutions(3, 20, 2)
 generate_pentomino_board_solutions(4, 15, 368)
-# generate_pentomino_board_solutions(5, 12, 1010)
-# generate_pentomino_board_solutions(6, 10, 2339)
+generate_pentomino_board_solutions(5, 12, 1010)
+generate_pentomino_board_solutions(6, 10, 2339)

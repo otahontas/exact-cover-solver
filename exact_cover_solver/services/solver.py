@@ -93,21 +93,14 @@ class Solver:
         Args:
             board_height: Height of the pentomino board
             board_width: Width of the pentomino board
+
+        Returns:
+            PentominoBoardBrowser which can be used to browse generated solutions.
         """
-        print("starting to generate data")
-        start_time = time.time()
         pc = PentominoCreator()
         pc.change_board_size(board_height, board_width)
         universe, set_collection = pc.create_universe_and_set_collection()
-        matrix = DLXMatrix(universe, set_collection)
-        print(f"data generated, took {time.time() - start_time} secs")
-
-        print("starting to solve")
-        start_time = time.time()
-        solutions = self._algorithm.solve(matrix)
-        print(f"solved, took {time.time() - start_time} secs")
-
-        print("returning board browser")
+        solutions = self._algorithm.solve(DLXMatrix(universe, set_collection))
         return PentominoBoardBrowser(
             board_height, board_width, solutions, set_collection
         )
