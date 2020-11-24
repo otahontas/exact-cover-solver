@@ -28,22 +28,15 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Main entrypoint for program.&#34;&#34;&#34;
-from tkinter import Tk
-
 from exact_cover_solver.ui import UI
 from exact_cover_solver.services.solver import Solver
 
 
 def main() -&gt; None:
-    &#34;&#34;&#34;Launch UI from main, initialize objects program is using.&#34;&#34;&#34;
-    window = Tk()
-    window.title(&#34;Exact cover solver&#34;)
-
+    &#34;&#34;&#34;Launch UI from main, initialize solver service that UI is using.&#34;&#34;&#34;
     solver = Solver()
-
-    ui = UI(window, solver)
-    ui.start()
-    window.mainloop()
+    ui = UI(solver)
+    ui.run()
 
 
 if __name__ == &#34;__main__&#34;:
@@ -61,21 +54,16 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">main</span></span>(<span>) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Launch UI from main, initialize objects program is using.</p></div>
+<div class="desc"><p>Launch UI from main, initialize solver service that UI is using.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def main() -&gt; None:
-    &#34;&#34;&#34;Launch UI from main, initialize objects program is using.&#34;&#34;&#34;
-    window = Tk()
-    window.title(&#34;Exact cover solver&#34;)
-
+    &#34;&#34;&#34;Launch UI from main, initialize solver service that UI is using.&#34;&#34;&#34;
     solver = Solver()
-
-    ui = UI(window, solver)
-    ui.start()
-    window.mainloop()</code></pre>
+    ui = UI(solver)
+    ui.run()</code></pre>
 </details>
 </dd>
 </dl>

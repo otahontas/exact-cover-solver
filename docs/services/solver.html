@@ -32,9 +32,12 @@
 from typing import Optional
 
 from exact_cover_solver.algos import AlgorithmX
-from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
 
 
 class AlgorithmNotChosenError(Exception):
@@ -72,10 +75,9 @@ class Solver:
         Raises:
             AlgorithmNotChosenError: Raised if algorithm not chosen.
         &#34;&#34;&#34;
-        try:
-            return self._algorithm.__name__
-        except AttributeError:
+        if not self._algorithm:
             raise AlgorithmNotChosenError
+        return self._algorithm.__class__.__name__
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -&gt; None:
@@ -106,9 +108,30 @@ class Solver:
         &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
         raise NotImplementedError
 
-    def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError
+    def solve_pentomino_problem(
+        self, board_height: int, board_width: int
+    ) -&gt; PentominoBoardBrowser:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solution browser.
+
+        Currently only dlxmatrix is used.
+        TODO: change this to abstract version, which matches currently used algo.
+
+        Args:
+            board_height: Height of the pentomino board
+            board_width: Width of the pentomino board
+
+        Returns:
+            PentominoBoardBrowser which can be used to browse generated solutions.
+        &#34;&#34;&#34;
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        pc = PentominoCreator()
+        pc.change_board_size(board_height, board_width)
+        universe, set_collection = pc.create_universe_and_set_collection()
+        solutions = self._algorithm.solve(DLXMatrix(universe, set_collection))
+        return PentominoBoardBrowser(
+            board_height, board_width, solutions, set_collection
+        )
 
     def solve_sudoku_problem(self) -&gt; None:
         &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
@@ -188,10 +211,9 @@ Initialize error with message.</p></div>
         Raises:
             AlgorithmNotChosenError: Raised if algorithm not chosen.
         &#34;&#34;&#34;
-        try:
-            return self._algorithm.__name__
-        except AttributeError:
+        if not self._algorithm:
             raise AlgorithmNotChosenError
+        return self._algorithm.__class__.__name__
 
     @algorithm.setter
     def algorithm(self, algorithm_name: str) -&gt; None:
@@ -222,9 +244,30 @@ Initialize error with message.</p></div>
         &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
         raise NotImplementedError
 
-    def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError
+    def solve_pentomino_problem(
+        self, board_height: int, board_width: int
+    ) -&gt; PentominoBoardBrowser:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solution browser.
+
+        Currently only dlxmatrix is used.
+        TODO: change this to abstract version, which matches currently used algo.
+
+        Args:
+            board_height: Height of the pentomino board
+            board_width: Width of the pentomino board
+
+        Returns:
+            PentominoBoardBrowser which can be used to browse generated solutions.
+        &#34;&#34;&#34;
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        pc = PentominoCreator()
+        pc.change_board_size(board_height, board_width)
+        universe, set_collection = pc.create_universe_and_set_collection()
+        solutions = self._algorithm.solve(DLXMatrix(universe, set_collection))
+        return PentominoBoardBrowser(
+            board_height, board_width, solutions, set_collection
+        )
 
     def solve_sudoku_problem(self) -&gt; None:
         &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
@@ -256,10 +299,9 @@ def algorithm(self) -&gt; Optional[str]:
     Raises:
         AlgorithmNotChosenError: Raised if algorithm not chosen.
     &#34;&#34;&#34;
-    try:
-        return self._algorithm.__name__
-    except AttributeError:
-        raise AlgorithmNotChosenError</code></pre>
+    if not self._algorithm:
+        raise AlgorithmNotChosenError
+    return self._algorithm.__class__.__name__</code></pre>
 </details>
 </dd>
 </dl>
@@ -282,17 +324,49 @@ def algorithm(self) -&gt; Optional[str]:
 </details>
 </dd>
 <dt id="exact_cover_solver.services.solver.Solver.solve_pentomino_problem"><code class="name flex">
-<span>def <span class="ident">solve_pentomino_problem</span></span>(<span>self, board_height: int, board_width: int) ‑> NoneType</span>
+<span>def <span class="ident">solve_pentomino_problem</span></span>(<span>self, board_height: int, board_width: int) ‑> <a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser" href="pentomino_browser.html#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser">PentominoBoardBrowser</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Not implemented.</p></div>
+<div class="desc"><p>Generate needed data, solve cover problem and return solution browser.</p>
+<p>Currently only dlxmatrix is used.
+TODO: change this to abstract version, which matches currently used algo.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>board_height</code></strong></dt>
+<dd>Height of the pentomino board</dd>
+<dt><strong><code>board_width</code></strong></dt>
+<dd>Width of the pentomino board</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>PentominoBoardBrowser which can be used to browse generated solutions.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def solve_pentomino_problem(self, board_height: int, board_width: int) -&gt; None:
-    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
+<pre><code class="python">def solve_pentomino_problem(
+    self, board_height: int, board_width: int
+) -&gt; PentominoBoardBrowser:
+    &#34;&#34;&#34;Generate needed data, solve cover problem and return solution browser.
+
+    Currently only dlxmatrix is used.
+    TODO: change this to abstract version, which matches currently used algo.
+
+    Args:
+        board_height: Height of the pentomino board
+        board_width: Width of the pentomino board
+
+    Returns:
+        PentominoBoardBrowser which can be used to browse generated solutions.
+    &#34;&#34;&#34;
+    if not self._algorithm:
+        raise AlgorithmNotChosenError
+    pc = PentominoCreator()
+    pc.change_board_size(board_height, board_width)
+    universe, set_collection = pc.create_universe_and_set_collection()
+    solutions = self._algorithm.solve(DLXMatrix(universe, set_collection))
+    return PentominoBoardBrowser(
+        board_height, board_width, solutions, set_collection
+    )</code></pre>
 </details>
 </dd>
 <dt id="exact_cover_solver.services.solver.Solver.solve_sudoku_problem"><code class="name flex">

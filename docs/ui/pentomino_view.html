@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
 <title>exact_cover_solver.ui.pentomino_view API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="Pentomino view function and helper functions." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,124 +22,71 @@
 <h1 class="title">Module <code>exact_cover_solver.ui.pentomino_view</code></h1>
 </header>
 <section id="section-intro">
+<p>Pentomino view function and helper functions.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from tkinter import Frame, Tk, ttk, Label, Button, constants
+<pre><code class="python">&#34;&#34;&#34;Pentomino view function and helper functions.&#34;&#34;&#34;
+import PySimpleGUI as sg
 
-from .view import View
-from exact_cover_solver.services.solver import Solver
-from typing import Optional, Dict, Tuple
+pentomino_colors = {
+    &#34;V&#34;: &#34;yellow&#34;,
+    &#34;U&#34;: &#34;slate blue&#34;,
+    &#34;X&#34;: &#34;forest green&#34;,
+    &#34;T&#34;: &#34;medium orchid&#34;,
+    &#34;Y&#34;: &#34;cyan&#34;,
+    &#34;I&#34;: &#34;light blue&#34;,
+    &#34;F&#34;: &#34;red&#34;,
+    &#34;P&#34;: &#34;orange&#34;,
+    &#34;W&#34;: &#34;misty rose&#34;,
+    &#34;Z&#34;: &#34;lavender blush&#34;,
+    &#34;N&#34;: &#34;navajo white&#34;,
+    &#34;L&#34;: &#34;azure&#34;,
+}
 
 
-class PentominoView(View):
-    def __init__(self, root: Tk, solver: Solver) -&gt; None:
-        &#34;&#34;&#34;Initialize needed variables.&#34;&#34;&#34;
-        self.__cells: Dict[Tuple[int, int], ttk.Frame] = {}
-        self.__width: Optional[int] = None
-        self.__height: Optional[int] = None
-        self.__solver = solver
-        self.__solutions = None
-        super().__init__(root)
-
-    def _initialize(self) -&gt; None:
-        &#34;&#34;&#34;Show board selection buttons.&#34;&#34;&#34;
-        self._frame = Frame(master=self._root)
-        self._draw_buttons()
-
-    def _draw_grid(self) -&gt; None:
-        &#34;&#34;&#34;Draw grid with solution (not yet ready).&#34;&#34;&#34;
-        self.destroy()
-        self._frame = Frame(master=self._root)
-        for row in range(self.__height):
-            for column in range(self.__width):
-                cell = Frame(
-                    master=self._frame, width=50, height=50, background=&#34;white&#34;
+def create_pentomino_view(size, grid, prev, next):
+    if not size:
+        return [
+            [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
+            [
+                sg.Text(
+                    &#34;Program will generate all the solutions for selected &#34;
+                    &#34;size and let&#39;s you browse solutions one by one. This is a &#34;
+                    &#34;blocking operation that might take a while to perform.&#34;,
+                    auto_size_text=True,
+                    size=(50, 5),
                 )
-                cell.grid(row=row, column=column, padx=3, pady=3)
-                self.__cells[(row, column)] = cell
-        label = Label(
-            master=self._frame, text=f&#34;Found {len(self.__solutions)} solutions.&#34;
-        )
-        label.grid(columnspan=3, row=self.__height + 1, column=0)
-        self.pack()
+            ],
+            [
+                sg.Button(&#34;3x20&#34;),
+                sg.Button(&#34;4x15&#34;),
+                sg.Button(&#34;5x12&#34;),
+                sg.Button(&#34;6x10&#34;),
+            ],
+        ]
+    grid = create_grid(grid)
+    buttons = []
+    if prev:
+        buttons.append(sg.Button(&#34;Previous&#34;))
+    if next:
+        buttons.append(sg.Button(&#34;Next&#34;))
+    return [[sg.Text(&#34;Solution:&#34;)], *grid, buttons]
 
-    def _draw_buttons(self) -&gt; None:
-        &#34;&#34;&#34;Draw selection buttons.&#34;&#34;&#34;
-        label = Label(
-            master=self._frame, text=&#34;Select which pentomino board solutions to solve&#34;
-        )
-        button_3_20 = Button(
-            master=self._frame,
-            text=&#34;3x20&#34;,
-            command=self._solve_for_pentomino_board_3_20,
-        )
-        button_4_15 = Button(
-            master=self._frame,
-            text=&#34;4x15&#34;,
-            command=self._solve_for_pentomino_board_4_15,
-        )
-        button_5_12 = Button(
-            master=self._frame,
-            text=&#34;5x12&#34;,
-            command=self._solve_for_pentomino_board_5_12,
-        )
-        button_6_10 = Button(
-            master=self._frame,
-            text=&#34;6x10&#34;,
-            command=self._solve_for_pentomino_board_6_10,
-        )
-        label.grid(row=1, column=0, padx=5, pady=5)
-        button_3_20.grid(row=2, column=0, padx=5, pady=5)
-        button_4_15.grid(row=2, column=1, padx=5, pady=5)
-        button_5_12.grid(row=2, column=2, padx=5, pady=5)
-        button_6_10.grid(row=2, column=3, padx=5, pady=5)
 
-    def _draw_loader(self):
-        &#34;&#34;&#34;Draw loader while calculating solutions.&#34;&#34;&#34;
-        self.destroy()
-        self._frame = Frame(master=self._root)
-        label = Label(
-            master=self._frame,
-            text=&#34;Hang on, calculating solutions. This might take a while.&#34;,
-        )
-        label.grid(row=1, column=0, padx=5, pady=5)
-        progress = ttk.Progressbar(
-            self._frame, orient=constants.HORIZONTAL, length=100, mode=&#34;indeterminate&#34;
-        )
-        progress.grid(row=2, column=0, padx=5, pady=5)
-        self.pack()
-
-    def _solve_for_pentomino_board_3_20(self):
-        &#34;&#34;&#34;Run event from 3x20 button.&#34;&#34;&#34;
-        self.__height = 3
-        self.__width = 20
-        self._solve()
-
-    def _solve_for_pentomino_board_4_15(self):
-        &#34;&#34;&#34;Run event from 4x15 button.&#34;&#34;&#34;
-        self.__height = 4
-        self.__width = 15
-        self._solve()
-
-    def _solve_for_pentomino_board_5_12(self):
-        &#34;&#34;&#34;Run event from 5x12 button.&#34;&#34;&#34;
-        self.__height = 5
-        self.__width = 12
-        self._solve()
-
-    def _solve_for_pentomino_board_6_10(self):
-        &#34;&#34;&#34;Run event from 6x10 button.&#34;&#34;&#34;
-        self.__height = 6
-        self.__width = 10
-        self._solve()
-
-    def _solve(self):
-        &#34;&#34;&#34;Solve with set board size.&#34;&#34;&#34;
-        self._draw_loader()
-        self.__solutions = self.__solver.solve(self.__height, self.__width)
-        self._draw_grid()</code></pre>
+def create_grid(grid):
+    return [
+        [
+            sg.Canvas(
+                background_color=pentomino_colors[grid[row][col]],
+                size=(20, 20),
+                border_width=1,
+            )
+            for col in range(len(grid[0]))
+        ]
+        for row in range(len(grid))
+    ]</code></pre>
 </details>
 </section>
 <section>
@@ -147,144 +94,72 @@ class PentominoView(View):
 <section>
 </section>
 <section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="exact_cover_solver.ui.pentomino_view.PentominoView"><code class="flex name class">
-<span>class <span class="ident">PentominoView</span></span>
-<span>(</span><span>root: tkinter.Tk, solver: <a title="exact_cover_solver.services.solver.Solver" href="../services/solver.html#exact_cover_solver.services.solver.Solver">Solver</a>)</span>
+<dt id="exact_cover_solver.ui.pentomino_view.create_grid"><code class="name flex">
+<span>def <span class="ident">create_grid</span></span>(<span>grid)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Base class for UI views.</p>
-<p>Initialize needed variables.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class PentominoView(View):
-    def __init__(self, root: Tk, solver: Solver) -&gt; None:
-        &#34;&#34;&#34;Initialize needed variables.&#34;&#34;&#34;
-        self.__cells: Dict[Tuple[int, int], ttk.Frame] = {}
-        self.__width: Optional[int] = None
-        self.__height: Optional[int] = None
-        self.__solver = solver
-        self.__solutions = None
-        super().__init__(root)
-
-    def _initialize(self) -&gt; None:
-        &#34;&#34;&#34;Show board selection buttons.&#34;&#34;&#34;
-        self._frame = Frame(master=self._root)
-        self._draw_buttons()
-
-    def _draw_grid(self) -&gt; None:
-        &#34;&#34;&#34;Draw grid with solution (not yet ready).&#34;&#34;&#34;
-        self.destroy()
-        self._frame = Frame(master=self._root)
-        for row in range(self.__height):
-            for column in range(self.__width):
-                cell = Frame(
-                    master=self._frame, width=50, height=50, background=&#34;white&#34;
-                )
-                cell.grid(row=row, column=column, padx=3, pady=3)
-                self.__cells[(row, column)] = cell
-        label = Label(
-            master=self._frame, text=f&#34;Found {len(self.__solutions)} solutions.&#34;
-        )
-        label.grid(columnspan=3, row=self.__height + 1, column=0)
-        self.pack()
-
-    def _draw_buttons(self) -&gt; None:
-        &#34;&#34;&#34;Draw selection buttons.&#34;&#34;&#34;
-        label = Label(
-            master=self._frame, text=&#34;Select which pentomino board solutions to solve&#34;
-        )
-        button_3_20 = Button(
-            master=self._frame,
-            text=&#34;3x20&#34;,
-            command=self._solve_for_pentomino_board_3_20,
-        )
-        button_4_15 = Button(
-            master=self._frame,
-            text=&#34;4x15&#34;,
-            command=self._solve_for_pentomino_board_4_15,
-        )
-        button_5_12 = Button(
-            master=self._frame,
-            text=&#34;5x12&#34;,
-            command=self._solve_for_pentomino_board_5_12,
-        )
-        button_6_10 = Button(
-            master=self._frame,
-            text=&#34;6x10&#34;,
-            command=self._solve_for_pentomino_board_6_10,
-        )
-        label.grid(row=1, column=0, padx=5, pady=5)
-        button_3_20.grid(row=2, column=0, padx=5, pady=5)
-        button_4_15.grid(row=2, column=1, padx=5, pady=5)
-        button_5_12.grid(row=2, column=2, padx=5, pady=5)
-        button_6_10.grid(row=2, column=3, padx=5, pady=5)
-
-    def _draw_loader(self):
-        &#34;&#34;&#34;Draw loader while calculating solutions.&#34;&#34;&#34;
-        self.destroy()
-        self._frame = Frame(master=self._root)
-        label = Label(
-            master=self._frame,
-            text=&#34;Hang on, calculating solutions. This might take a while.&#34;,
-        )
-        label.grid(row=1, column=0, padx=5, pady=5)
-        progress = ttk.Progressbar(
-            self._frame, orient=constants.HORIZONTAL, length=100, mode=&#34;indeterminate&#34;
-        )
-        progress.grid(row=2, column=0, padx=5, pady=5)
-        self.pack()
-
-    def _solve_for_pentomino_board_3_20(self):
-        &#34;&#34;&#34;Run event from 3x20 button.&#34;&#34;&#34;
-        self.__height = 3
-        self.__width = 20
-        self._solve()
-
-    def _solve_for_pentomino_board_4_15(self):
-        &#34;&#34;&#34;Run event from 4x15 button.&#34;&#34;&#34;
-        self.__height = 4
-        self.__width = 15
-        self._solve()
-
-    def _solve_for_pentomino_board_5_12(self):
-        &#34;&#34;&#34;Run event from 5x12 button.&#34;&#34;&#34;
-        self.__height = 5
-        self.__width = 12
-        self._solve()
-
-    def _solve_for_pentomino_board_6_10(self):
-        &#34;&#34;&#34;Run event from 6x10 button.&#34;&#34;&#34;
-        self.__height = 6
-        self.__width = 10
-        self._solve()
-
-    def _solve(self):
-        &#34;&#34;&#34;Solve with set board size.&#34;&#34;&#34;
-        self._draw_loader()
-        self.__solutions = self.__solver.solve(self.__height, self.__width)
-        self._draw_grid()</code></pre>
+<pre><code class="python">def create_grid(grid):
+    return [
+        [
+            sg.Canvas(
+                background_color=pentomino_colors[grid[row][col]],
+                size=(20, 20),
+                border_width=1,
+            )
+            for col in range(len(grid[0]))
+        ]
+        for row in range(len(grid))
+    ]</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="exact_cover_solver.ui.view.View" href="view.html#exact_cover_solver.ui.view.View">View</a></li>
-</ul>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="exact_cover_solver.ui.view.View" href="view.html#exact_cover_solver.ui.view.View">View</a></b></code>:
-<ul class="hlist">
-<li><code><a title="exact_cover_solver.ui.view.View.destroy" href="view.html#exact_cover_solver.ui.view.View.destroy">destroy</a></code></li>
-<li><code><a title="exact_cover_solver.ui.view.View.pack" href="view.html#exact_cover_solver.ui.view.View.pack">pack</a></code></li>
-</ul>
-</li>
-</ul>
+</dd>
+<dt id="exact_cover_solver.ui.pentomino_view.create_pentomino_view"><code class="name flex">
+<span>def <span class="ident">create_pentomino_view</span></span>(<span>size, grid, prev, next)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_pentomino_view(size, grid, prev, next):
+    if not size:
+        return [
+            [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
+            [
+                sg.Text(
+                    &#34;Program will generate all the solutions for selected &#34;
+                    &#34;size and let&#39;s you browse solutions one by one. This is a &#34;
+                    &#34;blocking operation that might take a while to perform.&#34;,
+                    auto_size_text=True,
+                    size=(50, 5),
+                )
+            ],
+            [
+                sg.Button(&#34;3x20&#34;),
+                sg.Button(&#34;4x15&#34;),
+                sg.Button(&#34;5x12&#34;),
+                sg.Button(&#34;6x10&#34;),
+            ],
+        ]
+    grid = create_grid(grid)
+    buttons = []
+    if prev:
+        buttons.append(sg.Button(&#34;Previous&#34;))
+    if next:
+        buttons.append(sg.Button(&#34;Next&#34;))
+    return [[sg.Text(&#34;Solution:&#34;)], *grid, buttons]</code></pre>
+</details>
 </dd>
 </dl>
+</section>
+<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -298,11 +173,10 @@ class PentominoView(View):
 <li><code><a title="exact_cover_solver.ui" href="index.html">exact_cover_solver.ui</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="exact_cover_solver.ui.pentomino_view.PentominoView" href="#exact_cover_solver.ui.pentomino_view.PentominoView">PentominoView</a></code></h4>
-</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="exact_cover_solver.ui.pentomino_view.create_grid" href="#exact_cover_solver.ui.pentomino_view.create_grid">create_grid</a></code></li>
+<li><code><a title="exact_cover_solver.ui.pentomino_view.create_pentomino_view" href="#exact_cover_solver.ui.pentomino_view.create_pentomino_view">create_pentomino_view</a></code></li>
 </ul>
 </li>
 </ul>
