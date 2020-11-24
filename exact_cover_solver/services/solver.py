@@ -3,14 +3,12 @@
 from typing import Optional
 
 from exact_cover_solver.algos import AlgorithmX
-from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.data_creators import Universe, SetCollection
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
-
-import time
 
 
 class AlgorithmNotChosenError(Exception):
@@ -49,7 +47,7 @@ class Solver:
             AlgorithmNotChosenError: Raised if algorithm not chosen.
         """
         try:
-            return self._algorithm.__name__
+            return self._algorithm.__class__.__name__
         except AttributeError:
             raise AlgorithmNotChosenError
 
@@ -97,6 +95,8 @@ class Solver:
         Returns:
             PentominoBoardBrowser which can be used to browse generated solutions.
         """
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
         pc = PentominoCreator()
         pc.change_board_size(board_height, board_width)
         universe, set_collection = pc.create_universe_and_set_collection()

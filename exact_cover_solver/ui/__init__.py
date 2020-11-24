@@ -1,83 +1,98 @@
 """Package for handling UI-related functionality."""
-from tkinter import Tk
 from typing import Optional
 
-from .menu import AppMenu
-from .nav import Nav
-from .view import View
-from .welcome_view import WelcomeView
-from .pentomino_view import PentominoView
+import PySimpleGUI as sg
+
+from ..services.solver import Solver, AlgorithmNotChosenError
+from .pentomino_view import create_pentomino_view
 
 
 class UI:
     """Main UI class."""
 
-    def __init__(self, root: Tk, solver):
+    def __init__(self, solver: Solver) -> None:
         """Initialize ui components."""
-        self.__root = root
-        self.__solver = solver
-        self.__current_view: Optional[View] = None
-        self.__app_menu: Optional[AppMenu] = None
-        self.__nav: Optional[Nav] = None
+        self._title = "Exact cover solver"
+        self._solver = solver
+        self._window: Optional[sg.Window] = None
+        self._pentomino_browser = None
+        self._update_view()
 
-    def start(self):
-        """Start UI, set some initial configurations and show default view."""
-        self.__app_menu = AppMenu(self.__root, self._quit_app, self._show_about)
-        self.__root.config(menu=self.__app_menu.menu)
-        self._set_current_nav()
-        self._set_current_view()
+    def run(self) -> None:
+        """Start event Loop to process "events" and get the "values" of the inputs"""
+        while True:
+            event, values = self._window.read()
+            if event == sg.WIN_CLOSED or event == "Exit program":
+                break
+            if event == "DLX":
+                self._change_current_algo("DLX")
+            if event == "DictX":
+                sg.popup("Not implemented yet.")
+            if event == "Pentomino":
+                self._update_view("Pentomino")
+            if event == "Next":
+                grid = self._pentomino_browser.next_board
+                self._generate_board(grid)
+            if event == "Previous":
+                grid = self._pentomino_browser.previous_board
+                self._generate_board(grid)
+            if event == "3x20":
+                try:
+                    self._pentomino_browser = self._solver.solve_pentomino_problem(3, 20)
+                except AlgorithmNotChosenError:
+                    sg.popup("Please select which algorithm to use.")
+                    continue
+                grid = self._pentomino_browser.current_board
+                self._generate_board(grid)
+        self._window.close()
 
-    def _set_current_view(self):
-        """Set view."""
-        self._hide_current_view()
-        current_problem = self.__solver.problem
-        if not current_problem:
-            self.__current_view = WelcomeView(self.__root)
-        elif current_problem == "pentomino":
-            self.__current_view = PentominoView(self.__root, self.__solver)
-        self.__current_view.pack()
+    def _generate_board(self, grid):
+        prev = self._pentomino_browser.has_previous_board
+        next = self._pentomino_browser.has_next_board
+        size = self._pentomino_browser.size
+        self._update_view("Pentomino", size, grid, prev, next)
 
-    def _hide_current_view(self):
-        """Destroy and hide current view."""
-        if self.__current_view:
-            self.__current_view.destroy()
-        self.__current_view = None
+    def _update_view(self, problem=None, size=None, grid=None, prev=None, next=None) -> None:
+        """Create view based on current selections."""
+        if self._window:
+            self._window.close()
+        try:
+            algo_name = self._solver.algorithm
+        except AlgorithmNotChosenError:
+            algo_name = ""
+        algos = [
+            [sg.Text("Select algo to use")],
+            [sg.Button("DLX"), sg.Button("DictX")],
+            [sg.Text("Algorithm currently in use: "),
+             sg.Text(algo_name, size=(15, 1), key='-CURRENT_ALGO-')]
+        ]
+        problems = [
+            [sg.Text("Select problem to solve")],
+            [sg.Button("Generic"), sg.Button("Pentomino"), sg.Button("Sudoku")]
+        ]
+        separator = [sg.Canvas(size=(500, 20))]
+        main = self._create_main_view(problem, size, grid, prev, next)
+        footer = [
+            sg.Button("Exit program"),
+            sg.Text(size=(15, 1), key='-ERROR-')
+        ]
+        layout = [
+            *algos,
+            *problems,
+            separator,
+            *main,
+            footer
+        ]
+        self._window = sg.Window(self._title, layout)
 
-    def _set_current_nav(self):
-        """Set nav."""
-        self._hide_current_nav()
-        current_problem = self.__solver.problem
-        current_algo = self.__solver.algorithm
-        self.__nav = Nav(
-            self.__root,
-            self._change_current_problem,
-            self._change_current_algo,
-            current_problem,
-            current_algo,
-        )
-        self.__nav.pack()
+    def _change_current_algo(self, algo_name: str) -> None:
+        self._solver.algorithm = algo_name
+        self._window['-CURRENT_ALGO-'].update(self._solver.algorithm)
 
-    def _hide_current_nav(self):
-        """Destroy and hide current nav."""
-        if self.__nav:
-            self.__nav.destroy()
-        self.__nav = None
-
-    def _quit_app(self) -> None:
-        """Exit the program."""
-        self.__root.quit()
-
-    def _show_about(self) -> None:
-        """Show about info."""
-        raise NotImplementedError
-
-    def _change_current_problem(self, problem: str) -> None:
-        """Change current problem in program logic and app."""
-        self.__solver.problem = problem
-        self._set_current_nav()
-        self._set_current_view()
-
-    def _change_current_algo(self, algo: str) -> None:
-        """Change current algo in program logic and app."""
-        self.__solver.algorithm = algo
-        self._set_current_nav()
+    def _create_main_view(self, problem, size, grid, prev, next):
+        if not problem:
+            return [[sg.Canvas(size=(500, 300))]]
+        if problem == "Pentomino":
+            if not size:
+                return create_pentomino_view(size, grid, prev, next)
+            return create_pentomino_view(size, grid, prev, next)

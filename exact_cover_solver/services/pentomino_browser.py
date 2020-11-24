@@ -69,7 +69,7 @@ class PentominoBoardBrowser:
 
     @property
     def next_board(self):
-        if self._current_board_index >= len(self._set_collection) - 1:
+        if self._current_board_index >= len(self._solutions) - 1:
             return None
         self._current_board_index += 1
         if self._current_board_index >= len(self._boards) - 1:
@@ -77,8 +77,16 @@ class PentominoBoardBrowser:
         return self._boards[self._current_board_index].grid
 
     @property
-    def current_index(self):
-        return self._current_board_index
+    def has_previous_board(self):
+        return self._current_board_index > 0
+
+    @property
+    def has_next_board(self):
+        return self._current_board_index < len(self._solutions) - 1
+
+    @property
+    def size(self):
+        return self._board_height, self._board_width
 
 
     def _create_board_on_demand(self, solutions_index: int):
