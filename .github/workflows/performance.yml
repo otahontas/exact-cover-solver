@@ -7,7 +7,7 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: [3.6, pypy3]
+        python-version: [pypy3]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
@@ -22,4 +22,4 @@ jobs:
         pip install .
     - name: Run performance tests 
       run: |
-        python performance_tests/test_pentominoes_with_dlx.py
+        python performance_tests/main.py
