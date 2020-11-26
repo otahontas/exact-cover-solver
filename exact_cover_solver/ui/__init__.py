@@ -27,7 +27,7 @@ class UI:
             if event == "DLX":
                 self._change_current_algo("DLX")
             if event == "DictX":
-                sg.popup("Not implemented yet.")
+                self._change_current_algo("DictX")
             if event == "Pentomino":
                 self._update_view("Pentomino")
             if event == "Generic":

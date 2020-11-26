@@ -23,10 +23,12 @@ class DictX(AlgorithmX):
         return self._solutions
 
     def _search(self, X, Y, partial: Solution = None) -> None:
+        if not partial:
+            partial: Solution = []
         if not X:
             self._solutions.append(list(partial))
         else:
-            c = min(X, key=lambda x: len(X[c]))
+            c = min(X, key=lambda c: len(X[c]))
             for r in list(X[c]):
                 partial.append(r)
                 cols = self._cover(X, Y, r)

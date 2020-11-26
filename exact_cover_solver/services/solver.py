@@ -7,6 +7,7 @@ from exact_cover_solver.algos.dictx import DictX
 from exact_cover_solver.algos.dlx import DLX
 from exact_cover_solver.data_creators import Universe, SetCollection
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
 
@@ -31,6 +32,7 @@ class Solver:
     """
 
     _algorithms = [DLX, DictX]
+    _matrices = {"DLX": DLXMatrix, "DictX": DictMatrix}
 
     def __init__(self):
         """Initialize algorithm variable."""
@@ -84,9 +86,6 @@ class Solver:
     ) -> PentominoBoardBrowser:
         """Generate needed data, solve cover problem and return solution browser.
 
-        Currently only dlxmatrix is used.
-        TODO: change this to abstract version, which matches currently used algo.
-
         Args:
             board_height: Height of the pentomino board
             board_width: Width of the pentomino board
@@ -99,7 +98,8 @@ class Solver:
         pc = PentominoCreator()
         pc.change_board_size(board_height, board_width)
         universe, set_collection = pc.create_universe_and_set_collection()
-        solutions = self._algorithm.solve(DLXMatrix(universe, set_collection))
+        matrix_class = self._matrices[self.algorithm]
+        solutions = self._algorithm.solve(matrix_class(universe, set_collection))
         return PentominoBoardBrowser(
             board_height, board_width, solutions, set_collection
         )
