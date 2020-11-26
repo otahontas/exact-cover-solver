@@ -6,6 +6,7 @@
   - `algos`-paketti sisältää ohjelman algoritmit:
     - Algoritmi X:n rajapinnan määrittely
     - Dancing links (linkitetyt listat) -toteutus (nimeltään DLX) algoritmista
+    - Hajautusperustainen toteutus (DictX) algoritmista, perustuen: https://www.cs.mcgill.ca/~aassaf9/python/algorithm_x.html
   - `datastructures`-paketti sisältää ohjelman tarvitsemat itse tehdyt tietorakenteet:
     - Dancing links -toteutuksessa tarvitut linkitettyjen listojen erityyppiset solmut sekä matriisitoteutus, jonka metodeilla solmut liitetään yhteen
   - `ui` -paketti sisältää käyttöliittymän

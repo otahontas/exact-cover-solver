@@ -14,6 +14,7 @@ class DictMatrix(Matrix):
             universe: a list of integers representing some set of elements
             set_collection: a list of lists, each made from integers in the universe
         """
+        self._grid = None
         super().__init__(universe, set_collection)
 
     def _create_columns(self) -> None:
@@ -22,4 +23,11 @@ class DictMatrix(Matrix):
 
     def _create_nodes(self) -> None:
         """Create nodes."""
-        pass
+        self._grid = {col: set() for col in self._universe}
+        for index, row in enumerate(self._set_collection):
+            for element in row:
+                self._grid[element].add(index)
+
+    @property
+    def grid(self):
+        return self._grid
