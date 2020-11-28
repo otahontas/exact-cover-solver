@@ -16,7 +16,7 @@ class DLX(AlgorithmX):
     def solve(self, matrix: AlgorithmX[DLXMatrix]) -> List[Solution]:
         """Solve which rows cover the given matrix.
 
-        Clears solutions bookkeeping and used matrix from previous runs, then calls
+        Clears solutions bookkeeping from previous runs, then calls
         recursive method.
 
         Args:

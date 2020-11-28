@@ -11,18 +11,20 @@ class DLXMatrix(Matrix):
     """Matrix representation and initialization methods for circular linked lists."""
 
     def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
-        """Create column and data objects and link them to this matrix object.
+        """Initialize linked list based matrix.
+
+        Create initial links to column objects, then pass the universe and the set
+        collection constrains to parent initializer.
 
         Args:
             universe: a list of integers representing some set of elements
             set_collection: a list of lists, each made from integers in the universe
-
         """
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
         super().__init__(universe, set_collection)
 
-    def _create(self):
+    def _create(self) -> None:
         """Call creator methods for different linked list data types."""
         self._create_column_nodes()
         self._create_data_nodes()
@@ -39,7 +41,7 @@ class DLXMatrix(Matrix):
         previous.right = self
 
     def _create_data_nodes(self) -> None:
-        """Create nodes representing elements in each set in set collection.
+        """Create nodes representing elements in each set in collection.
 
         All sets are iterated through. For each element in set the element is
         linked to the correct column and columns column. Elements in set are
@@ -59,7 +61,7 @@ class DLXMatrix(Matrix):
 
             for element in set_elements:
                 column = find_column(element)
-                cell = DataObject(column, row=set_number)
+                cell = DataObject(column, set_number)
 
                 prev_up = column.up
                 prev_up.down = cell
