@@ -10,8 +10,7 @@ class DictX(AlgorithmX):
     """Dictionary based implementation for algorithm X."""
 
     def __init__(self) -> None:
-        """Initialize DLX with empty solution counter and without matrix."""
-        self._solutions: List[Solution] = []
+        super().__init__()
 
     def solve(self, matrix: AlgorithmX[DictMatrix]) -> List[Solution]:
         """Not implemented."""

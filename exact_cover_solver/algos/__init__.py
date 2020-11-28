@@ -5,7 +5,7 @@ this package.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Generic
+from typing import List, Generic, Optional
 from exact_cover_solver.datastructures import GenericMatrix
 
 Solution = List[int]
@@ -17,6 +17,11 @@ class AlgorithmX(ABC, Generic[GenericMatrix]):
     Algorithm X is a straightforward recursive, nondeterministic, depth-first
     and backtracking algorithm.
     """
+
+    def __init__(self) -> None:
+        """Initialize with empty solution counter and matrix."""
+        self._solutions: List[Solution] = []
+        self._matrix: Optional[GenericMatrix] = None
 
     @abstractmethod
     def solve(self, matrix: GenericMatrix) -> List[Solution]:
