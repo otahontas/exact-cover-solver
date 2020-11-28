@@ -25,22 +25,11 @@ class Matrix(ABC):
         self.id = "root"
         self._universe = universe
         self._set_collection = set_collection
-        self._create_columns()
-        self._create_nodes()
+        self._create()
 
     @abstractmethod
-    def _create_columns(self) -> None:
-        """Abstract method that should be implemented by subclass.
-
-        Raises:
-            NotImplementedError: Error is raised if this abstract method is called
-                directly.
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def _create_nodes(self) -> None:
-        """Abstract method that should be implemented by subclass.
+    def _create(self) -> None:
+        """Abstract matrix creating method that should be implemented by subclass.
 
         Raises:
             NotImplementedError: Error is raised if this abstract method is called
@@ -50,3 +39,10 @@ class Matrix(ABC):
 
 
 GenericMatrix = TypeVar("GenericMatrix", bound=Matrix)
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"Matrix.{func}": True
+    for func in dir(Matrix)
+    if callable(getattr(Matrix, func)) and func.startswith("_")
+}

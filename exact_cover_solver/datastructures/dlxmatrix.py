@@ -22,7 +22,11 @@ class DLXMatrix(Matrix):
         self.left: Optional[ColumnObject] = None
         super().__init__(universe, set_collection)
 
-    def _create_columns(self) -> None:
+    def _create(self):
+        self._create_column_nodes()
+        self._create_data_nodes()
+
+    def _create_column_nodes(self) -> None:
         """Create column columns and attach them to root."""
         previous = self
         for element in self._universe:
@@ -33,7 +37,7 @@ class DLXMatrix(Matrix):
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self) -> None:
+    def _create_data_nodes(self) -> None:
         """Create nodes representing elements in each set in set collection.
 
         All sets are iterated through. For each element in set the element is

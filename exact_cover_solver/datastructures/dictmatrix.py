@@ -21,7 +21,7 @@ class DictMatrix(Matrix):
         """Create column."""
         pass
 
-    def _create_nodes(self) -> None:
+    def _create_data_nodes(self) -> None:
         """Create nodes."""
         self._grid = {col: set() for col in self._universe}
         for index, row in enumerate(self._set_collection):
