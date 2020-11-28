@@ -1,6 +1,6 @@
 """Dancing links implementation for algorithm X."""
 
-from typing import List, Optional
+from typing import List
 
 from exact_cover_solver.algos import AlgorithmX, Solution
 from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
@@ -32,24 +32,24 @@ class DLX(AlgorithmX):
         if not isinstance(matrix, DLXMatrix):
             raise ValueError("Given matrix can't be processed by DLX algorithm.")
         self._solutions.clear()
-        self._matrix = matrix
-        self._search()
+        self._search(matrix)
         return self._solutions
 
-    def _search(self, partial: Solution = None) -> None:
+    def _search(self, matrix: DLXMatrix, partial: Solution = None) -> None:
         """Perform algorithm X recursively and collect solutions.
 
         Args:
+            matrix: Matrix representation implemented as circular doubly linked lists.
             partial: List including rows collected this far in recursion.
         """
         if not partial:
             partial: Solution = []
 
-        if self._matrix.right == self._matrix:
+        if matrix.right == matrix:
             self._solutions.append(partial[:])
             return
 
-        column = self._choose_optimal_column_object()
+        column = self._choose_optimal_column_object(matrix)
 
         if not column.size:
             return
@@ -63,7 +63,7 @@ class DLX(AlgorithmX):
             while node != row:
                 self._cover(node.column)
                 node = node.right
-            self._search(partial)
+            self._search(matrix, partial)
             node = row.left
             while node != row:
                 self._uncover(node.column)
@@ -72,16 +72,20 @@ class DLX(AlgorithmX):
             row = row.down
         self._uncover(column)
 
-    def _choose_optimal_column_object(self) -> ColumnObject:
+    @staticmethod
+    def _choose_optimal_column_object(matrix: DLXMatrix) -> ColumnObject:
         """Find column with smallest number of 1s to minimize the branching factor.
+
+        Args:
+            matrix: Matrix representation implemented as circular doubly linked lists.
 
         Returns:
             Linked list column node representing column with smallest number of 1s.
         """
-        current_column = self._matrix.right
+        current_column = matrix.right
         column = current_column
         size = current_column.size
-        while current_column != self._matrix:
+        while current_column != matrix:
             column, size = (
                 (current_column, current_column.size)
                 if current_column.size < size

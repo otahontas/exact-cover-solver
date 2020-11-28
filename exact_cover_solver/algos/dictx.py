@@ -54,3 +54,11 @@ class DictX(AlgorithmX):
                 for k in Y[i]:
                     if k != j:
                         X[k].add(i)
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"DictX.{func}": True
+    for func in dir(DictX)
+    if callable(getattr(DictX, func)) and func.startswith("_")
+}
