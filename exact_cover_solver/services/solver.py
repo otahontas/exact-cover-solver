@@ -95,14 +95,12 @@ class Solver:
         """
         if not self._algorithm:
             raise AlgorithmNotChosenError
-        pc = PentominoCreator()
-        pc.change_board_size(board_height, board_width)
-        constrains = pc.create_universe_and_set_collection()
+        pentomino_creator = PentominoCreator()
+        pentomino_creator.change_board_size(board_height, board_width)
+        constrains = pentomino_creator.create_universe_and_set_collection()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
-        return PentominoBoardBrowser(
-            board_height, board_width, solutions, set_collection
-        )
+        return PentominoBoardBrowser(pentomino_creator, solutions)
 
     def solve_sudoku_problem(self) -> None:
         """Not implemented."""

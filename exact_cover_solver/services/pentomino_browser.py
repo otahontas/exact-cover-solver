@@ -1,48 +1,41 @@
 """Classes used to browse pentomino solutions."""
 
 from exact_cover_solver.algos import Solution
-from typing import List, Dict
+from typing import List, Tuple, Callable
 
-from exact_cover_solver.data_creators import SetCollection
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.datastructures.pentomino import Pentominoes
 
 
 class PentominoBoard:
     """Single pentomino board."""
 
-    _pentomino_names: Dict[str, int] = {
-        0: "V",
-        1: "U",
-        2: "X",
-        3: "T",
-        4: "Y",
-        5: "I",
-        6: "F",
-        7: "P",
-        8: "W",
-        9: "Z",
-        10: "N",
-        11: "L",
-    }
+    _pentominoes = Pentominoes()
 
     def __init__(
-        self, board_height: int, board_width: int, placements: List[List[int]]
+        self,
+        board_height: int,
+        board_width: int,
+        placements: List[List[int]],
+        convert_cell_num_to_point: Callable,
     ):
-        self._grid = [[None] * board_width for _ in range(board_height)]
-        self._place_pentominoes(placements)
+        self._grid = [[""] * board_width for _ in range(board_height)]
+        self._place_pentominoes(placements, convert_cell_num_to_point)
 
-    def _place_pentominoes(self, placements):
+    def _place_pentominoes(
+        self, placements: List[List[int]], convert_cell_num_to_point: Callable
+    ):
         """Add pentominoes to board based on given cell list."""
-        for placement_list in placements:
-            pentomino = self._pentomino_names[placement_list[0]]
-            for cell in placement_list[1:]:
-                cell -= 12
-                y = cell // len(self._grid[0])
-                x = cell - (y * len(self._grid[0]))
-                self._grid[y][x] = pentomino
+        for placement in placements:
+            pentomino_index, *cells = placement
+            pentomino_name = self._pentominoes.get_name_by_index(pentomino_index)
+            for cell in cells:
+                y, x = convert_cell_num_to_point(cell)
+                self._grid[y][x] = pentomino_name
 
     @property
-    def grid(self):
-        """Get pentomino board as grid."""
+    def board(self):
+        """Get two dimensional array grid and return it."""
         return self._grid
 
 
@@ -51,15 +44,11 @@ class PentominoBoardBrowser:
 
     def __init__(
         self,
-        board_height: int,
-        board_width: int,
+        pentomino_creator: PentominoCreator,
         solutions: List[Solution],
-        set_collection: SetCollection,
     ):
-        self._board_width = board_width
-        self._board_height = board_height
+        self._pentomino_creator = pentomino_creator
         self._solutions = solutions
-        self._set_collection = set_collection
         self._boards = []
         self._current_board_index = 0
         self._create_board_on_demand(self._current_board_index)
@@ -67,8 +56,8 @@ class PentominoBoardBrowser:
     @property
     def previous_board(self):
         """Generate previous board."""
-        if self._current_board_index <= 0:
-            return None
+        if self._current_board_index == 0:
+            raise IndexError("Previous board not available")
         self._current_board_index -= 1
         return self._boards[self._current_board_index].grid
 
@@ -80,32 +69,53 @@ class PentominoBoardBrowser:
     @property
     def next_board(self):
         """Generate next board."""
-        if self._current_board_index >= len(self._solutions) - 1:
-            return None
+        if self._current_board_index > len(self._solutions) - 1:
+            raise IndexError("Next board not available")
         self._current_board_index += 1
-        if self._current_board_index >= len(self._boards) - 1:
+        try:
+            return self._boards[self._current_board_index].board
+        except IndexError:
             self._create_board_on_demand(self._current_board_index)
-        return self._boards[self._current_board_index].grid
+            return self._boards[self._current_board_index].board
 
     @property
-    def has_previous_board(self):
+    def board_size(self) -> Tuple[int, int]:
+        """Get board size."""
+        return self._pentomino_creator.board_size
+
+    @property
+    def board_amount(self) -> int:
+        """Get amount of solutions."""
+        return len(self._solutions)
+
+    @property
+    def current_index(self) -> int:
+        """Get current index."""
+        return self._current_board_index
+
+    def has_previous_board(self) -> bool:
         """Check if previous board can be generated."""
         return self._current_board_index > 0
 
-    @property
-    def has_next_board(self):
+    def has_next_board(self) -> bool:
         """Check if next board can be generated."""
         return self._current_board_index < len(self._solutions) - 1
 
-    @property
-    def size(self):
-        """Get board size."""
-        return self._board_height, self._board_width
+    def _create_board_on_demand(self, solutions_index: int) -> None:
+        """Create next board if needed.
 
-    def _create_board_on_demand(self, solutions_index: int):
-        """Create next board if needed."""
+        Args:
+            solutions_index: Index of the solution to be turned into board.
+        """
         solution = self._solutions[solutions_index]
-        placements = [self._set_collection[row] for row in solution]
+        _, set_collection = self._pentomino_creator.create_universe_and_set_collection()
+        board_height, board_width = self._pentomino_creator.board_size
+        placements = [set_collection[set_number] for set_number in solution]
         self._boards.append(
-            PentominoBoard(self._board_height, self._board_width, placements)
+            PentominoBoard(
+                board_height,
+                board_width,
+                placements,
+                self._pentomino_creator.cell_num_to_point,
+            )
         )

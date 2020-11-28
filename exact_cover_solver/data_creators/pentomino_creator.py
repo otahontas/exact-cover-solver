@@ -1,5 +1,5 @@
 """Universe and set collection creator for pentomino problem."""
-from typing import Tuple, List, Dict, Set, Optional
+from typing import Tuple, List, Optional
 
 from exact_cover_solver.data_creators import (
     DataCreator,
@@ -7,8 +7,8 @@ from exact_cover_solver.data_creators import (
     SetCollection,
     Constrains,
 )
+from exact_cover_solver.datastructures.pentomino import Pentominoes, PentominoGrid
 
-Pentomino = List[List[int]]
 Point = Tuple[int, int]
 
 
@@ -32,37 +32,9 @@ class PentominoCreator(DataCreator):
     but the board size varies.
     """
 
-    _PENTOMINOES_AMOUNT = 12
     _CELLS_AMOUNT = 60
-    _universe: Universe = [num for num in range(_PENTOMINOES_AMOUNT + _CELLS_AMOUNT)]
-    _pentominoes: Dict[str, Pentomino] = {
-        "V": [[1, 1, 1], [1, 0, 0], [1, 0, 0]],
-        "U": [[1, 0, 1], [1, 1, 1]],
-        "X": [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
-        "T": [[1, 0, 0], [1, 1, 1], [1, 0, 0]],
-        "Y": [[1, 1, 1, 1], [0, 1, 0, 0]],
-        "I": [[1, 1, 1, 1, 1]],
-        "F": [[0, 1, 0], [1, 1, 0], [0, 1, 1]],
-        "P": [[1, 1, 1], [1, 1, 0]],
-        "W": [[1, 1, 0], [0, 1, 1], [0, 0, 1]],
-        "Z": [[1, 0, 0], [1, 1, 1], [0, 0, 1]],
-        "N": [[1, 1, 0, 0], [0, 1, 1, 1]],
-        "L": [[1, 1, 1, 1], [1, 0, 0, 0]],
-    }
-    _pentomino_indexes: Dict[str, int] = {
-        "V": 0,
-        "U": 1,
-        "X": 2,
-        "T": 3,
-        "Y": 4,
-        "I": 5,
-        "F": 6,
-        "P": 7,
-        "W": 8,
-        "Z": 9,
-        "N": 10,
-        "L": 11,
-    }
+    _pentominoes = Pentominoes()
+    _universe: Universe = [num for num in range(_pentominoes.amount + _CELLS_AMOUNT)]
 
     def __init__(self) -> None:
         """Initialize DLX with empty set collection and without dimensions."""
@@ -109,6 +81,20 @@ class PentominoCreator(DataCreator):
         self._width = width
         self._generate_set_collection()
 
+    @property
+    def board_size(self) -> Tuple[int, int]:
+        """Get board size.
+
+        Returns:
+            Tuple containing height and width.
+
+        Raises:
+            BoardSizeNotInitializedError: Raised if current height or width is None.
+        """
+        if not self._height or not self._width:
+            raise BoardSizeNotInitializedError()
+        return self._height, self._width
+
     def _generate_set_collection(self) -> None:
         """Generate all possible ways to place each pentomino on the board.
 
@@ -116,24 +102,17 @@ class PentominoCreator(DataCreator):
         cells pentomino can be placed to (values in range 12-72).
         """
         self._set_collection.clear()
-        for pentomino in self._pentominoes:
-            for orientation in self._generate_all_orientations(
-                self._pentominoes[pentomino]
-            ):
+        for index, pentomino in enumerate(self._pentominoes.as_list()):
+            for orientation in pentomino.generate_all_orientations():
                 pentomino_height = len(orientation)
                 pentomino_width = len(orientation[0])
                 for row in range(self._height + 1 - pentomino_height):
                     for col in range(self._width + 1 - pentomino_width):
                         point = (row, col)
                         covered = self._solve_covered_cells(orientation, point)
-                        self._set_collection.append(
-                            [
-                                self._pentomino_indexes[pentomino],
-                                *[(self._PENTOMINOES_AMOUNT + x) for x in covered],
-                            ]
-                        )
+                        self._set_collection.append([index, *covered])
 
-    def _solve_covered_cells(self, pentomino: Pentomino, start: Point) -> List[int]:
+    def _solve_covered_cells(self, pentomino: PentominoGrid, start: Point) -> List[int]:
         """Find cells this pentomino covers.
 
         Args:
@@ -148,77 +127,23 @@ class PentominoCreator(DataCreator):
         covered: List[int] = []
         pentomino_height = len(pentomino)
         pentomino_width = len(pentomino[0])
-        for row in range(pentomino_height):
-            for column in range(pentomino_width):
-                if pentomino[row][column] == 1:
-                    cell_index = (start_y + row) * self._width + start_x + column
-                    covered.append(cell_index)
+        for y in range(pentomino_height):
+            for x in range(pentomino_width):
+                if pentomino[y][x] == 1:
+                    covered.append(self._point_to_cell_num((start_y + y, start_x + x)))
         return covered
 
-    def _generate_all_orientations(self, pentomino: Pentomino) -> List[Pentomino]:
-        """Generate different orientations for this pentomino.
+    def _point_to_cell_num(self, point: Point) -> int:
+        """Convert point to cell num, used internally."""
+        y, x = point
+        return y * self._width + x + self._pentominoes.amount
 
-        If pentomino is N, prune half of the orientations away. This helps pruning
-        algoX branches.
-
-        Args:
-            pentomino: Single pentomino polygon
-
-        Returns:
-            List of all unique orientations for the given pentomino.
-
-        """
-        seen: Set[str] = set()
-        orientations = []
-        for transposed in (pentomino, self._transpose(pentomino)):
-            for left_right_flipped in (transposed, self._flip_left_right(transposed)):
-                for up_down_flipped in (
-                    left_right_flipped,
-                    self._flip_up_down(left_right_flipped),
-                ):
-                    orientation_as_string = str(up_down_flipped)
-                    if orientation_as_string not in seen:
-                        seen.add(orientation_as_string)
-                        orientations.append(up_down_flipped)
-        if pentomino == self._pentominoes["N"]:
-            return orientations[::2]
-        return orientations
-
-    @staticmethod
-    def _flip_up_down(pentomino: Pentomino) -> Pentomino:
-        """Reverse each column.
-
-        Args:
-            pentomino: Single pentomino polygon
-
-        Returns:
-            Pentomino with each column reversed.
-        """
-        return pentomino[::-1]
-
-    @staticmethod
-    def _flip_left_right(pentomino: Pentomino) -> Pentomino:
-        """Reverse each row.
-
-        Args:
-            pentomino: Single pentomino polygon
-
-        Returns:
-            Pentomino with each row reversed.
-        """
-        return [row[::-1] for row in pentomino]
-
-    @staticmethod
-    def _transpose(pentomino: Pentomino) -> Pentomino:
-        """Transpose whole pentomino.
-
-        Args:
-            pentomino: Single pentomino polygon
-
-        Returns:
-            Transposed pentomino.
-        """
-        return [list(x) for x in zip(*pentomino)]
+    def cell_num_to_point(self, cell: int) -> Point:
+        """Convert cell num to point, called from outside."""
+        cell -= self._pentominoes.amount
+        y = cell // self._width
+        x = cell - (y * self._width)
+        return y, x
 
 
 # Add all private methods to pdoc when generating documentation
