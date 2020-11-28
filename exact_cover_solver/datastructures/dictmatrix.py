@@ -1,7 +1,7 @@
 """Dictionary-based 0s and 1s matrix implementation class."""
 
 from exact_cover_solver.datastructures import Matrix
-from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators import SetCollection, Constrains
 from typing import Dict, Set, Optional, Tuple
 
 ColumnDict = Dict[int, Set[int]]
@@ -11,7 +11,7 @@ ColumnValue = Set[int]
 class DictMatrix(Matrix):
     """Matrix representation based on dictionaries and sets."""
 
-    def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
+    def __init__(self, constrains: Constrains) -> None:
         """Initialize dictionary based matrix.
 
         Create initial variable for matrix, then pass the universe and the set
@@ -21,11 +21,10 @@ class DictMatrix(Matrix):
         column) and each row where element is presented collected to set as values.
 
         Args:
-            universe: a list of integers representing some set of elements
-            set_collection: a list of lists, each made from integers in the universe
+            constrains: Tuple containing universe and set collection.
         """
         self._columns: Optional[ColumnDict] = None
-        super().__init__(universe, set_collection)
+        super().__init__(constrains)
 
     def _create(self) -> None:
         """Create dict with sets representing elements in each set in collection.

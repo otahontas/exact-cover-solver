@@ -124,7 +124,7 @@ class DictX(AlgorithmX):
             column_dict: Matrix representation as a dictionary
             set_collection: Original set collection used to create the matrix
             set_index: Which set elements to uncover
-            removed_columns: Columsn removed while covering set
+            removed_columns: Columns removed while covering set
         """
         for counter, element in enumerate(reversed(set_collection[set_index])):
             index = len(removed_columns) - 1 - counter

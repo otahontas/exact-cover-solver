@@ -1,7 +1,12 @@
 """Universe and set collection creator for pentomino problem."""
 from typing import Tuple, List, Dict, Set, Optional
 
-from exact_cover_solver.data_creators import DataCreator, Universe, SetCollection
+from exact_cover_solver.data_creators import (
+    DataCreator,
+    Universe,
+    SetCollection,
+    Constrains,
+)
 
 Pentomino = List[List[int]]
 Point = Tuple[int, int]
@@ -65,13 +70,11 @@ class PentominoCreator(DataCreator):
         self._width: Optional[int] = None
         self._height: Optional[int] = None
 
-    def create_universe_and_set_collection(self) -> Tuple[Universe, SetCollection]:
+    def create_universe_and_set_collection(self) -> Constrains:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:
-            Tuple containing universe, a list of integers representing some set of
-                elements and collection of sets, a list of lists, each made from
-                integers in the universe
+            Tuple containing universe and set collection.
 
         Raises:
             BoardSizeNotInitializedError: Raised if current height or width is None.

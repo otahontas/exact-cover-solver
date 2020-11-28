@@ -2,26 +2,30 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar
 
-from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators import Constrains
 
 
 class Matrix(ABC):
     """Base class for matrix used by algorithm X implementations."""
 
-    def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
+    def __init__(self, constrains: Constrains) -> None:
         """Initialize matrix details and call column and node creator methods.
 
         Args:
-            universe: a list of integers representing some set of elements
-            set_collection: a list of lists, each made from integers in the universe
+            constrains: Tuple containing universe and set collection.
 
         Raises:
-            ValueError: Error is raised if universe or set_collection is empty.
+            ValueError: Error is raised if universe or set_collection is empty or
+                tuple doesn't contain enough information.
         """
+        try:
+            universe, set_collection = constrains
+        except IndexError:
+            raise ValueError("Constrains should contain universe and set_collection.")
         if not universe:
-            raise ValueError("Not possible to create matrix with empty universe.")
+            raise ValueError("Not possible to create with empty universe.")
         if not set_collection:
-            raise ValueError("Not possible to create matrix with empty set collection.")
+            raise ValueError("Not possible to create with empty set collection.")
         self.id = "root"
         self._universe = universe
         self._set_collection = set_collection

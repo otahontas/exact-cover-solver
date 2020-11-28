@@ -9,6 +9,7 @@ from typing import List, Tuple
 
 Universe = List[int]
 SetCollection = List[List[int]]
+Constrains = Tuple[Universe, SetCollection]
 
 
 class DataCreator(ABC):
@@ -19,7 +20,7 @@ class DataCreator(ABC):
     """
 
     @abstractmethod
-    def create_universe_and_set_collection(self) -> Tuple[Universe, SetCollection]:
+    def create_universe_and_set_collection(self) -> Constrains:
         """Abstract creator method that should be implemented by a subclass.
 
         Returns:

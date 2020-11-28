@@ -4,25 +4,24 @@ from typing import Optional
 
 from exact_cover_solver.datastructures import Matrix
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators import Constrains
 
 
 class DLXMatrix(Matrix):
     """Matrix representation and initialization methods for circular linked lists."""
 
-    def __init__(self, universe: Universe, set_collection: SetCollection) -> None:
+    def __init__(self, constrains: Constrains) -> None:
         """Initialize linked list based matrix.
 
         Create initial links to column objects, then pass the universe and the set
         collection constrains to parent initializer.
 
         Args:
-            universe: a list of integers representing some set of elements
-            set_collection: a list of lists, each made from integers in the universe
+            constrains: Tuple containing universe and set collection.
         """
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        super().__init__(universe, set_collection)
+        super().__init__(constrains)
 
     def _create(self) -> None:
         """Call creator methods for different linked list data types."""

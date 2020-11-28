@@ -97,9 +97,9 @@ class Solver:
             raise AlgorithmNotChosenError
         pc = PentominoCreator()
         pc.change_board_size(board_height, board_width)
-        universe, set_collection = pc.create_universe_and_set_collection()
+        constrains = pc.create_universe_and_set_collection()
         matrix_class = self._matrices[self.algorithm]
-        solutions = self._algorithm.solve(matrix_class(universe, set_collection))
+        solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(
             board_height, board_width, solutions, set_collection
         )
