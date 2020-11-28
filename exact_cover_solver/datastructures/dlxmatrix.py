@@ -23,6 +23,7 @@ class DLXMatrix(Matrix):
         super().__init__(universe, set_collection)
 
     def _create(self):
+        """Call creator methods for different linked list data types."""
         self._create_column_nodes()
         self._create_data_nodes()
 
@@ -55,37 +56,29 @@ class DLXMatrix(Matrix):
         for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
+
             for element in set_elements:
                 column = find_column(element)
                 cell = DataObject(column, row=set_number)
+
                 prev_up = column.up
                 prev_up.down = cell
+
                 cell.up = prev_up
                 cell.down = column
                 column.up = cell
+
                 if previous:
                     previous.right = cell
                     cell.left = previous
                 else:
                     first = cell
+
                 previous = cell
                 column.size += 1
+
             previous.right = first
             first.left = previous
-
-    def __repr__(self) -> str:
-        """Return printable representation of matrix."""
-        s = ""
-        column = self.right
-        while column != self:
-            data = column.down
-            data_str = ""
-            while data != column:
-                data_str = f"{data_str} {data.row}"
-                data = data.down
-            s = f"{s}Column {column.id} has {column.size} rows:{data_str}\n"
-            column = column.right
-        return s
 
 
 # Add all private methods to pdoc when generating documentation

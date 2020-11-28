@@ -17,11 +17,10 @@ class DictMatrix(Matrix):
         self._grid = None
         super().__init__(universe, set_collection)
 
-    def _create_columns(self) -> None:
-        """Create column."""
-        pass
+    def _create(self) -> None:
+        self._create_matrix_grid()
 
-    def _create_data_nodes(self) -> None:
+    def _create_matrix_grid(self) -> None:
         """Create nodes."""
         self._grid = {col: set() for col in self._universe}
         for index, row in enumerate(self._set_collection):
