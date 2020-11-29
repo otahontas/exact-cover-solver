@@ -30,7 +30,7 @@ def test_parsing_fails_with_badly_written_universe_input(instance_without_init):
 
 def test_parsing_fails_with_badly_written_set_collection_input(instance_without_init):
     with pytest.raises(ParsingError):
-        set_collection_input = "1;;4;1,4"
+        set_collection_input = "1a;j;4;1,4"
         instance_without_init._universe = set()
         instance_without_init._parse_set_collection(set_collection_input)
 

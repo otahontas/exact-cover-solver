@@ -29,7 +29,7 @@ def test_correct_board_size_can_be_set(height, width, generator):
         assert mocked_generate.call_count == 1
 
 
-@pytest.mark.parametrize("height, width", [(2, 11), (7, 9), (4, 20), (2, 10)])
+@pytest.mark.parametrize("height, width", [(2, 20), (3, 19), (4, 20)])
 def test_not_correct_size_can_not_be_set(height, width, generator):
     with patch.object(generator, "_generate_set_collection") as mocked_generate:
         with pytest.raises(ValueError):
@@ -55,6 +55,11 @@ def test_certain_methods_fail_if_board_size_not_set(generator_method_and_params)
             method(params)
         else:
             method()
+
+
+def test_board_size_property_fails_if_board_size_not_set(generator):
+    with pytest.raises(BoardSizeNotInitializedError):
+        assert not generator.board_size
 
 
 @pytest.mark.parametrize(
