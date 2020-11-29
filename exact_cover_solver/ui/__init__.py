@@ -15,7 +15,9 @@ class UI:
         self._title = "Exact cover solver"
         self._solver = solver
         self._window: Optional[sg.Window] = None
+        self._window_width = 600
         self._pentomino_browser = None
+        self._pentomino_board_to_get = "current"
         self._update_view()
 
     def run(self) -> None:
@@ -29,47 +31,31 @@ class UI:
             if event == "DictX":
                 self._change_current_algo("DictX")
             if event == "Pentomino":
+                self._pentomino_browser = None
                 self._update_view("Pentomino")
             if event == "Generic":
                 sg.popup("Not implemented yet.")
             if event == "Sudoku":
                 sg.popup("Not implemented yet.")
             if event == "Next":
-                grid = self._pentomino_browser.next_board
-                self._generate_board(grid)
+                self._pentomino_board_to_get = "next"
+                self._update_view("Pentomino")
+                self._pentomino_board_to_get = "current"
             if event == "Previous":
-                grid = self._pentomino_browser.previous_board
-                self._generate_board(grid)
+                self._pentomino_board_to_get = "previous"
+                self._update_view("Pentomino")
+                self._pentomino_board_to_get = "current"
             if event == "3x20":
-                self._generate_solutions(3, 20)
+                self._get_pentomino_solutions(3, 20)
             if event == "4x15":
-                self._generate_solutions(4, 15)
+                self._get_pentomino_solutions(4, 15)
             if event == "5x12":
-                self._generate_solutions(5, 12)
+                self._get_pentomino_solutions(5, 12)
             if event == "6x10":
-                self._generate_solutions(6, 10)
+                self._get_pentomino_solutions(6, 10)
         self._window.close()
 
-    def _generate_board(self, grid):
-        prev = self._pentomino_browser.has_previous_board
-        next = self._pentomino_browser.has_next_board
-        size = self._pentomino_browser.size
-        self._update_view("Pentomino", size, grid, prev, next)
-
-    def _generate_solutions(self, height, width):
-        try:
-            self._pentomino_browser = self._solver.solve_pentomino_problem(
-                height, width
-            )
-        except AlgorithmNotChosenError:
-            sg.popup("Please select which algorithm to use.")
-            return
-        grid = self._pentomino_browser.current_board
-        self._generate_board(grid)
-
-    def _update_view(
-        self, problem=None, size=None, grid=None, prev=None, next=None
-    ) -> None:
+    def _update_view(self, problem=None) -> None:
         """Create view based on current selections."""
         if self._window:
             self._window.close()
@@ -89,9 +75,9 @@ class UI:
             [sg.Text("Select problem to solve")],
             [sg.Button("Generic"), sg.Button("Pentomino"), sg.Button("Sudoku")],
         ]
-        separator = [sg.Canvas(size=(500, 20))]
-        main = self._create_main_view(problem, size, grid, prev, next)
-        footer = [sg.Button("Exit program"), sg.Text(size=(15, 1), key="-ERROR-")]
+        separator = [sg.Canvas(size=(self._window_width, 20))]
+        main = self._create_main_view(problem)
+        footer = [sg.Button("Exit program")]
         layout = [*algos, *problems, separator, *main, footer]
         self._window = sg.Window(self._title, layout)
 
@@ -99,10 +85,22 @@ class UI:
         self._solver.algorithm = algo_name
         self._window["-CURRENT_ALGO-"].update(self._solver.algorithm)
 
-    def _create_main_view(self, problem, size, grid, prev, next):
+    def _create_main_view(self, problem=None):
         if not problem:
-            return [[sg.Canvas(size=(500, 300))]]
+            return [[sg.Canvas(size=(self._window_width, 300))]]
         if problem == "Pentomino":
-            if not size:
-                return create_pentomino_view(size, grid, prev, next)
-            return create_pentomino_view(size, grid, prev, next)
+            if not self._pentomino_browser:
+                return create_pentomino_view()
+            return create_pentomino_view(
+                self._pentomino_browser, self._pentomino_board_to_get
+            )
+
+    def _get_pentomino_solutions(self, height, width):
+        try:
+            self._pentomino_browser = self._solver.solve_pentomino_problem(
+                height, width
+            )
+        except AlgorithmNotChosenError:
+            sg.popup("Please select which algorithm to use.")
+            return
+        self._update_view("Pentomino")
