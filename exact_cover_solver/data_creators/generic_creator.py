@@ -1,4 +1,4 @@
-"""Universe and set collection creator for pentomino problem."""
+"""Universe and set collection creator for generic problems."""
 
 from exact_cover_solver.data_creators import (
     DataCreator,
@@ -13,18 +13,10 @@ class ParsingError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, constrain: str, given_input: str):
+    def __init__(self, message: str, given_input: str):
         """Initialize error with message."""
-        if constrain == "universe":
-            message = "You should give a list of elements separated by commas."
-        else:
-            message = (
-                "You should give each set as list of commas and sets separated "
-                "by semicolons."
-            )
         self.message = (
-            f"Parsing {constrain} failed with following input:"
-            f" {given_input}\n{message}"
+            f"Parsing failed with following input:" f" {given_input}\n{message}"
         )
         super().__init__(self.message)
 
@@ -44,12 +36,8 @@ class GenericCreator(DataCreator):
             set_collection: sets as string, elements separated by commas and sets
                 separated by semicolons.
         """
-        self._universe = [int(x.strip()) for x in universe.split(",")]
-        self._universe_as_set = set(self._universe)
-        parsed_sets = set_collection.split(";")
-        self._set_collection = []
-        for parsed_set in parsed_sets:
-            self._set_collection.append([int(x.strip()) for x in parsed_set.split()])
+        self._parse_universe(universe)
+        self._parse_set_collection(set_collection)
 
     def create_constrains(self) -> Constrains:
         """Create data representing the pentomino problem in certain board size.
@@ -61,3 +49,40 @@ class GenericCreator(DataCreator):
             BoardSizeNotInitializedError: Raised if current height or width is None.
         """
         return self._universe, self._set_collection
+
+    def _parse_universe(self, universe) -> None:
+        """Parse universe into correct format."""
+        try:
+            parsed_universe = [int(x.strip()) for x in universe.split(",")]
+        except ValueError:
+            message = (
+                "For universe you should give a list of elements separated by "
+                "commas, e.g '1,2,3,4'"
+            )
+            raise ParsingError(message, universe)
+
+        if len(parsed_universe) != len(set(parsed_universe)):
+            raise ParsingError("Only unique elements are allowed.", universe)
+
+        self._universe = parsed_universe
+
+    def _parse_set_collection(self, set_collection) -> None:
+        """Parse set collection into correct format."""
+        universe_as_set = set(self._universe)
+        self._set_collection = []
+        for single_set in set_collection.split(";"):
+            try:
+                parsed_set = [int(x.strip()) for x in single_set.split(",")]
+            except ValueError:
+                message = (
+                    "For set collection you should give each set as list of commas and "
+                    "sets separated by semicolons, e.g '1,3;2,4'."
+                )
+                raise ParsingError(message, set_collection)
+            for element in parsed_set:
+                if element not in universe_as_set:
+                    raise ParsingError(
+                        "Set includes elements not in universe.",
+                        f"universe: {self._universe}, set_collection: {set_collection}",
+                    )
+            self._set_collection.append(parsed_set)
