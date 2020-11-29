@@ -5,6 +5,7 @@ from typing import Optional
 from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dictx import DictX
 from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.data_creators.generic_creator import GenericCreator
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
@@ -74,9 +75,31 @@ class Solver:
             )
         self._algorithm = algo_class()
 
-    def solve_generic_problem(self, universe: str, set_collection: str) -> None:
-        """Not implemented."""
-        raise NotImplementedError
+    def solve_generic_problem(self, universe: str, set_collection: str) -> str:
+        """Parse given data, solve cover problem and format solution to string.
+
+        Args:
+            universe: used universe
+            set_collection: set collection based on universe elements
+
+        Returns:
+            Solution formatted as printable string.
+        """
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        generic_creator = GenericCreator(universe, set_collection)
+        constrains = generic_creator.create_constrains()
+        matrix_class = self._matrices[self.algorithm]
+        solutions = self._algorithm.solve(matrix_class(constrains))
+        if not solutions:
+            return "No solutions found with given universe and set collection."
+        formatted_solution = (
+            f"For given set_collection: {set_collection} you can "
+            f"create exact cover solution by following ways:\n"
+        )
+        for solution in solutions:
+            formatted_solution = f"{formatted_solution}Choose rows: {solution}\n"
+        return formatted_solution
 
     def solve_pentomino_problem(
         self, board_height: int, board_width: int
@@ -98,7 +121,3 @@ class Solver:
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(pentomino_creator, solutions)
-
-    def solve_sudoku_problem(self) -> None:
-        """Not implemented."""
-        raise NotImplementedError
