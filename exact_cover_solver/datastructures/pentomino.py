@@ -21,12 +21,16 @@ class Pentomino:
     def generate_all_orientations(self) -> List[PentominoGrid]:
         """Generate different orientations for this pentomino.
 
-        If pentomino is N, prune half of the orientations away. This helps pruning
-        algoX branches.
+        For V pentomino, only the original orientation is returned. This helps
+        algorithm to skip creating unnecessary solutions which are only mirrored /
+        flipped from unique solutions.
 
         Returns:
             List of all unique orientations for the this pentomino.
         """
+        if self._name == "V":
+            return [self._shape]
+
         seen: Set[str] = set()
         orientations = []
         for transposed in (self._shape, self._transpose(self._shape)):
@@ -39,8 +43,6 @@ class Pentomino:
                     if orientation_as_string not in seen:
                         seen.add(orientation_as_string)
                         orientations.append(up_down_flipped)
-        if self._name == "N":
-            return orientations[::2]
         return orientations
 
     @property
@@ -91,7 +93,7 @@ class Pentominoes:
     def __init__(self):
         """Create all pentominoes, save them to list."""
         self._pentomino_list = [
-            Pentomino("V", [[1, 1, 1], [1, 0, 0], [1, 0, 0]]),
+            Pentomino("V", [[0, 0, 1], [0, 0, 1], [1, 1, 1]]),
             Pentomino("U", [[1, 0, 1], [1, 1, 1]]),
             Pentomino("X", [[0, 1, 0], [1, 1, 1], [0, 1, 0]]),
             Pentomino("T", [[1, 0, 0], [1, 1, 1], [1, 0, 0]]),

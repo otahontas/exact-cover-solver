@@ -84,6 +84,11 @@ class PentominoBoardBrowser:
         return self._pentomino_creator.board_size
 
     @property
+    def all_solutions(self) -> List[Solution]:
+        """Return all solutions."""
+        return self._solutions
+
+    @property
     def current_status(self) -> str:
         """Get current index and amount of all solutions as string."""
         return f"{self._current_board_index + 1} / {len(self._solutions)}"

@@ -11,7 +11,6 @@ def pentominoes():
 @pytest.mark.parametrize(
     "pentomino_name, correctly_transposed",
     [
-        ("V", [[1, 1, 1], [1, 0, 0], [1, 0, 0]]),
         ("U", [[1, 1], [0, 1], [1, 1]]),
         ("X", [[0, 1, 0], [1, 1, 1], [0, 1, 0]]),
         ("T", [[1, 1, 1], [0, 1, 0], [0, 1, 0]]),
@@ -35,7 +34,6 @@ def test_pentomino_is_correctly_transposed(
 @pytest.mark.parametrize(
     "pentomino_name, correctly_lr_flipped",
     [
-        ("V", [[1, 1, 1], [0, 0, 1], [0, 0, 1]]),
         ("U", [[1, 0, 1], [1, 1, 1]]),
         ("X", [[0, 1, 0], [1, 1, 1], [0, 1, 0]]),
         ("T", [[0, 0, 1], [1, 1, 1], [0, 0, 1]]),
@@ -59,7 +57,6 @@ def test_pentomino_is_correctly_lr_flipped(
 @pytest.mark.parametrize(
     "pentomino_name, correctly_ud_flipped",
     [
-        ("V", [[1, 0, 0], [1, 0, 0], [1, 1, 1]]),
         ("U", [[1, 1, 1], [1, 0, 1]]),
         ("X", [[0, 1, 0], [1, 1, 1], [0, 1, 0]]),
         ("T", [[1, 0, 0], [1, 1, 1], [1, 0, 0]]),
@@ -83,7 +80,7 @@ def test_pentomino_is_correctly_ud_flipped(
 @pytest.mark.parametrize(
     "pentomino_name, correct_amount",
     [
-        ("V", 4),
+        ("V", 1),
         ("U", 4),
         ("X", 1),
         ("T", 4),
@@ -93,7 +90,7 @@ def test_pentomino_is_correctly_ud_flipped(
         ("P", 8),
         ("W", 4),
         ("Z", 4),
-        ("N", 4),
+        ("N", 8),
         ("L", 8),
     ],
 )

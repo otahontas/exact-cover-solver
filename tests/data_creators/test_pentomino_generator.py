@@ -106,7 +106,7 @@ def test_same_size_universe_is_generated_for_each_board_size(height, width, gene
 @pytest.mark.parametrize(
     "pentomino_name, correct_amount",
     [
-        ("V", 72),
+        ("V", 18),
         ("U", 110),
         ("X", 18),
         ("T", 72),
@@ -116,7 +116,7 @@ def test_same_size_universe_is_generated_for_each_board_size(height, width, gene
         ("P", 220),
         ("W", 72),
         ("Z", 72),
-        ("N", 68),
+        ("N", 136),
         ("L", 136),
     ],
 )
