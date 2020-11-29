@@ -30,7 +30,7 @@ Ohjelmistovaatimukset:
   - Pypyn voit ladata [projektin nettisivuilta](https://www.pypy.org/download.html), [pyenvin avulla](https://github.com/pyenv/pyenv) tai todennäköisesti käyttöjärjestelmäsi paketinhallinnasta.
 
 Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjätyökaluja seuraavasti (korvaa komennoissa oleva `pypy3` komennolla `python3`, jos et halua / voi käyttää pypyä):
-- Tee virtuaaliympäristö ajamalla `pypy3 -m venv venv` (tai `python3 -m venv venv`)
+- Tee virtuaaliympäristö ajamalla `pypy3 -m venv venv`
 - Ota virtuaaliympäristö käyttöön `source venv/bin/activate`
 - Päivitä pip: `pypy3 -m pip install --upgrade pip`
 - Asenna ohjelma `pypy3 -m pip install .`
@@ -45,6 +45,9 @@ Ohjelmistovaatimukset:
   - Pyenvin asennusohjeet ja -skripti [projektin githubista](https://github.com/pyenv/pyenv)
 
 ### Asennus
+
+Jos koneesi oletus-python on alle python3.6, aseta poetry käyttämään oikeaa python-versiota ajamalla `poetry env use <versio>` (esim `poetry env use 3.6`).
+
 Asenna projektin tarvitsemat paketit komennolla `poetry install`. Tämän jälkeen voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list`.
 
 ### Käynnistys
@@ -84,7 +87,7 @@ Blackin huomaamat virheet voi korjata automaattisesti ajamalla `poetry run invok
 
 ### API-dokumentaatio
 
-Ohjelman sisäisessä dokumentaatiossa (docstringit) käytetään [Googlen Python Style Guide](https://google.github.io/styleguide/pyguide.html) -konventiota.
+Ohjelman sisäisessä dokumentaatiossa (docstringit) käytetään [Googlen Python Style Guide](https://google.github.io/styleguide/pyguide.html) -konventiota ja edellämainittua pep257-konventiota. Googlen konventio ajaa edelle ristiriitatilanteissa.
 
 Generoi dokumentaatio (vrt. Javadocit) komennolla:
 
@@ -92,4 +95,4 @@ Generoi dokumentaatio (vrt. Javadocit) komennolla:
 poetry run invoke docs
 ```
 
-Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`. Projektin docstring-
+Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.

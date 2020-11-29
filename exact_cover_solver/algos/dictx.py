@@ -61,7 +61,10 @@ class DictX(AlgorithmX):
             return
 
         column = self._choose_optimal_column(column_dict)
-        for row in column_dict[column]:
+        if not column_dict[column]:
+            return
+        rows = list(column_dict[column])
+        for row in rows:
             partial.append(row)
             removed_columns = self._cover(column_dict, set_collection, row)
             self._search(column_dict, set_collection, partial)
