@@ -17,7 +17,7 @@ class DictX(AlgorithmX):
     def __init__(self) -> None:
         super().__init__()
 
-    def solve(self, matrix: AlgorithmX[DictMatrix]) -> List[Solution]:
+    def solve(self, matrix: DictMatrix) -> List[Solution]:
         """Solve which rows cover the given matrix.
 
         Clears solutions bookkeeping from previous runs, then calls

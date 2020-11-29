@@ -2,6 +2,7 @@
 import pytest
 
 from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 

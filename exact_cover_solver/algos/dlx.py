@@ -13,7 +13,7 @@ class DLX(AlgorithmX):
     def __init__(self) -> None:
         super().__init__()
 
-    def solve(self, matrix: AlgorithmX[DLXMatrix]) -> List[Solution]:
+    def solve(self, matrix: DLXMatrix) -> List[Solution]:
         """Solve which rows cover the given matrix.
 
         Clears solutions bookkeeping from previous runs, then calls
