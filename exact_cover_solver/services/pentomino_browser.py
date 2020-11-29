@@ -59,12 +59,12 @@ class PentominoBoardBrowser:
         if self._current_board_index == 0:
             raise IndexError("Previous board not available")
         self._current_board_index -= 1
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def current_board(self):
         """Generate current board."""
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def next_board(self):
@@ -84,14 +84,9 @@ class PentominoBoardBrowser:
         return self._pentomino_creator.board_size
 
     @property
-    def board_amount(self) -> int:
-        """Get amount of solutions."""
-        return len(self._solutions)
-
-    @property
-    def current_index(self) -> int:
-        """Get current index."""
-        return self._current_board_index
+    def current_status(self) -> str:
+        """Get current index and amount of all solutions as string."""
+        return f"{self._current_board_index + 1} / {len(self._solutions)}"
 
     def has_previous_board(self) -> bool:
         """Check if previous board can be generated."""
@@ -108,7 +103,7 @@ class PentominoBoardBrowser:
             solutions_index: Index of the solution to be turned into board.
         """
         solution = self._solutions[solutions_index]
-        _, set_collection = self._pentomino_creator.create_universe_and_set_collection()
+        _, set_collection = self._pentomino_creator.create_constrains()
         board_height, board_width = self._pentomino_creator.board_size
         placements = [set_collection[set_number] for set_number in solution]
         self._boards.append(

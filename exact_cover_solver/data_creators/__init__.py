@@ -20,7 +20,7 @@ class DataCreator(ABC):
     """
 
     @abstractmethod
-    def create_universe_and_set_collection(self) -> Constrains:
+    def create_constrains(self) -> Constrains:
         """Abstract creator method that should be implemented by a subclass.
 
         Returns:

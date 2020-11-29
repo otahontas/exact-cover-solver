@@ -43,6 +43,11 @@ class Pentomino:
             return orientations[::2]
         return orientations
 
+    @property
+    def name(self) -> str:
+        """Get name of this pentomino."""
+        return self._name
+
     @staticmethod
     def _flip_up_down(pentomino: PentominoGrid) -> PentominoGrid:
         """Reverse each column.

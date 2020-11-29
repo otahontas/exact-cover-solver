@@ -36,7 +36,7 @@ class DictX(AlgorithmX):
         if not isinstance(matrix, DictMatrix):
             raise ValueError("Given matrix can't be processed by DictX algorithm.")
         self._solutions.clear()
-        column_dict, set_collection = matrix
+        column_dict, set_collection = matrix.data
         self._search(column_dict, set_collection)
         return self._solutions
 

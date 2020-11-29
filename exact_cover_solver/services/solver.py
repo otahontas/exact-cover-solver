@@ -5,7 +5,6 @@ from typing import Optional
 from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dictx import DictX
 from exact_cover_solver.algos.dlx import DLX
-from exact_cover_solver.data_creators import Universe, SetCollection
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
@@ -75,9 +74,7 @@ class Solver:
             )
         self._algorithm = algo_class()
 
-    def solve_generic_problem(
-        self, universe: Universe, set_collection: SetCollection
-    ) -> None:
+    def solve_generic_problem(self, universe: str, set_collection: str) -> None:
         """Not implemented."""
         raise NotImplementedError
 
@@ -97,7 +94,7 @@ class Solver:
             raise AlgorithmNotChosenError
         pentomino_creator = PentominoCreator()
         pentomino_creator.change_board_size(board_height, board_width)
-        constrains = pentomino_creator.create_universe_and_set_collection()
+        constrains = pentomino_creator.create_constrains()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(pentomino_creator, solutions)

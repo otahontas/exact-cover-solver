@@ -42,7 +42,7 @@ class PentominoCreator(DataCreator):
         self._width: Optional[int] = None
         self._height: Optional[int] = None
 
-    def create_universe_and_set_collection(self) -> Constrains:
+    def create_constrains(self) -> Constrains:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:
