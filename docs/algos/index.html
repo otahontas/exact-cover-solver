@@ -36,7 +36,8 @@ this package.
 &#34;&#34;&#34;
 
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import List
+from exact_cover_solver.datastructures import GenericMatrix
 
 Solution = List[int]
 
@@ -48,8 +49,12 @@ class AlgorithmX(ABC):
     and backtracking algorithm.
     &#34;&#34;&#34;
 
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize with empty solution counter and matrix.&#34;&#34;&#34;
+        self._solutions: List[Solution] = []
+
     @abstractmethod
-    def solve(self, matrix: Any) -&gt; List[Solution]:
+    def solve(self, matrix: GenericMatrix) -&gt; List[Solution]:
         &#34;&#34;&#34;Abstract solving method that should be implemented by a subclass.
 
         Args:
@@ -72,7 +77,7 @@ class AlgorithmX(ABC):
 <dl>
 <dt><code class="name"><a title="exact_cover_solver.algos.dictx" href="dictx.html">exact_cover_solver.algos.dictx</a></code></dt>
 <dd>
-<div class="desc"><p>Dancing links implementation for algorithm X.</p></div>
+<div class="desc"><p>Dictionary based implementation for algorithm X.</p></div>
 </dd>
 <dt><code class="name"><a title="exact_cover_solver.algos.dlx" href="dlx.html">exact_cover_solver.algos.dlx</a></code></dt>
 <dd>
@@ -93,7 +98,8 @@ class AlgorithmX(ABC):
 <dd>
 <div class="desc"><p>Abstract base class for algorithm X that solves the exact cover problem.</p>
 <p>Algorithm X is a straightforward recursive, nondeterministic, depth-first
-and backtracking algorithm.</p></div>
+and backtracking algorithm.</p>
+<p>Initialize with empty solution counter and matrix.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -105,8 +111,12 @@ and backtracking algorithm.</p></div>
     and backtracking algorithm.
     &#34;&#34;&#34;
 
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize with empty solution counter and matrix.&#34;&#34;&#34;
+        self._solutions: List[Solution] = []
+
     @abstractmethod
-    def solve(self, matrix: Any) -&gt; List[Solution]:
+    def solve(self, matrix: GenericMatrix) -&gt; List[Solution]:
         &#34;&#34;&#34;Abstract solving method that should be implemented by a subclass.
 
         Args:
@@ -135,7 +145,7 @@ and backtracking algorithm.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.algos.AlgorithmX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, matrix: Any) ‑> List[List[int]]</span>
+<span>def <span class="ident">solve</span></span>(<span>self, matrix: ~GenericMatrix) ‑> List[List[int]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Abstract solving method that should be implemented by a subclass.</p>
@@ -159,7 +169,7 @@ directly.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@abstractmethod
-def solve(self, matrix: Any) -&gt; List[Solution]:
+def solve(self, matrix: GenericMatrix) -&gt; List[Solution]:
     &#34;&#34;&#34;Abstract solving method that should be implemented by a subclass.
 
     Args:

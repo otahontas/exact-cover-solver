@@ -40,14 +40,14 @@ pentomino_colors = {
     &#34;F&#34;: &#34;red&#34;,
     &#34;P&#34;: &#34;orange&#34;,
     &#34;W&#34;: &#34;misty rose&#34;,
-    &#34;Z&#34;: &#34;lavender blush&#34;,
-    &#34;N&#34;: &#34;navajo white&#34;,
-    &#34;L&#34;: &#34;azure&#34;,
+    &#34;Z&#34;: &#34;purple&#34;,
+    &#34;N&#34;: &#34;dark blue&#34;,
+    &#34;L&#34;: &#34;dark gray&#34;,
 }
 
 
-def create_pentomino_view(size, grid, prev, next):
-    if not size:
+def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;):
+    if not pentomino_browser:
         return [
             [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
             [
@@ -66,13 +66,19 @@ def create_pentomino_view(size, grid, prev, next):
                 sg.Button(&#34;6x10&#34;),
             ],
         ]
-    grid = create_grid(grid)
+    if board_to_get == &#34;next&#34;:
+        grid = create_grid(pentomino_browser.next_board)
+    elif board_to_get == &#34;previous&#34;:
+        grid = create_grid(pentomino_browser.previous_board)
+    else:
+        grid = create_grid(pentomino_browser.current_board)
+    header = [sg.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
     buttons = []
-    if prev:
+    if pentomino_browser.has_previous_board():
         buttons.append(sg.Button(&#34;Previous&#34;))
-    if next:
+    if pentomino_browser.has_next_board():
         buttons.append(sg.Button(&#34;Next&#34;))
-    return [[sg.Text(&#34;Solution:&#34;)], *grid, buttons]
+    return [header, *grid, buttons]
 
 
 def create_grid(grid):
@@ -80,7 +86,7 @@ def create_grid(grid):
         [
             sg.Canvas(
                 background_color=pentomino_colors[grid[row][col]],
-                size=(20, 20),
+                size=(15, 15),
                 border_width=1,
             )
             for col in range(len(grid[0]))
@@ -110,7 +116,7 @@ def create_grid(grid):
         [
             sg.Canvas(
                 background_color=pentomino_colors[grid[row][col]],
-                size=(20, 20),
+                size=(15, 15),
                 border_width=1,
             )
             for col in range(len(grid[0]))
@@ -120,7 +126,7 @@ def create_grid(grid):
 </details>
 </dd>
 <dt id="exact_cover_solver.ui.pentomino_view.create_pentomino_view"><code class="name flex">
-<span>def <span class="ident">create_pentomino_view</span></span>(<span>size, grid, prev, next)</span>
+<span>def <span class="ident">create_pentomino_view</span></span>(<span>pentomino_browser=None, board_to_get='current')</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -128,8 +134,8 @@ def create_grid(grid):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_pentomino_view(size, grid, prev, next):
-    if not size:
+<pre><code class="python">def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;):
+    if not pentomino_browser:
         return [
             [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
             [
@@ -148,13 +154,19 @@ def create_grid(grid):
                 sg.Button(&#34;6x10&#34;),
             ],
         ]
-    grid = create_grid(grid)
+    if board_to_get == &#34;next&#34;:
+        grid = create_grid(pentomino_browser.next_board)
+    elif board_to_get == &#34;previous&#34;:
+        grid = create_grid(pentomino_browser.previous_board)
+    else:
+        grid = create_grid(pentomino_browser.current_board)
+    header = [sg.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
     buttons = []
-    if prev:
+    if pentomino_browser.has_previous_board():
         buttons.append(sg.Button(&#34;Previous&#34;))
-    if next:
+    if pentomino_browser.has_next_board():
         buttons.append(sg.Button(&#34;Next&#34;))
-    return [[sg.Text(&#34;Solution:&#34;)], *grid, buttons]</code></pre>
+    return [header, *grid, buttons]</code></pre>
 </details>
 </dd>
 </dl>

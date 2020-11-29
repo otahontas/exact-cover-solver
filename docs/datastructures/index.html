@@ -27,12 +27,67 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Package for custom datastructures.&#34;&#34;&#34;</code></pre>
+<pre><code class="python">&#34;&#34;&#34;Package for custom datastructures.&#34;&#34;&#34;
+from abc import ABC, abstractmethod
+from typing import TypeVar
+
+from exact_cover_solver.data_creators import Constrains
+
+
+class Matrix(ABC):
+    &#34;&#34;&#34;Base class for matrix used by algorithm X implementations.&#34;&#34;&#34;
+
+    def __init__(self, constrains: Constrains) -&gt; None:
+        &#34;&#34;&#34;Initialize matrix details and call column and node creator methods.
+
+        Args:
+            constrains: Tuple containing universe and set collection.
+
+        Raises:
+            ValueError: Error is raised if universe or set_collection is empty or
+                tuple doesn&#39;t contain enough information.
+        &#34;&#34;&#34;
+        try:
+            universe, set_collection = constrains
+        except ValueError:
+            raise ValueError(&#34;Constrains should contain universe and set_collection.&#34;)
+        if not universe:
+            raise ValueError(&#34;Not possible to create with empty universe.&#34;)
+        if not set_collection:
+            raise ValueError(&#34;Not possible to create with empty set collection.&#34;)
+        self.id = &#34;root&#34;
+        self._universe = universe
+        self._set_collection = set_collection
+        self._create()
+
+    @abstractmethod
+    def _create(self) -&gt; None:
+        &#34;&#34;&#34;Abstract matrix creating method that should be implemented by subclass.
+
+        Raises:
+            NotImplementedError: Error is raised if this abstract method is called
+                directly.
+        &#34;&#34;&#34;
+        raise NotImplementedError
+
+
+GenericMatrix = TypeVar(&#34;GenericMatrix&#34;, bound=Matrix)
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f&#34;Matrix.{func}&#34;: True
+    for func in dir(Matrix)
+    if callable(getattr(Matrix, func)) and func.startswith(&#34;_&#34;)
+}</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="exact_cover_solver.datastructures.dictmatrix" href="dictmatrix.html">exact_cover_solver.datastructures.dictmatrix</a></code></dt>
+<dd>
+<div class="desc"><p>Dictionary-based 0s and 1s matrix implementation class.</p></div>
+</dd>
 <dt><code class="name"><a title="exact_cover_solver.datastructures.dlxdataobjects" href="dlxdataobjects.html">exact_cover_solver.datastructures.dlxdataobjects</a></code></dt>
 <dd>
 <div class="desc"><p>Circular doubly linked list object definitions.</p></div>
@@ -41,6 +96,10 @@
 <dd>
 <div class="desc"><p>Wrappers to represent dancing links data and column objects as matrix.</p></div>
 </dd>
+<dt><code class="name"><a title="exact_cover_solver.datastructures.pentomino" href="pentomino.html">exact_cover_solver.datastructures.pentomino</a></code></dt>
+<dd>
+<div class="desc"><p>Class for single pentomino and container class for all pentominoes.</p></div>
+</dd>
 </dl>
 </section>
 <section>
@@ -48,6 +107,149 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="exact_cover_solver.datastructures.Matrix"><code class="flex name class">
+<span>class <span class="ident">Matrix</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base class for matrix used by algorithm X implementations.</p>
+<p>Initialize matrix details and call column and node creator methods.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>constrains</code></strong></dt>
+<dd>Tuple containing universe and set collection.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Error is raised if universe or set_collection is empty or
+tuple doesn't contain enough information.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Matrix(ABC):
+    &#34;&#34;&#34;Base class for matrix used by algorithm X implementations.&#34;&#34;&#34;
+
+    def __init__(self, constrains: Constrains) -&gt; None:
+        &#34;&#34;&#34;Initialize matrix details and call column and node creator methods.
+
+        Args:
+            constrains: Tuple containing universe and set collection.
+
+        Raises:
+            ValueError: Error is raised if universe or set_collection is empty or
+                tuple doesn&#39;t contain enough information.
+        &#34;&#34;&#34;
+        try:
+            universe, set_collection = constrains
+        except ValueError:
+            raise ValueError(&#34;Constrains should contain universe and set_collection.&#34;)
+        if not universe:
+            raise ValueError(&#34;Not possible to create with empty universe.&#34;)
+        if not set_collection:
+            raise ValueError(&#34;Not possible to create with empty set collection.&#34;)
+        self.id = &#34;root&#34;
+        self._universe = universe
+        self._set_collection = set_collection
+        self._create()
+
+    @abstractmethod
+    def _create(self) -&gt; None:
+        &#34;&#34;&#34;Abstract matrix creating method that should be implemented by subclass.
+
+        Raises:
+            NotImplementedError: Error is raised if this abstract method is called
+                directly.
+        &#34;&#34;&#34;
+        raise NotImplementedError</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="exact_cover_solver.datastructures.dictmatrix.DictMatrix" href="dictmatrix.html#exact_cover_solver.datastructures.dictmatrix.DictMatrix">DictMatrix</a></li>
+<li><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.datastructures.Matrix.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, constrains: Tuple[List[int], List[List[int]]]) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize matrix details and call column and node creator methods.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>constrains</code></strong></dt>
+<dd>Tuple containing universe and set collection.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>Error is raised if universe or set_collection is empty or
+tuple doesn't contain enough information.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def __init__(self, constrains: Constrains) -&gt; None:
+    &#34;&#34;&#34;Initialize matrix details and call column and node creator methods.
+
+    Args:
+        constrains: Tuple containing universe and set collection.
+
+    Raises:
+        ValueError: Error is raised if universe or set_collection is empty or
+            tuple doesn&#39;t contain enough information.
+    &#34;&#34;&#34;
+    try:
+        universe, set_collection = constrains
+    except ValueError:
+        raise ValueError(&#34;Constrains should contain universe and set_collection.&#34;)
+    if not universe:
+        raise ValueError(&#34;Not possible to create with empty universe.&#34;)
+    if not set_collection:
+        raise ValueError(&#34;Not possible to create with empty set collection.&#34;)
+    self.id = &#34;root&#34;
+    self._universe = universe
+    self._set_collection = set_collection
+    self._create()</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.datastructures.Matrix._create"><code class="name flex">
+<span>def <span class="ident">_create</span></span>(<span>self) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Abstract matrix creating method that should be implemented by subclass.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>NotImplementedError</code></dt>
+<dd>Error is raised if this abstract method is called
+directly.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def _create(self) -&gt; None:
+    &#34;&#34;&#34;Abstract matrix creating method that should be implemented by subclass.
+
+    Raises:
+        NotImplementedError: Error is raised if this abstract method is called
+            directly.
+    &#34;&#34;&#34;
+    raise NotImplementedError</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -63,8 +265,21 @@
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="exact_cover_solver.datastructures.dictmatrix" href="dictmatrix.html">exact_cover_solver.datastructures.dictmatrix</a></code></li>
 <li><code><a title="exact_cover_solver.datastructures.dlxdataobjects" href="dlxdataobjects.html">exact_cover_solver.datastructures.dlxdataobjects</a></code></li>
 <li><code><a title="exact_cover_solver.datastructures.dlxmatrix" href="dlxmatrix.html">exact_cover_solver.datastructures.dlxmatrix</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.pentomino" href="pentomino.html">exact_cover_solver.datastructures.pentomino</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="exact_cover_solver.datastructures.Matrix" href="#exact_cover_solver.datastructures.Matrix">Matrix</a></code></h4>
+<ul class="">
+<li><code><a title="exact_cover_solver.datastructures.Matrix.__init__" href="#exact_cover_solver.datastructures.Matrix.__init__">__init__</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.Matrix._create" href="#exact_cover_solver.datastructures.Matrix._create">_create</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

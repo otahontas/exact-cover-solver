@@ -31,37 +31,33 @@
 
 from typing import Optional
 
+from exact_cover_solver.datastructures import Matrix
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.data_creators import Universe, SetCollection
+from exact_cover_solver.data_creators import Constrains
 
 
-class DLXMatrix:
+class DLXMatrix(Matrix):
     &#34;&#34;&#34;Matrix representation and initialization methods for circular linked lists.&#34;&#34;&#34;
 
-    def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
-        &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
+    def __init__(self, constrains: Constrains) -&gt; None:
+        &#34;&#34;&#34;Initialize linked list based matrix.
+
+        Create initial links to column objects, then pass the universe and the set
+        collection constrains to parent initializer.
 
         Args:
-            universe: a list of integers representing some set of elements
-            set_collection: a list of lists, each made from integers in the universe
-
-        Raises:
-            ValueError: Error is raised if universe or set_collection is empty.
+            constrains: Tuple containing universe and set collection.
         &#34;&#34;&#34;
-        if not universe:
-            raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
-        if not set_collection:
-            raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
-
-        self.id = &#34;root&#34;
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._universe = universe
-        self._set_collection = set_collection
-        self._create_columns()
-        self._create_nodes()
+        super().__init__(constrains)
 
-    def _create_columns(self) -&gt; None:
+    def _create(self) -&gt; None:
+        &#34;&#34;&#34;Call creator methods for different linked list data types.&#34;&#34;&#34;
+        self._create_column_nodes()
+        self._create_data_nodes()
+
+    def _create_column_nodes(self) -&gt; None:
         &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
         previous = self
         for element in self._universe:
@@ -72,8 +68,8 @@ class DLXMatrix:
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self) -&gt; None:
-        &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
+    def _create_data_nodes(self) -&gt; None:
+        &#34;&#34;&#34;Create nodes representing elements in each set in collection.
 
         All sets are iterated through. For each element in set the element is
         linked to the correct column and columns column. Elements in set are
@@ -90,37 +86,29 @@ class DLXMatrix:
         for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
+
             for element in set_elements:
                 column = find_column(element)
-                cell = DataObject(column, row=set_number)
+                cell = DataObject(column, set_number)
+
                 prev_up = column.up
                 prev_up.down = cell
+
                 cell.up = prev_up
                 cell.down = column
                 column.up = cell
+
                 if previous:
                     previous.right = cell
                     cell.left = previous
                 else:
                     first = cell
+
                 previous = cell
                 column.size += 1
+
             previous.right = first
             first.left = previous
-
-    def __repr__(self) -&gt; str:
-        &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
-        s = &#34;&#34;
-        column = self.right
-        while column != self:
-            data = column.down
-            data_str = &#34;&#34;
-            while data != column:
-                data_str = f&#34;{data_str} {data.row}&#34;
-                data = data.down
-            s = f&#34;{s}Column {column.id} has {column.size} rows:{data_str}\n&#34;
-            column = column.right
-        return s
 
 
 # Add all private methods to pdoc when generating documentation
@@ -145,50 +133,40 @@ __pdoc__ = {
 </code></dt>
 <dd>
 <div class="desc"><p>Matrix representation and initialization methods for circular linked lists.</p>
-<p>Create column and data objects and link them to this matrix object.</p>
+<p>Initialize linked list based matrix.</p>
+<p>Create initial links to column objects, then pass the universe and the set
+collection constrains to parent initializer.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>universe</code></strong></dt>
-<dd>a list of integers representing some set of elements</dd>
-<dt><strong><code>set_collection</code></strong></dt>
-<dd>a list of lists, each made from integers in the universe</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>Error is raised if universe or set_collection is empty.</dd>
+<dt><strong><code>constrains</code></strong></dt>
+<dd>Tuple containing universe and set collection.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DLXMatrix:
+<pre><code class="python">class DLXMatrix(Matrix):
     &#34;&#34;&#34;Matrix representation and initialization methods for circular linked lists.&#34;&#34;&#34;
 
-    def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
-        &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
+    def __init__(self, constrains: Constrains) -&gt; None:
+        &#34;&#34;&#34;Initialize linked list based matrix.
+
+        Create initial links to column objects, then pass the universe and the set
+        collection constrains to parent initializer.
 
         Args:
-            universe: a list of integers representing some set of elements
-            set_collection: a list of lists, each made from integers in the universe
-
-        Raises:
-            ValueError: Error is raised if universe or set_collection is empty.
+            constrains: Tuple containing universe and set collection.
         &#34;&#34;&#34;
-        if not universe:
-            raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
-        if not set_collection:
-            raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
-
-        self.id = &#34;root&#34;
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        self._universe = universe
-        self._set_collection = set_collection
-        self._create_columns()
-        self._create_nodes()
+        super().__init__(constrains)
 
-    def _create_columns(self) -&gt; None:
+    def _create(self) -&gt; None:
+        &#34;&#34;&#34;Call creator methods for different linked list data types.&#34;&#34;&#34;
+        self._create_column_nodes()
+        self._create_data_nodes()
+
+    def _create_column_nodes(self) -&gt; None:
         &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
         previous = self
         for element in self._universe:
@@ -199,8 +177,8 @@ __pdoc__ = {
         self.left = previous
         previous.right = self
 
-    def _create_nodes(self) -&gt; None:
-        &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
+    def _create_data_nodes(self) -&gt; None:
+        &#34;&#34;&#34;Create nodes representing elements in each set in collection.
 
         All sets are iterated through. For each element in set the element is
         linked to the correct column and columns column. Elements in set are
@@ -217,111 +195,84 @@ __pdoc__ = {
         for set_number, set_elements in enumerate(self._set_collection):
             previous = None
             first = None
+
             for element in set_elements:
                 column = find_column(element)
-                cell = DataObject(column, row=set_number)
+                cell = DataObject(column, set_number)
+
                 prev_up = column.up
                 prev_up.down = cell
+
                 cell.up = prev_up
                 cell.down = column
                 column.up = cell
+
                 if previous:
                     previous.right = cell
                     cell.left = previous
                 else:
                     first = cell
+
                 previous = cell
                 column.size += 1
-            previous.right = first
-            first.left = previous
 
-    def __repr__(self) -&gt; str:
-        &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
-        s = &#34;&#34;
-        column = self.right
-        while column != self:
-            data = column.down
-            data_str = &#34;&#34;
-            while data != column:
-                data_str = f&#34;{data_str} {data.row}&#34;
-                data = data.down
-            s = f&#34;{s}Column {column.id} has {column.size} rows:{data_str}\n&#34;
-            column = column.right
-        return s</code></pre>
+            previous.right = first
+            first.left = previous</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="exact_cover_solver.datastructures.Matrix" href="index.html#exact_cover_solver.datastructures.Matrix">Matrix</a></li>
+<li>abc.ABC</li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__"><code class="name flex">
-<span>def <span class="ident">__init__</span></span>(<span>self, universe: List[int], set_collection: List[List[int]]) ‑> NoneType</span>
+<span>def <span class="ident">__init__</span></span>(<span>self, constrains: Tuple[List[int], List[List[int]]]) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create column and data objects and link them to this matrix object.</p>
+<div class="desc"><p>Initialize linked list based matrix.</p>
+<p>Create initial links to column objects, then pass the universe and the set
+collection constrains to parent initializer.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>universe</code></strong></dt>
-<dd>a list of integers representing some set of elements</dd>
-<dt><strong><code>set_collection</code></strong></dt>
-<dd>a list of lists, each made from integers in the universe</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>Error is raised if universe or set_collection is empty.</dd>
+<dt><strong><code>constrains</code></strong></dt>
+<dd>Tuple containing universe and set collection.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def __init__(self, universe: Universe, set_collection: SetCollection) -&gt; None:
-    &#34;&#34;&#34;Create column and data objects and link them to this matrix object.
+<pre><code class="python">def __init__(self, constrains: Constrains) -&gt; None:
+    &#34;&#34;&#34;Initialize linked list based matrix.
+
+    Create initial links to column objects, then pass the universe and the set
+    collection constrains to parent initializer.
 
     Args:
-        universe: a list of integers representing some set of elements
-        set_collection: a list of lists, each made from integers in the universe
-
-    Raises:
-        ValueError: Error is raised if universe or set_collection is empty.
+        constrains: Tuple containing universe and set collection.
     &#34;&#34;&#34;
-    if not universe:
-        raise ValueError(&#34;Not possible to create matrix with empty universe.&#34;)
-    if not set_collection:
-        raise ValueError(&#34;Not possible to create matrix with empty set collection.&#34;)
-
-    self.id = &#34;root&#34;
     self.right: Optional[ColumnObject] = None
     self.left: Optional[ColumnObject] = None
-    self._universe = universe
-    self._set_collection = set_collection
-    self._create_columns()
-    self._create_nodes()</code></pre>
+    super().__init__(constrains)</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__"><code class="name flex">
-<span>def <span class="ident">__repr__</span></span>(<span>self) ‑> str</span>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create"><code class="name flex">
+<span>def <span class="ident">_create</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return printable representation of matrix.</p></div>
+<div class="desc"><p>Call creator methods for different linked list data types.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def __repr__(self) -&gt; str:
-    &#34;&#34;&#34;Return printable representation of matrix.&#34;&#34;&#34;
-    s = &#34;&#34;
-    column = self.right
-    while column != self:
-        data = column.down
-        data_str = &#34;&#34;
-        while data != column:
-            data_str = f&#34;{data_str} {data.row}&#34;
-            data = data.down
-        s = f&#34;{s}Column {column.id} has {column.size} rows:{data_str}\n&#34;
-        column = column.right
-    return s</code></pre>
+<pre><code class="python">def _create(self) -&gt; None:
+    &#34;&#34;&#34;Call creator methods for different linked list data types.&#34;&#34;&#34;
+    self._create_column_nodes()
+    self._create_data_nodes()</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns"><code class="name flex">
-<span>def <span class="ident">_create_columns</span></span>(<span>self) ‑> NoneType</span>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_column_nodes"><code class="name flex">
+<span>def <span class="ident">_create_column_nodes</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create column columns and attach them to root.</p></div>
@@ -329,7 +280,7 @@ __pdoc__ = {
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def _create_columns(self) -&gt; None:
+<pre><code class="python">def _create_column_nodes(self) -&gt; None:
     &#34;&#34;&#34;Create column columns and attach them to root.&#34;&#34;&#34;
     previous = self
     for element in self._universe:
@@ -341,11 +292,11 @@ __pdoc__ = {
     previous.right = self</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes"><code class="name flex">
-<span>def <span class="ident">_create_nodes</span></span>(<span>self) ‑> NoneType</span>
+<dt id="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_data_nodes"><code class="name flex">
+<span>def <span class="ident">_create_data_nodes</span></span>(<span>self) ‑> NoneType</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create nodes representing elements in each set in set collection.</p>
+<div class="desc"><p>Create nodes representing elements in each set in collection.</p>
 <p>All sets are iterated through. For each element in set the element is
 linked to the correct column and columns column. Elements in set are
 also linked together to form a circular row.</p></div>
@@ -353,8 +304,8 @@ also linked together to form a circular row.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def _create_nodes(self) -&gt; None:
-    &#34;&#34;&#34;Create nodes representing elements in each set in set collection.
+<pre><code class="python">def _create_data_nodes(self) -&gt; None:
+    &#34;&#34;&#34;Create nodes representing elements in each set in collection.
 
     All sets are iterated through. For each element in set the element is
     linked to the correct column and columns column. Elements in set are
@@ -371,21 +322,27 @@ also linked together to form a circular row.</p></div>
     for set_number, set_elements in enumerate(self._set_collection):
         previous = None
         first = None
+
         for element in set_elements:
             column = find_column(element)
-            cell = DataObject(column, row=set_number)
+            cell = DataObject(column, set_number)
+
             prev_up = column.up
             prev_up.down = cell
+
             cell.up = prev_up
             cell.down = column
             column.up = cell
+
             if previous:
                 previous.right = cell
                 cell.left = previous
             else:
                 first = cell
+
             previous = cell
             column.size += 1
+
         previous.right = first
         first.left = previous</code></pre>
 </details>
@@ -412,9 +369,9 @@ also linked together to form a circular row.</p></div>
 <h4><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a></code></h4>
 <ul class="">
 <li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__init__">__init__</a></code></li>
-<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix.__repr__">__repr__</a></code></li>
-<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_columns">_create_columns</a></code></li>
-<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_nodes">_create_nodes</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create">_create</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_column_nodes" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_column_nodes">_create_column_nodes</a></code></li>
+<li><code><a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_data_nodes" href="#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix._create_data_nodes">_create_data_nodes</a></code></li>
 </ul>
 </li>
 </ul>

@@ -30,48 +30,41 @@
 <pre><code class="python">&#34;&#34;&#34;Classes used to browse pentomino solutions.&#34;&#34;&#34;
 
 from exact_cover_solver.algos import Solution
-from typing import List, Dict
+from typing import List, Tuple, Callable
 
-from exact_cover_solver.data_creators import SetCollection
+from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.datastructures.pentomino import Pentominoes
 
 
 class PentominoBoard:
     &#34;&#34;&#34;Single pentomino board.&#34;&#34;&#34;
 
-    _pentomino_names: Dict[str, int] = {
-        0: &#34;V&#34;,
-        1: &#34;U&#34;,
-        2: &#34;X&#34;,
-        3: &#34;T&#34;,
-        4: &#34;Y&#34;,
-        5: &#34;I&#34;,
-        6: &#34;F&#34;,
-        7: &#34;P&#34;,
-        8: &#34;W&#34;,
-        9: &#34;Z&#34;,
-        10: &#34;N&#34;,
-        11: &#34;L&#34;,
-    }
+    _pentominoes = Pentominoes()
 
     def __init__(
-        self, board_height: int, board_width: int, placements: List[List[int]]
+        self,
+        board_height: int,
+        board_width: int,
+        placements: List[List[int]],
+        convert_cell_num_to_point: Callable,
     ):
-        self._grid = [[None] * board_width for _ in range(board_height)]
-        self._place_pentominoes(placements)
+        self._grid = [[&#34;&#34;] * board_width for _ in range(board_height)]
+        self._place_pentominoes(placements, convert_cell_num_to_point)
 
-    def _place_pentominoes(self, placements):
+    def _place_pentominoes(
+        self, placements: List[List[int]], convert_cell_num_to_point: Callable
+    ):
         &#34;&#34;&#34;Add pentominoes to board based on given cell list.&#34;&#34;&#34;
-        for placement_list in placements:
-            pentomino = self._pentomino_names[placement_list[0]]
-            for cell in placement_list[1:]:
-                cell -= 12
-                y = cell // len(self._grid[0])
-                x = cell - (y * len(self._grid[0]))
-                self._grid[y][x] = pentomino
+        for placement in placements:
+            pentomino_index, *cells = placement
+            pentomino_name = self._pentominoes.get_name_by_index(pentomino_index)
+            for cell in cells:
+                y, x = convert_cell_num_to_point(cell)
+                self._grid[y][x] = pentomino_name
 
     @property
-    def grid(self):
-        &#34;&#34;&#34;Get pentomino board as grid.&#34;&#34;&#34;
+    def board(self):
+        &#34;&#34;&#34;Get two dimensional array grid and return it.&#34;&#34;&#34;
         return self._grid
 
 
@@ -80,15 +73,11 @@ class PentominoBoardBrowser:
 
     def __init__(
         self,
-        board_height: int,
-        board_width: int,
+        pentomino_creator: PentominoCreator,
         solutions: List[Solution],
-        set_collection: SetCollection,
     ):
-        self._board_width = board_width
-        self._board_height = board_height
+        self._pentomino_creator = pentomino_creator
         self._solutions = solutions
-        self._set_collection = set_collection
         self._boards = []
         self._current_board_index = 0
         self._create_board_on_demand(self._current_board_index)
@@ -96,47 +85,63 @@ class PentominoBoardBrowser:
     @property
     def previous_board(self):
         &#34;&#34;&#34;Generate previous board.&#34;&#34;&#34;
-        if self._current_board_index &lt;= 0:
-            return None
+        if self._current_board_index == 0:
+            raise IndexError(&#34;Previous board not available&#34;)
         self._current_board_index -= 1
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def current_board(self):
         &#34;&#34;&#34;Generate current board.&#34;&#34;&#34;
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def next_board(self):
         &#34;&#34;&#34;Generate next board.&#34;&#34;&#34;
-        if self._current_board_index &gt;= len(self._solutions) - 1:
-            return None
+        if self._current_board_index &gt; len(self._solutions) - 1:
+            raise IndexError(&#34;Next board not available&#34;)
         self._current_board_index += 1
-        if self._current_board_index &gt;= len(self._boards) - 1:
+        try:
+            return self._boards[self._current_board_index].board
+        except IndexError:
             self._create_board_on_demand(self._current_board_index)
-        return self._boards[self._current_board_index].grid
+            return self._boards[self._current_board_index].board
 
     @property
-    def has_previous_board(self):
+    def board_size(self) -&gt; Tuple[int, int]:
+        &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
+        return self._pentomino_creator.board_size
+
+    @property
+    def current_status(self) -&gt; str:
+        &#34;&#34;&#34;Get current index and amount of all solutions as string.&#34;&#34;&#34;
+        return f&#34;{self._current_board_index + 1} / {len(self._solutions)}&#34;
+
+    def has_previous_board(self) -&gt; bool:
         &#34;&#34;&#34;Check if previous board can be generated.&#34;&#34;&#34;
         return self._current_board_index &gt; 0
 
-    @property
-    def has_next_board(self):
+    def has_next_board(self) -&gt; bool:
         &#34;&#34;&#34;Check if next board can be generated.&#34;&#34;&#34;
         return self._current_board_index &lt; len(self._solutions) - 1
 
-    @property
-    def size(self):
-        &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
-        return self._board_height, self._board_width
+    def _create_board_on_demand(self, solutions_index: int) -&gt; None:
+        &#34;&#34;&#34;Create next board if needed.
 
-    def _create_board_on_demand(self, solutions_index: int):
-        &#34;&#34;&#34;Create next board if needed.&#34;&#34;&#34;
+        Args:
+            solutions_index: Index of the solution to be turned into board.
+        &#34;&#34;&#34;
         solution = self._solutions[solutions_index]
-        placements = [self._set_collection[row] for row in solution]
+        _, set_collection = self._pentomino_creator.create_constrains()
+        board_height, board_width = self._pentomino_creator.board_size
+        placements = [set_collection[set_number] for set_number in solution]
         self._boards.append(
-            PentominoBoard(self._board_height, self._board_width, placements)
+            PentominoBoard(
+                board_height,
+                board_width,
+                placements,
+                self._pentomino_creator.cell_num_to_point,
+            )
         )</code></pre>
 </details>
 </section>
@@ -151,7 +156,7 @@ class PentominoBoardBrowser:
 <dl>
 <dt id="exact_cover_solver.services.pentomino_browser.PentominoBoard"><code class="flex name class">
 <span>class <span class="ident">PentominoBoard</span></span>
-<span>(</span><span>board_height: int, board_width: int, placements: List[List[int]])</span>
+<span>(</span><span>board_height: int, board_width: int, placements: List[List[int]], convert_cell_num_to_point: Callable)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Single pentomino board.</p></div>
@@ -162,54 +167,46 @@ class PentominoBoardBrowser:
 <pre><code class="python">class PentominoBoard:
     &#34;&#34;&#34;Single pentomino board.&#34;&#34;&#34;
 
-    _pentomino_names: Dict[str, int] = {
-        0: &#34;V&#34;,
-        1: &#34;U&#34;,
-        2: &#34;X&#34;,
-        3: &#34;T&#34;,
-        4: &#34;Y&#34;,
-        5: &#34;I&#34;,
-        6: &#34;F&#34;,
-        7: &#34;P&#34;,
-        8: &#34;W&#34;,
-        9: &#34;Z&#34;,
-        10: &#34;N&#34;,
-        11: &#34;L&#34;,
-    }
+    _pentominoes = Pentominoes()
 
     def __init__(
-        self, board_height: int, board_width: int, placements: List[List[int]]
+        self,
+        board_height: int,
+        board_width: int,
+        placements: List[List[int]],
+        convert_cell_num_to_point: Callable,
     ):
-        self._grid = [[None] * board_width for _ in range(board_height)]
-        self._place_pentominoes(placements)
+        self._grid = [[&#34;&#34;] * board_width for _ in range(board_height)]
+        self._place_pentominoes(placements, convert_cell_num_to_point)
 
-    def _place_pentominoes(self, placements):
+    def _place_pentominoes(
+        self, placements: List[List[int]], convert_cell_num_to_point: Callable
+    ):
         &#34;&#34;&#34;Add pentominoes to board based on given cell list.&#34;&#34;&#34;
-        for placement_list in placements:
-            pentomino = self._pentomino_names[placement_list[0]]
-            for cell in placement_list[1:]:
-                cell -= 12
-                y = cell // len(self._grid[0])
-                x = cell - (y * len(self._grid[0]))
-                self._grid[y][x] = pentomino
+        for placement in placements:
+            pentomino_index, *cells = placement
+            pentomino_name = self._pentominoes.get_name_by_index(pentomino_index)
+            for cell in cells:
+                y, x = convert_cell_num_to_point(cell)
+                self._grid[y][x] = pentomino_name
 
     @property
-    def grid(self):
-        &#34;&#34;&#34;Get pentomino board as grid.&#34;&#34;&#34;
+    def board(self):
+        &#34;&#34;&#34;Get two dimensional array grid and return it.&#34;&#34;&#34;
         return self._grid</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoard.grid"><code class="name">var <span class="ident">grid</span></code></dt>
+<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoard.board"><code class="name">var <span class="ident">board</span></code></dt>
 <dd>
-<div class="desc"><p>Get pentomino board as grid.</p></div>
+<div class="desc"><p>Get two dimensional array grid and return it.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def grid(self):
-    &#34;&#34;&#34;Get pentomino board as grid.&#34;&#34;&#34;
+def board(self):
+    &#34;&#34;&#34;Get two dimensional array grid and return it.&#34;&#34;&#34;
     return self._grid</code></pre>
 </details>
 </dd>
@@ -217,7 +214,7 @@ def grid(self):
 </dd>
 <dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser"><code class="flex name class">
 <span>class <span class="ident">PentominoBoardBrowser</span></span>
-<span>(</span><span>board_height: int, board_width: int, solutions: List[List[int]], set_collection: List[List[int]])</span>
+<span>(</span><span>pentomino_creator: <a title="exact_cover_solver.data_creators.pentomino_creator.PentominoCreator" href="../data_creators/pentomino_creator.html#exact_cover_solver.data_creators.pentomino_creator.PentominoCreator">PentominoCreator</a>, solutions: List[List[int]])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Browser for pentomino boards based on created solutions.</p></div>
@@ -230,15 +227,11 @@ def grid(self):
 
     def __init__(
         self,
-        board_height: int,
-        board_width: int,
+        pentomino_creator: PentominoCreator,
         solutions: List[Solution],
-        set_collection: SetCollection,
     ):
-        self._board_width = board_width
-        self._board_height = board_height
+        self._pentomino_creator = pentomino_creator
         self._solutions = solutions
-        self._set_collection = set_collection
         self._boards = []
         self._current_board_index = 0
         self._create_board_on_demand(self._current_board_index)
@@ -246,51 +239,80 @@ def grid(self):
     @property
     def previous_board(self):
         &#34;&#34;&#34;Generate previous board.&#34;&#34;&#34;
-        if self._current_board_index &lt;= 0:
-            return None
+        if self._current_board_index == 0:
+            raise IndexError(&#34;Previous board not available&#34;)
         self._current_board_index -= 1
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def current_board(self):
         &#34;&#34;&#34;Generate current board.&#34;&#34;&#34;
-        return self._boards[self._current_board_index].grid
+        return self._boards[self._current_board_index].board
 
     @property
     def next_board(self):
         &#34;&#34;&#34;Generate next board.&#34;&#34;&#34;
-        if self._current_board_index &gt;= len(self._solutions) - 1:
-            return None
+        if self._current_board_index &gt; len(self._solutions) - 1:
+            raise IndexError(&#34;Next board not available&#34;)
         self._current_board_index += 1
-        if self._current_board_index &gt;= len(self._boards) - 1:
+        try:
+            return self._boards[self._current_board_index].board
+        except IndexError:
             self._create_board_on_demand(self._current_board_index)
-        return self._boards[self._current_board_index].grid
+            return self._boards[self._current_board_index].board
 
     @property
-    def has_previous_board(self):
+    def board_size(self) -&gt; Tuple[int, int]:
+        &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
+        return self._pentomino_creator.board_size
+
+    @property
+    def current_status(self) -&gt; str:
+        &#34;&#34;&#34;Get current index and amount of all solutions as string.&#34;&#34;&#34;
+        return f&#34;{self._current_board_index + 1} / {len(self._solutions)}&#34;
+
+    def has_previous_board(self) -&gt; bool:
         &#34;&#34;&#34;Check if previous board can be generated.&#34;&#34;&#34;
         return self._current_board_index &gt; 0
 
-    @property
-    def has_next_board(self):
+    def has_next_board(self) -&gt; bool:
         &#34;&#34;&#34;Check if next board can be generated.&#34;&#34;&#34;
         return self._current_board_index &lt; len(self._solutions) - 1
 
-    @property
-    def size(self):
-        &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
-        return self._board_height, self._board_width
+    def _create_board_on_demand(self, solutions_index: int) -&gt; None:
+        &#34;&#34;&#34;Create next board if needed.
 
-    def _create_board_on_demand(self, solutions_index: int):
-        &#34;&#34;&#34;Create next board if needed.&#34;&#34;&#34;
+        Args:
+            solutions_index: Index of the solution to be turned into board.
+        &#34;&#34;&#34;
         solution = self._solutions[solutions_index]
-        placements = [self._set_collection[row] for row in solution]
+        _, set_collection = self._pentomino_creator.create_constrains()
+        board_height, board_width = self._pentomino_creator.board_size
+        placements = [set_collection[set_number] for set_number in solution]
         self._boards.append(
-            PentominoBoard(self._board_height, self._board_width, placements)
+            PentominoBoard(
+                board_height,
+                board_width,
+                placements,
+                self._pentomino_creator.cell_num_to_point,
+            )
         )</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
+<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.board_size"><code class="name">var <span class="ident">board_size</span> : Tuple[int, int]</code></dt>
+<dd>
+<div class="desc"><p>Get board size.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def board_size(self) -&gt; Tuple[int, int]:
+    &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
+    return self._pentomino_creator.board_size</code></pre>
+</details>
+</dd>
 <dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_board"><code class="name">var <span class="ident">current_board</span></code></dt>
 <dd>
 <div class="desc"><p>Generate current board.</p></div>
@@ -301,33 +323,20 @@ def grid(self):
 <pre><code class="python">@property
 def current_board(self):
     &#34;&#34;&#34;Generate current board.&#34;&#34;&#34;
-    return self._boards[self._current_board_index].grid</code></pre>
+    return self._boards[self._current_board_index].board</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_next_board"><code class="name">var <span class="ident">has_next_board</span></code></dt>
+<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_status"><code class="name">var <span class="ident">current_status</span> : str</code></dt>
 <dd>
-<div class="desc"><p>Check if next board can be generated.</p></div>
+<div class="desc"><p>Get current index and amount of all solutions as string.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def has_next_board(self):
-    &#34;&#34;&#34;Check if next board can be generated.&#34;&#34;&#34;
-    return self._current_board_index &lt; len(self._solutions) - 1</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_previous_board"><code class="name">var <span class="ident">has_previous_board</span></code></dt>
-<dd>
-<div class="desc"><p>Check if previous board can be generated.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def has_previous_board(self):
-    &#34;&#34;&#34;Check if previous board can be generated.&#34;&#34;&#34;
-    return self._current_board_index &gt; 0</code></pre>
+def current_status(self) -&gt; str:
+    &#34;&#34;&#34;Get current index and amount of all solutions as string.&#34;&#34;&#34;
+    return f&#34;{self._current_board_index + 1} / {len(self._solutions)}&#34;</code></pre>
 </details>
 </dd>
 <dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.next_board"><code class="name">var <span class="ident">next_board</span></code></dt>
@@ -340,12 +349,14 @@ def has_previous_board(self):
 <pre><code class="python">@property
 def next_board(self):
     &#34;&#34;&#34;Generate next board.&#34;&#34;&#34;
-    if self._current_board_index &gt;= len(self._solutions) - 1:
-        return None
+    if self._current_board_index &gt; len(self._solutions) - 1:
+        raise IndexError(&#34;Next board not available&#34;)
     self._current_board_index += 1
-    if self._current_board_index &gt;= len(self._boards) - 1:
+    try:
+        return self._boards[self._current_board_index].board
+    except IndexError:
         self._create_board_on_demand(self._current_board_index)
-    return self._boards[self._current_board_index].grid</code></pre>
+        return self._boards[self._current_board_index].board</code></pre>
 </details>
 </dd>
 <dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.previous_board"><code class="name">var <span class="ident">previous_board</span></code></dt>
@@ -358,23 +369,41 @@ def next_board(self):
 <pre><code class="python">@property
 def previous_board(self):
     &#34;&#34;&#34;Generate previous board.&#34;&#34;&#34;
-    if self._current_board_index &lt;= 0:
-        return None
+    if self._current_board_index == 0:
+        raise IndexError(&#34;Previous board not available&#34;)
     self._current_board_index -= 1
-    return self._boards[self._current_board_index].grid</code></pre>
+    return self._boards[self._current_board_index].board</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.size"><code class="name">var <span class="ident">size</span></code></dt>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_next_board"><code class="name flex">
+<span>def <span class="ident">has_next_board</span></span>(<span>self) ‑> bool</span>
+</code></dt>
 <dd>
-<div class="desc"><p>Get board size.</p></div>
+<div class="desc"><p>Check if next board can be generated.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@property
-def size(self):
-    &#34;&#34;&#34;Get board size.&#34;&#34;&#34;
-    return self._board_height, self._board_width</code></pre>
+<pre><code class="python">def has_next_board(self) -&gt; bool:
+    &#34;&#34;&#34;Check if next board can be generated.&#34;&#34;&#34;
+    return self._current_board_index &lt; len(self._solutions) - 1</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_previous_board"><code class="name flex">
+<span>def <span class="ident">has_previous_board</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if previous board can be generated.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def has_previous_board(self) -&gt; bool:
+    &#34;&#34;&#34;Check if previous board can be generated.&#34;&#34;&#34;
+    return self._current_board_index &gt; 0</code></pre>
 </details>
 </dd>
 </dl>
@@ -398,18 +427,19 @@ def size(self):
 <li>
 <h4><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoard" href="#exact_cover_solver.services.pentomino_browser.PentominoBoard">PentominoBoard</a></code></h4>
 <ul class="">
-<li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoard.grid" href="#exact_cover_solver.services.pentomino_browser.PentominoBoard.grid">grid</a></code></li>
+<li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoard.board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoard.board">board</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser">PentominoBoardBrowser</a></code></h4>
 <ul class="two-column">
+<li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.board_size" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.board_size">board_size</a></code></li>
 <li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_board">current_board</a></code></li>
+<li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_status" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.current_status">current_status</a></code></li>
 <li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_next_board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_next_board">has_next_board</a></code></li>
 <li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_previous_board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.has_previous_board">has_previous_board</a></code></li>
 <li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.next_board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.next_board">next_board</a></code></li>
 <li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.previous_board" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.previous_board">previous_board</a></code></li>
-<li><code><a title="exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.size" href="#exact_cover_solver.services.pentomino_browser.PentominoBoardBrowser.size">size</a></code></li>
 </ul>
 </li>
 </ul>
