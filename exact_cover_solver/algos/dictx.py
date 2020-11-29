@@ -57,7 +57,7 @@ class DictX(AlgorithmX):
             partial: Solution = []
 
         if not column_dict:
-            self._solutions.append(partial)
+            self._solutions.append(partial[:])
             return
 
         column = self._choose_optimal_column(column_dict)
@@ -78,9 +78,12 @@ class DictX(AlgorithmX):
         Returns:
             Key of optimal column.
         """
-        key, size = 0, len(column_dict[0])
+        key, size = None, None
         for column, content in column_dict.items():
-            key, size = (column, len(content)) if len(content) > size else (key, size)
+            if not key and not size:
+                key, size = column, len(content)
+                continue
+            key, size = (column, len(content)) if len(content) < size else (key, size)
         return key
 
     @staticmethod

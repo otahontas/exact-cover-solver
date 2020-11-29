@@ -1,4 +1,4 @@
 [run]
 branch = True
 source = exact_cover_solver
-omit = exact_cover_solver/ui/**
+omit = exact_cover_solver/ui/**, exact_cover_solver/main.py
