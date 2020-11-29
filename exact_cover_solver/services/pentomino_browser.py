@@ -114,3 +114,17 @@ class PentominoBoardBrowser:
                 self._pentomino_creator.cell_num_to_point,
             )
         )
+
+
+# Add all private methods to pdoc when generating documentation
+browser_doc = {
+    f"PentominoBoardBrowser.{func}": True
+    for func in dir(PentominoBoardBrowser)
+    if callable(getattr(PentominoBoardBrowser, func)) and func.startswith("_")
+}
+board_doc = {
+    f"PentominoBoard.{func}": True
+    for func in dir(PentominoBoard)
+    if callable(getattr(PentominoBoard, func)) and func.startswith("_")
+}
+__pdoc__ = {**browser_doc, **board_doc}

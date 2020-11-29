@@ -86,3 +86,11 @@ class GenericCreator(DataCreator):
                         f"universe: {self._universe}, set_collection: {set_collection}",
                     )
             self._set_collection.append(parsed_set)
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f"GenericCreator.{func}": True
+    for func in dir(GenericCreator)
+    if callable(getattr(GenericCreator, func)) and func.startswith("_")
+}
