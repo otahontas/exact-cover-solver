@@ -51,9 +51,3 @@ def test_each_column_in_matrix_has_correct_size(
 
     column_7 = column_6.right
     assert column_7.size == 4
-
-
-def test_matrix_is_not_created_when_giving_empty_args():
-    constrains = ([], [])
-    with pytest.raises(ValueError):
-        DLXMatrix(constrains)
