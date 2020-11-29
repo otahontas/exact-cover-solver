@@ -101,6 +101,8 @@ class PentominoCreator(DataCreator):
         Each generated set includes index for pentomino (value in range 0-11) and five
         cells pentomino can be placed to (values in range 12-72).
         """
+        if not self._height or not self._width:
+            raise BoardSizeNotInitializedError()
         self._set_collection.clear()
         for index, pentomino in enumerate(self._pentominoes.as_list()):
             for orientation in pentomino.generate_all_orientations():
@@ -135,11 +137,15 @@ class PentominoCreator(DataCreator):
 
     def _point_to_cell_num(self, point: Point) -> int:
         """Convert point to cell num, used internally."""
+        if not self._width:
+            raise BoardSizeNotInitializedError()
         y, x = point
         return y * self._width + x + self._pentominoes.amount
 
     def cell_num_to_point(self, cell: int) -> Point:
         """Convert cell num to point, called from outside."""
+        if not self._width:
+            raise BoardSizeNotInitializedError()
         cell -= self._pentominoes.amount
         y = cell // self._width
         x = cell - (y * self._width)

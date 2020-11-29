@@ -33,8 +33,18 @@ def collection_with_multiple_solutions():
     ]
 
 
+def calc_node_amount(changed_matrix):
+    tmp_amount = 0
+    column = changed_matrix.right
+    while column != changed_matrix:
+        tmp_amount += column.size
+        column = column.right
+    return tmp_amount
+
+
 def test_correct_single_solution_is_found(universe, collection_with_single_solution):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
     solutions = dlx.solve(matrix)
     assert len(solutions) == 1
@@ -44,7 +54,8 @@ def test_correct_single_solution_is_found(universe, collection_with_single_solut
 def test_no_solution_is_found_with_unsolvable_collection(
     universe, collection_without_solution
 ):
-    matrix = DLXMatrix(universe, collection_without_solution)
+    constrains = (universe, collection_without_solution)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
     solutions = dlx.solve(matrix)
     assert not solutions
@@ -53,33 +64,27 @@ def test_no_solution_is_found_with_unsolvable_collection(
 def test_all_solutions_are_found_with_multiple_solutions(
     universe, collection_with_multiple_solutions
 ):
-    matrix = DLXMatrix(universe, collection_with_multiple_solutions)
+    constrains = (universe, collection_with_multiple_solutions)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
     solutions = dlx.solve(matrix)
     assert len(solutions) == 3
 
 
 def test_optimal_column_is_chosen(universe, collection_with_single_solution):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
-    dlx._matrix = matrix
-    chosen_column = dlx._choose_optimal_column_object()
+    chosen_column = dlx._choose_optimal_column_object(matrix)
     assert chosen_column.id == 1
 
 
 def test_covering_detaches_correct_amount_of_nodes(
     universe, collection_with_single_solution
 ):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
-
-    def calc_node_amount(changed_matrix):
-        tmp_amount = 0
-        column = changed_matrix.right
-        while column != changed_matrix:
-            tmp_amount += column.size
-            column = column.right
-        return tmp_amount
 
     amount = calc_node_amount(matrix)
     assert amount == 17
@@ -89,17 +94,23 @@ def test_covering_detaches_correct_amount_of_nodes(
 
 
 def test_uncovering_restores_correct_nodes(universe, collection_with_single_solution):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
-    original_repr = str(matrix)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
     dlx = DLX()
     column = matrix.right
+
+    original_amount = calc_node_amount(matrix)
+
     dlx._cover(column)
-    assert original_repr != str(matrix)
+    amount_after_cover = calc_node_amount(matrix)
+    assert amount_after_cover != original_amount
+
     dlx._uncover(column)
-    assert original_repr == str(matrix)
+    amount_after_uncover = calc_node_amount(matrix)
+    assert amount_after_uncover == original_amount
 
 
 def test_solve_errors_when_trying_to_give_wrong_matrix():
     dlx = DLX()
     with pytest.raises(ValueError):
-        dlx.solve(None)
+        dlx.solve(DictMatrix)

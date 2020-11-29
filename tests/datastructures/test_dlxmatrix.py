@@ -17,7 +17,8 @@ def collection_with_single_solution():
 def test_matrix_columns_are_linked_together_correctly(
     universe, collection_with_single_solution
 ):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
     assert matrix is not None
     assert matrix.id == "root"
     assert matrix.right.id == 1
@@ -27,7 +28,8 @@ def test_matrix_columns_are_linked_together_correctly(
 def test_each_column_in_matrix_has_correct_size(
     universe, collection_with_single_solution
 ):
-    matrix = DLXMatrix(universe, collection_with_single_solution)
+    constrains = (universe, collection_with_single_solution)
+    matrix = DLXMatrix(constrains)
 
     column_1 = matrix.right
     assert column_1.size == 2
@@ -52,5 +54,6 @@ def test_each_column_in_matrix_has_correct_size(
 
 
 def test_matrix_is_not_created_when_giving_empty_args():
+    constrains = ([], [])
     with pytest.raises(ValueError):
-        DLXMatrix([], [])
+        DLXMatrix(constrains)
