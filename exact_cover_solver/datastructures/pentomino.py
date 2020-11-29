@@ -109,9 +109,20 @@ class Pentominoes:
         """Get collection as list."""
         return self._pentomino_list
 
-    def get_name_by_index(self, index) -> str:
+    def get_name_by_index(self, index: int) -> str:
         """Return pentomino name by given index."""
         return self._pentomino_list[index].name
+
+    def get_pentomino_by_name(self, name: str) -> Pentomino:
+        """Return pentomino object by name."""
+        try:
+            return next(
+                pentomino
+                for pentomino in self._pentomino_list
+                if pentomino.name == name
+            )
+        except StopIteration:
+            raise ValueError(f"No pentomino with name {name}")
 
     @property
     def amount(self) -> int:
