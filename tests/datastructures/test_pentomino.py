@@ -102,3 +102,14 @@ def test_correct_amount_of_orientations_is_generated(
 ):
     pentomino = pentominoes.get_pentomino_by_name(pentomino_name)
     assert len(pentomino.generate_all_orientations()) == correct_amount
+
+
+def test_wrong_pentomino_index_does_not_work(pentominoes):
+    amount = pentominoes.amount
+    with pytest.raises(ValueError):
+        pentominoes.get_name_by_index(amount + 1)
+
+
+def test_wrong_pentomino_name_does_not_work(pentominoes):
+    with pytest.raises(ValueError):
+        pentominoes.get_pentomino_by_name("Ö")

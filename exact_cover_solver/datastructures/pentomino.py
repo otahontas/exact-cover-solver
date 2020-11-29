@@ -111,7 +111,10 @@ class Pentominoes:
 
     def get_name_by_index(self, index: int) -> str:
         """Return pentomino name by given index."""
-        return self._pentomino_list[index].name
+        try:
+            return self._pentomino_list[index].name
+        except IndexError:
+            raise ValueError(f"No pentomino with index {index}.")
 
     def get_pentomino_by_name(self, name: str) -> Pentomino:
         """Return pentomino object by name."""

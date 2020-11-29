@@ -20,7 +20,7 @@ class Matrix(ABC):
         """
         try:
             universe, set_collection = constrains
-        except IndexError:
+        except ValueError:
             raise ValueError("Constrains should contain universe and set_collection.")
         if not universe:
             raise ValueError("Not possible to create with empty universe.")

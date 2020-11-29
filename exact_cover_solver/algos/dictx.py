@@ -82,7 +82,6 @@ class DictX(AlgorithmX):
         for column, content in column_dict.items():
             if not key and not size:
                 key, size = column, len(content)
-                continue
             key, size = (column, len(content)) if len(content) < size else (key, size)
         return key
 
