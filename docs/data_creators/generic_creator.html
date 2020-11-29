@@ -114,7 +114,15 @@ class GenericCreator(DataCreator):
                         &#34;Set includes elements not in universe.&#34;,
                         f&#34;universe: {self._universe}, set_collection: {set_collection}&#34;,
                     )
-            self._set_collection.append(parsed_set)</code></pre>
+            self._set_collection.append(parsed_set)
+
+
+# Add all private methods to pdoc when generating documentation
+__pdoc__ = {
+    f&#34;GenericCreator.{func}&#34;: True
+    for func in dir(GenericCreator)
+    if callable(getattr(GenericCreator, func)) and func.startswith(&#34;_&#34;)
+}</code></pre>
 </details>
 </section>
 <section>
@@ -128,7 +136,6 @@ class GenericCreator(DataCreator):
 <dl>
 <dt id="exact_cover_solver.data_creators.generic_creator.GenericCreator"><code class="flex name class">
 <span>class <span class="ident">GenericCreator</span></span>
-<span>(</span><span>universe: str, set_collection: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Universe and set collection creator for pentomino problem.</p>
@@ -220,6 +227,92 @@ separated by semicolons.</dd>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="exact_cover_solver.data_creators.generic_creator.GenericCreator.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, universe: str, set_collection: str) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize and try to parse string input.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>universe</code></strong></dt>
+<dd>elements as string, separated by commas</dd>
+<dt><strong><code>set_collection</code></strong></dt>
+<dd>sets as string, elements separated by commas and sets
+separated by semicolons.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def __init__(self, universe: str, set_collection: str) -&gt; None:
+    &#34;&#34;&#34;Initialize and try to parse string input.
+
+    Args:
+        universe: elements as string, separated by commas
+        set_collection: sets as string, elements separated by commas and sets
+            separated by semicolons.
+    &#34;&#34;&#34;
+    self._parse_universe(universe)
+    self._parse_set_collection(set_collection)</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_set_collection"><code class="name flex">
+<span>def <span class="ident">_parse_set_collection</span></span>(<span>self, set_collection) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse set collection into correct format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _parse_set_collection(self, set_collection) -&gt; None:
+    &#34;&#34;&#34;Parse set collection into correct format.&#34;&#34;&#34;
+    universe_as_set = set(self._universe)
+    self._set_collection = []
+    for single_set in set_collection.split(&#34;;&#34;):
+        try:
+            parsed_set = [int(x.strip()) for x in single_set.split(&#34;,&#34;)]
+        except ValueError:
+            message = (
+                &#34;For set collection you should give each set as list of commas and &#34;
+                &#34;sets separated by semicolons, e.g &#39;1,3;2,4&#39;.&#34;
+            )
+            raise ParsingError(message, set_collection)
+        for element in parsed_set:
+            if element not in universe_as_set:
+                raise ParsingError(
+                    &#34;Set includes elements not in universe.&#34;,
+                    f&#34;universe: {self._universe}, set_collection: {set_collection}&#34;,
+                )
+        self._set_collection.append(parsed_set)</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_universe"><code class="name flex">
+<span>def <span class="ident">_parse_universe</span></span>(<span>self, universe) ‑> NoneType</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parse universe into correct format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _parse_universe(self, universe) -&gt; None:
+    &#34;&#34;&#34;Parse universe into correct format.&#34;&#34;&#34;
+    try:
+        parsed_universe = [int(x.strip()) for x in universe.split(&#34;,&#34;)]
+    except ValueError:
+        message = (
+            &#34;For universe you should give a list of elements separated by &#34;
+            &#34;commas, e.g &#39;1,2,3,4&#39;&#34;
+        )
+        raise ParsingError(message, universe)
+
+    if len(parsed_universe) != len(set(parsed_universe)):
+        raise ParsingError(&#34;Only unique elements are allowed.&#34;, universe)
+
+    self._universe = parsed_universe</code></pre>
+</details>
+</dd>
 <dt id="exact_cover_solver.data_creators.generic_creator.GenericCreator.create_constrains"><code class="name flex">
 <span>def <span class="ident">create_constrains</span></span>(<span>self) ‑> Tuple[List[int], List[List[int]]]</span>
 </code></dt>
@@ -302,6 +395,9 @@ Initialize error with message.</p></div>
 <li>
 <h4><code><a title="exact_cover_solver.data_creators.generic_creator.GenericCreator" href="#exact_cover_solver.data_creators.generic_creator.GenericCreator">GenericCreator</a></code></h4>
 <ul class="">
+<li><code><a title="exact_cover_solver.data_creators.generic_creator.GenericCreator.__init__" href="#exact_cover_solver.data_creators.generic_creator.GenericCreator.__init__">__init__</a></code></li>
+<li><code><a title="exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_set_collection" href="#exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_set_collection">_parse_set_collection</a></code></li>
+<li><code><a title="exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_universe" href="#exact_cover_solver.data_creators.generic_creator.GenericCreator._parse_universe">_parse_universe</a></code></li>
 <li><code><a title="exact_cover_solver.data_creators.generic_creator.GenericCreator.create_constrains" href="#exact_cover_solver.data_creators.generic_creator.GenericCreator.create_constrains">create_constrains</a></code></li>
 </ul>
 </li>

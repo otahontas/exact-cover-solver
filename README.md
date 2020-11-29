@@ -20,6 +20,7 @@ Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä t�
 - [Viikko 2](docs/raportit/viikko2.md)
 - [Viikko 3](docs/raportit/viikko3.md)
 - [Viikko 4](docs/raportit/viikko4.md)
+- [Viikko 5](docs/raportit/viikko5.md)
 
 ## Käyttöohje
 

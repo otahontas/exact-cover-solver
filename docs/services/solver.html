@@ -34,6 +34,7 @@ from typing import Optional
 from exact_cover_solver.algos import AlgorithmX
 from exact_cover_solver.algos.dictx import DictX
 from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.data_creators.generic_creator import GenericCreator
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
@@ -103,9 +104,31 @@ class Solver:
             )
         self._algorithm = algo_class()
 
-    def solve_generic_problem(self, universe: str, set_collection: str) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError
+    def solve_generic_problem(self, universe: str, set_collection: str) -&gt; str:
+        &#34;&#34;&#34;Parse given data, solve cover problem and format solution to string.
+
+        Args:
+            universe: used universe
+            set_collection: set collection based on universe elements
+
+        Returns:
+            Solution formatted as printable string.
+        &#34;&#34;&#34;
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        generic_creator = GenericCreator(universe, set_collection)
+        constrains = generic_creator.create_constrains()
+        matrix_class = self._matrices[self.algorithm]
+        solutions = self._algorithm.solve(matrix_class(constrains))
+        if not solutions:
+            return &#34;No solutions found with given universe and set collection.&#34;
+        formatted_solution = (
+            f&#34;For given set_collection: {set_collection} you can &#34;
+            f&#34;create exact cover solution by following ways:\n&#34;
+        )
+        for solution in solutions:
+            formatted_solution = f&#34;{formatted_solution}Choose rows: {solution}\n&#34;
+        return formatted_solution
 
     def solve_pentomino_problem(
         self, board_height: int, board_width: int
@@ -126,11 +149,7 @@ class Solver:
         constrains = pentomino_creator.create_constrains()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
-        return PentominoBoardBrowser(pentomino_creator, solutions)
-
-    def solve_sudoku_problem(self) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError</code></pre>
+        return PentominoBoardBrowser(pentomino_creator, solutions)</code></pre>
 </details>
 </section>
 <section>
@@ -234,9 +253,31 @@ Initialize error with message.</p></div>
             )
         self._algorithm = algo_class()
 
-    def solve_generic_problem(self, universe: str, set_collection: str) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError
+    def solve_generic_problem(self, universe: str, set_collection: str) -&gt; str:
+        &#34;&#34;&#34;Parse given data, solve cover problem and format solution to string.
+
+        Args:
+            universe: used universe
+            set_collection: set collection based on universe elements
+
+        Returns:
+            Solution formatted as printable string.
+        &#34;&#34;&#34;
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        generic_creator = GenericCreator(universe, set_collection)
+        constrains = generic_creator.create_constrains()
+        matrix_class = self._matrices[self.algorithm]
+        solutions = self._algorithm.solve(matrix_class(constrains))
+        if not solutions:
+            return &#34;No solutions found with given universe and set collection.&#34;
+        formatted_solution = (
+            f&#34;For given set_collection: {set_collection} you can &#34;
+            f&#34;create exact cover solution by following ways:\n&#34;
+        )
+        for solution in solutions:
+            formatted_solution = f&#34;{formatted_solution}Choose rows: {solution}\n&#34;
+        return formatted_solution
 
     def solve_pentomino_problem(
         self, board_height: int, board_width: int
@@ -257,11 +298,7 @@ Initialize error with message.</p></div>
         constrains = pentomino_creator.create_constrains()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
-        return PentominoBoardBrowser(pentomino_creator, solutions)
-
-    def solve_sudoku_problem(self) -&gt; None:
-        &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-        raise NotImplementedError</code></pre>
+        return PentominoBoardBrowser(pentomino_creator, solutions)</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -298,17 +335,48 @@ def algorithm(self) -&gt; Optional[str]:
 <h3>Methods</h3>
 <dl>
 <dt id="exact_cover_solver.services.solver.Solver.solve_generic_problem"><code class="name flex">
-<span>def <span class="ident">solve_generic_problem</span></span>(<span>self, universe: str, set_collection: str) ‑> NoneType</span>
+<span>def <span class="ident">solve_generic_problem</span></span>(<span>self, universe: str, set_collection: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Not implemented.</p></div>
+<div class="desc"><p>Parse given data, solve cover problem and format solution to string.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>universe</code></strong></dt>
+<dd>used universe</dd>
+<dt><strong><code>set_collection</code></strong></dt>
+<dd>set collection based on universe elements</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Solution formatted as printable string.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def solve_generic_problem(self, universe: str, set_collection: str) -&gt; None:
-    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
+<pre><code class="python">def solve_generic_problem(self, universe: str, set_collection: str) -&gt; str:
+    &#34;&#34;&#34;Parse given data, solve cover problem and format solution to string.
+
+    Args:
+        universe: used universe
+        set_collection: set collection based on universe elements
+
+    Returns:
+        Solution formatted as printable string.
+    &#34;&#34;&#34;
+    if not self._algorithm:
+        raise AlgorithmNotChosenError
+    generic_creator = GenericCreator(universe, set_collection)
+    constrains = generic_creator.create_constrains()
+    matrix_class = self._matrices[self.algorithm]
+    solutions = self._algorithm.solve(matrix_class(constrains))
+    if not solutions:
+        return &#34;No solutions found with given universe and set collection.&#34;
+    formatted_solution = (
+        f&#34;For given set_collection: {set_collection} you can &#34;
+        f&#34;create exact cover solution by following ways:\n&#34;
+    )
+    for solution in solutions:
+        formatted_solution = f&#34;{formatted_solution}Choose rows: {solution}\n&#34;
+    return formatted_solution</code></pre>
 </details>
 </dd>
 <dt id="exact_cover_solver.services.solver.Solver.solve_pentomino_problem"><code class="name flex">
@@ -351,20 +419,6 @@ def algorithm(self) -&gt; Optional[str]:
     return PentominoBoardBrowser(pentomino_creator, solutions)</code></pre>
 </details>
 </dd>
-<dt id="exact_cover_solver.services.solver.Solver.solve_sudoku_problem"><code class="name flex">
-<span>def <span class="ident">solve_sudoku_problem</span></span>(<span>self) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Not implemented.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def solve_sudoku_problem(self) -&gt; None:
-    &#34;&#34;&#34;Not implemented.&#34;&#34;&#34;
-    raise NotImplementedError</code></pre>
-</details>
-</dd>
 </dl>
 </dd>
 </dl>
@@ -392,7 +446,6 @@ def algorithm(self) -&gt; Optional[str]:
 <li><code><a title="exact_cover_solver.services.solver.Solver.algorithm" href="#exact_cover_solver.services.solver.Solver.algorithm">algorithm</a></code></li>
 <li><code><a title="exact_cover_solver.services.solver.Solver.solve_generic_problem" href="#exact_cover_solver.services.solver.Solver.solve_generic_problem">solve_generic_problem</a></code></li>
 <li><code><a title="exact_cover_solver.services.solver.Solver.solve_pentomino_problem" href="#exact_cover_solver.services.solver.Solver.solve_pentomino_problem">solve_pentomino_problem</a></code></li>
-<li><code><a title="exact_cover_solver.services.solver.Solver.solve_sudoku_problem" href="#exact_cover_solver.services.solver.Solver.solve_sudoku_problem">solve_sudoku_problem</a></code></li>
 </ul>
 </li>
 </ul>
