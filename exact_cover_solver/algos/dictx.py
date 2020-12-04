@@ -11,7 +11,7 @@ from exact_cover_solver.datastructures.dictmatrix import (
 )
 
 
-class DictX(AlgorithmX):
+class DictX(AlgorithmX[DictMatrix]):
     """Dictionary based implementation for algorithm X."""
 
     def __init__(self) -> None:

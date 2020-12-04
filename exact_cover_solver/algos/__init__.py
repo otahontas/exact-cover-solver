@@ -5,13 +5,13 @@ this package.
 """
 
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Generic
 from exact_cover_solver.datastructures import GenericMatrix
 
 Solution = List[int]
 
 
-class AlgorithmX(ABC):
+class AlgorithmX(ABC, Generic[GenericMatrix]):
     """Abstract base class for algorithm X that solves the exact cover problem.
 
     Algorithm X is a straightforward recursive, nondeterministic, depth-first

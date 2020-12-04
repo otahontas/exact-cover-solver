@@ -7,7 +7,7 @@ from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 
-class DLX(AlgorithmX):
+class DLX(AlgorithmX[DLXMatrix]):
     """Dancing links implementation for algorithm X."""
 
     def __init__(self) -> None:
