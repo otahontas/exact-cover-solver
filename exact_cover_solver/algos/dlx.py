@@ -122,7 +122,7 @@ class DLX(AlgorithmX[DLXMatrix]):
         steps done during column covering.
 
         Args:
-            Linked list column node.
+            column: Linked list column node.
         """
         row = column.up
         while row != column:

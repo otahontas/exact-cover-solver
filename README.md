@@ -82,13 +82,13 @@ Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html)
 - virheistä, turhista importeista jne
 - koodin liiallisesta haarautumisesta / kompleksisuudesta
 - black-formatoijan tyyliohjeiden noudattamisesta
-- [pep257 -docstring ohjeiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta (vain lähdekoodille, testeille ei ajeta docstring-tarkastuksia)
+- [Google Python Style Guiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta docstringeissä (vain lähdekoodille, testeille ei ajeta docstring-tarkastuksia)
 
 Blackin huomaamat virheet voi korjata automaattisesti ajamalla `poetry run invoke list`. Flaken huomaamat virheet täytyy sen sijaan korjata käsin.
 
 ### API-dokumentaatio
 
-Ohjelman sisäisessä dokumentaatiossa (docstringit) käytetään [Googlen Python Style Guide](https://google.github.io/styleguide/pyguide.html) -konventiota ja edellämainittua pep257-konventiota. Googlen konventio ajaa edelle ristiriitatilanteissa.
+Ohjelman sisäisessä dokumentaatiossa (docstringit) käytetään [Googlen Python Style Guide](https://google.github.io/styleguide/pyguide.html) -konventiota.
 
 Generoi dokumentaatio (vrt. Javadocit) komennolla:
 

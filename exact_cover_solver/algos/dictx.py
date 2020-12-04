@@ -125,6 +125,7 @@ class DictX(AlgorithmX[DictMatrix]):
         """Uncover columns.
 
         Restores removed columns in reversed order to dictionary.
+
         Args:
             column_dict: Matrix representation as a dictionary
             set_collection: Original set collection used to create the matrix
