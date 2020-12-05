@@ -5,7 +5,7 @@ description = "Exact cover solver for Helsinki University datastructures and alg
 authors = ["Otto Ahoniemi <otto@ottoahoniemi.fi>"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.6.1,<4.0"
 PySimpleGUI = "^4.32.1"
 
 [tool.poetry.dev-dependencies]
@@ -17,6 +17,7 @@ pytest-cov = "^2.10.1"
 pdoc3 = "^0.9.1"
 invoke = "^1.4.1"
 mypy = "^0.790"
+flake8-annotations = "^2.4.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
