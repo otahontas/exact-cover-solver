@@ -1,10 +1,7 @@
 """Solver service, handles different solving modes."""
+from typing import Optional, Union
 
-from typing import Optional
-
-from exact_cover_solver.algos import AlgorithmX
-from exact_cover_solver.algos.dictx import DictX
-from exact_cover_solver.algos.dlx import DLX
+from exact_cover_solver.algos import DictX, DLX
 from exact_cover_solver.data_creators.generic_creator import GenericCreator
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
@@ -36,7 +33,7 @@ class Solver:
 
     def __init__(self):
         """Initialize algorithm variable."""
-        self._algorithm: Optional[AlgorithmX] = None
+        self._algorithm: Optional[Union[DLXMatrix, DictMatrix]] = None
 
     @property
     def algorithm(self) -> Optional[str]:

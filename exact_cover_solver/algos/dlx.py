@@ -1,16 +1,17 @@
-"""Dancing links implementation for algorithm X."""
+"""Dancing links based implementation for algorithm X."""
 
 from typing import List
 
-from exact_cover_solver.algos import AlgorithmX, Solution
+from .algox_base import AlgorithmX, Solution
 from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 
 class DLX(AlgorithmX[DLXMatrix]):
-    """Dancing links implementation for algorithm X."""
+    """Dancing links based implementation for algorithm X."""
 
     def __init__(self) -> None:
+        """Initialize object by calling parent constructor."""
         super().__init__()
 
     def solve(self, matrix: DLXMatrix) -> List[Solution]:
@@ -132,11 +133,3 @@ class DLX(AlgorithmX[DLXMatrix]):
                 node = node.left
             row = row.up
         column.attach()
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"DLX.{func}": True
-    for func in dir(DLX)
-    if callable(getattr(DLX, func)) and func.startswith("_")
-}

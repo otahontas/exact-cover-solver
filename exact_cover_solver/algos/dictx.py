@@ -2,7 +2,7 @@
 
 from typing import List
 
-from exact_cover_solver.algos import AlgorithmX, Solution
+from .algox_base import AlgorithmX, Solution
 from exact_cover_solver.data_creators import SetCollection
 from exact_cover_solver.datastructures.dictmatrix import (
     DictMatrix,
@@ -15,6 +15,7 @@ class DictX(AlgorithmX[DictMatrix]):
     """Dictionary based implementation for algorithm X."""
 
     def __init__(self) -> None:
+        """Initialize object by calling parent constructor."""
         super().__init__()
 
     def solve(self, matrix: DictMatrix) -> List[Solution]:
@@ -139,11 +140,3 @@ class DictX(AlgorithmX[DictMatrix]):
                 for other_element in set_collection[row]:
                     if other_element != element:
                         column_dict[other_element].add(row)
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"DictX.{func}": True
-    for func in dir(DictX)
-    if callable(getattr(DictX, func)) and func.startswith("_")
-}

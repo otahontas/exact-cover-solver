@@ -1,5 +1,5 @@
 import pytest
-from exact_cover_solver.algos import AlgorithmX
+from exact_cover_solver.algos.algox_base import AlgorithmX
 
 
 def test_not_possible_to_call_solve_without_real_implementation():

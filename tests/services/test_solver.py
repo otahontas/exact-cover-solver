@@ -3,8 +3,7 @@ import pytest
 
 from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
 from exact_cover_solver.services.solver import Solver, AlgorithmNotChosenError
-from exact_cover_solver.algos.dlx import DLX
-from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.algos import DLX, DictX
 from unittest.mock import Mock
 
 

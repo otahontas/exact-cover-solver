@@ -1,8 +1,7 @@
 """Unit tests for dlx implementation of algo X."""
 import pytest
 
-from exact_cover_solver.algos.dlx import DLX
-from exact_cover_solver.algos.dictx import DictX
+from exact_cover_solver.algos import DLX, DictX
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 
