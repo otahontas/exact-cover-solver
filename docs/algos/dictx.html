@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>exact_cover_solver.algos.dictx API documentation</title>
 <meta name="description" content="Dictionary based implementation for algorithm X." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -31,8 +31,8 @@
 
 from typing import List
 
-from exact_cover_solver.algos import AlgorithmX, Solution
-from exact_cover_solver.data_creators import SetCollection
+from .algox_base import AlgorithmX
+from exact_cover_solver.types import Solution, SubsetCollection
 from exact_cover_solver.datastructures.dictmatrix import (
     DictMatrix,
     ColumnDict,
@@ -40,10 +40,11 @@ from exact_cover_solver.datastructures.dictmatrix import (
 )
 
 
-class DictX(AlgorithmX):
+class DictX(AlgorithmX[DictMatrix]):
     &#34;&#34;&#34;Dictionary based implementation for algorithm X.&#34;&#34;&#34;
 
     def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize object by calling parent constructor.&#34;&#34;&#34;
         super().__init__()
 
     def solve(self, matrix: DictMatrix) -&gt; List[Solution]:
@@ -56,23 +57,19 @@ class DictX(AlgorithmX):
             matrix: Matrix representation implemented with dictionaries and sets.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         &#34;&#34;&#34;
-        if not isinstance(matrix, DictMatrix):
-            raise ValueError(&#34;Given matrix can&#39;t be processed by DictX algorithm.&#34;)
         self._solutions.clear()
         column_dict, set_collection = matrix.data
-        self._search(column_dict, set_collection)
+        partial: Solution = []
+        self._search(column_dict, set_collection, partial)
         return self._solutions
 
     def _search(
         self,
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         partial: Solution = None,
     ) -&gt; None:
         &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
@@ -82,9 +79,6 @@ class DictX(AlgorithmX):
             set_collection: Original set collection used to create the matrix.
             partial: List including rows collected this far in recursion.
         &#34;&#34;&#34;
-        if not partial:
-            partial: Solution = []
-
         if not column_dict:
             self._solutions.append(partial[:])
             return
@@ -119,7 +113,7 @@ class DictX(AlgorithmX):
 
     @staticmethod
     def _cover(
-        column_dict: ColumnDict, set_collection: SetCollection, set_index: int
+        column_dict: ColumnDict, set_collection: SubsetCollection, set_index: int
     ) -&gt; List[ColumnValue]:
         &#34;&#34;&#34;Cover columns in given set.
 
@@ -147,13 +141,14 @@ class DictX(AlgorithmX):
     @staticmethod
     def _uncover(
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         set_index: int,
         removed_columns: List[ColumnValue],
     ) -&gt; None:
         &#34;&#34;&#34;Uncover columns.
 
         Restores removed columns in reversed order to dictionary.
+
         Args:
             column_dict: Matrix representation as a dictionary
             set_collection: Original set collection used to create the matrix
@@ -166,15 +161,7 @@ class DictX(AlgorithmX):
             for row in column_dict[element]:
                 for other_element in set_collection[row]:
                     if other_element != element:
-                        column_dict[other_element].add(row)
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f&#34;DictX.{func}&#34;: True
-    for func in dir(DictX)
-    if callable(getattr(DictX, func)) and func.startswith(&#34;_&#34;)
-}</code></pre>
+                        column_dict[other_element].add(row)</code></pre>
 </details>
 </section>
 <section>
@@ -191,15 +178,16 @@ __pdoc__ = {
 </code></dt>
 <dd>
 <div class="desc"><p>Dictionary based implementation for algorithm X.</p>
-<p>Initialize with empty solution counter and matrix.</p></div>
+<p>Initialize object by calling parent constructor.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DictX(AlgorithmX):
+<pre><code class="python">class DictX(AlgorithmX[DictMatrix]):
     &#34;&#34;&#34;Dictionary based implementation for algorithm X.&#34;&#34;&#34;
 
     def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize object by calling parent constructor.&#34;&#34;&#34;
         super().__init__()
 
     def solve(self, matrix: DictMatrix) -&gt; List[Solution]:
@@ -212,23 +200,19 @@ __pdoc__ = {
             matrix: Matrix representation implemented with dictionaries and sets.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         &#34;&#34;&#34;
-        if not isinstance(matrix, DictMatrix):
-            raise ValueError(&#34;Given matrix can&#39;t be processed by DictX algorithm.&#34;)
         self._solutions.clear()
         column_dict, set_collection = matrix.data
-        self._search(column_dict, set_collection)
+        partial: Solution = []
+        self._search(column_dict, set_collection, partial)
         return self._solutions
 
     def _search(
         self,
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         partial: Solution = None,
     ) -&gt; None:
         &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
@@ -238,9 +222,6 @@ __pdoc__ = {
             set_collection: Original set collection used to create the matrix.
             partial: List including rows collected this far in recursion.
         &#34;&#34;&#34;
-        if not partial:
-            partial: Solution = []
-
         if not column_dict:
             self._solutions.append(partial[:])
             return
@@ -275,7 +256,7 @@ __pdoc__ = {
 
     @staticmethod
     def _cover(
-        column_dict: ColumnDict, set_collection: SetCollection, set_index: int
+        column_dict: ColumnDict, set_collection: SubsetCollection, set_index: int
     ) -&gt; List[ColumnValue]:
         &#34;&#34;&#34;Cover columns in given set.
 
@@ -303,13 +284,14 @@ __pdoc__ = {
     @staticmethod
     def _uncover(
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         set_index: int,
         removed_columns: List[ColumnValue],
     ) -&gt; None:
         &#34;&#34;&#34;Uncover columns.
 
         Restores removed columns in reversed order to dictionary.
+
         Args:
             column_dict: Matrix representation as a dictionary
             set_collection: Original set collection used to create the matrix
@@ -326,210 +308,14 @@ __pdoc__ = {
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="exact_cover_solver.algos.AlgorithmX" href="index.html#exact_cover_solver.algos.AlgorithmX">AlgorithmX</a></li>
+<li><a title="exact_cover_solver.algos.algox_base.AlgorithmX" href="algox_base.html#exact_cover_solver.algos.algox_base.AlgorithmX">AlgorithmX</a></li>
 <li>abc.ABC</li>
+<li>typing.Generic</li>
 </ul>
-<h3>Static methods</h3>
-<dl>
-<dt id="exact_cover_solver.algos.dictx.DictX._choose_optimal_column"><code class="name flex">
-<span>def <span class="ident">_choose_optimal_column</span></span>(<span>column_dict: Dict[int, Set[int]]) ‑> int</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Find column with smallest size to minimize the branching factor.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>column_dict</code></strong></dt>
-<dd>Dictionary of each column on current iteration.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Key of optimal column.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _choose_optimal_column(column_dict: ColumnDict) -&gt; int:
-    &#34;&#34;&#34;Find column with smallest size to minimize the branching factor.
-
-    Args:
-        column_dict: Dictionary of each column on current iteration.
-
-    Returns:
-        Key of optimal column.
-    &#34;&#34;&#34;
-    key, size = None, None
-    for column, content in column_dict.items():
-        if not key and not size:
-            key, size = column, len(content)
-        key, size = (column, len(content)) if len(content) &lt; size else (key, size)
-    return key</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dictx.DictX._cover"><code class="name flex">
-<span>def <span class="ident">_cover</span></span>(<span>column_dict: Dict[int, Set[int]], set_collection: List[List[int]], set_index: int) ‑> List[Set[int]]</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Cover columns in given set.</p>
-<p>Go through each element in given set and for each row where element is present,
-remove all other elements. Then remove column representing iterated element
-from column dictionary.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>column_dict</code></strong></dt>
-<dd>Matrix representation as a dictionary</dd>
-<dt><strong><code>set_collection</code></strong></dt>
-<dd>Original set collection used to create the matrix</dd>
-<dt><strong><code>set_index</code></strong></dt>
-<dd>Which set elements to cover</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>List including sets that have been removed from column dict.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _cover(
-    column_dict: ColumnDict, set_collection: SetCollection, set_index: int
-) -&gt; List[ColumnValue]:
-    &#34;&#34;&#34;Cover columns in given set.
-
-    Go through each element in given set and for each row where element is present,
-    remove all other elements. Then remove column representing iterated element
-    from column dictionary.
-
-    Args:
-        column_dict: Matrix representation as a dictionary
-        set_collection: Original set collection used to create the matrix
-        set_index: Which set elements to cover
-
-    Returns:
-        List including sets that have been removed from column dict.
-    &#34;&#34;&#34;
-    removed_columns = []
-    for element in set_collection[set_index]:
-        for row in column_dict[element]:
-            for other_element in set_collection[row]:
-                if other_element != element:
-                    column_dict[other_element].remove(row)
-        removed_columns.append(column_dict.pop(element))
-    return removed_columns</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dictx.DictX._uncover"><code class="name flex">
-<span>def <span class="ident">_uncover</span></span>(<span>column_dict: Dict[int, Set[int]], set_collection: List[List[int]], set_index: int, removed_columns: List[Set[int]]) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Uncover columns.</p>
-<p>Restores removed columns in reversed order to dictionary.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>column_dict</code></strong></dt>
-<dd>Matrix representation as a dictionary</dd>
-<dt><strong><code>set_collection</code></strong></dt>
-<dd>Original set collection used to create the matrix</dd>
-<dt><strong><code>set_index</code></strong></dt>
-<dd>Which set elements to uncover</dd>
-<dt><strong><code>removed_columns</code></strong></dt>
-<dd>Columns removed while covering set</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _uncover(
-    column_dict: ColumnDict,
-    set_collection: SetCollection,
-    set_index: int,
-    removed_columns: List[ColumnValue],
-) -&gt; None:
-    &#34;&#34;&#34;Uncover columns.
-
-    Restores removed columns in reversed order to dictionary.
-    Args:
-        column_dict: Matrix representation as a dictionary
-        set_collection: Original set collection used to create the matrix
-        set_index: Which set elements to uncover
-        removed_columns: Columns removed while covering set
-    &#34;&#34;&#34;
-    for counter, element in enumerate(reversed(set_collection[set_index])):
-        index = len(removed_columns) - 1 - counter
-        column_dict[element] = removed_columns[index]
-        for row in column_dict[element]:
-            for other_element in set_collection[row]:
-                if other_element != element:
-                    column_dict[other_element].add(row)</code></pre>
-</details>
-</dd>
-</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="exact_cover_solver.algos.dictx.DictX.__init__"><code class="name flex">
-<span>def <span class="ident">__init__</span></span>(<span>self) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Initialize with empty solution counter and matrix.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def __init__(self) -&gt; None:
-    super().__init__()</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dictx.DictX._search"><code class="name flex">
-<span>def <span class="ident">_search</span></span>(<span>self, column_dict: Dict[int, Set[int]], set_collection: List[List[int]], partial: List[int] = None) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Perform algorithm X recursively and collect solutions.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>column_dict</code></strong></dt>
-<dd>Matrix representation as a dictionary.</dd>
-<dt><strong><code>set_collection</code></strong></dt>
-<dd>Original set collection used to create the matrix.</dd>
-<dt><strong><code>partial</code></strong></dt>
-<dd>List including rows collected this far in recursion.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def _search(
-    self,
-    column_dict: ColumnDict,
-    set_collection: SetCollection,
-    partial: Solution = None,
-) -&gt; None:
-    &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
-
-    Args:
-        column_dict: Matrix representation as a dictionary.
-        set_collection: Original set collection used to create the matrix.
-        partial: List including rows collected this far in recursion.
-    &#34;&#34;&#34;
-    if not partial:
-        partial: Solution = []
-
-    if not column_dict:
-        self._solutions.append(partial[:])
-        return
-
-    column = self._choose_optimal_column(column_dict)
-    if not column_dict[column]:
-        return
-    rows = list(column_dict[column])
-    for row in rows:
-        partial.append(row)
-        removed_columns = self._cover(column_dict, set_collection, row)
-        self._search(column_dict, set_collection, partial)
-        self._uncover(column_dict, set_collection, row, removed_columns)
-        partial.pop()</code></pre>
-</details>
-</dd>
 <dt id="exact_cover_solver.algos.dictx.DictX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dictmatrix.DictMatrix" href="../datastructures/dictmatrix.html#exact_cover_solver.datastructures.dictmatrix.DictMatrix">DictMatrix</a>) ‑> List[List[int]]</span>
+<span>def <span class="ident">solve</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dictmatrix.DictMatrix" href="../datastructures/dictmatrix.html#exact_cover_solver.datastructures.dictmatrix.DictMatrix">DictMatrix</a>) ‑> List[List[Union[int, str]]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Solve which rows cover the given matrix.</p>
@@ -541,13 +327,8 @@ recursive method.</p>
 <dd>Matrix representation implemented with dictionaries and sets.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>List of solutions. Each solution is a list of indexes of rows that will
-exactly cover the given matrix.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>Error is raised if given matrix has wrong type.</dd>
-</dl></div>
+<p>List of solutions. Solution is a list identifiers of rows that were
+picked to solution.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -562,17 +343,13 @@ exactly cover the given matrix.</p>
         matrix: Matrix representation implemented with dictionaries and sets.
 
     Returns:
-        List of solutions. Each solution is a list of indexes of rows that will
-            exactly cover the given matrix.
-
-    Raises:
-        ValueError: Error is raised if given matrix has wrong type.
+        List of solutions. Solution is a list identifiers of rows that were
+        picked to solution.
     &#34;&#34;&#34;
-    if not isinstance(matrix, DictMatrix):
-        raise ValueError(&#34;Given matrix can&#39;t be processed by DictX algorithm.&#34;)
     self._solutions.clear()
     column_dict, set_collection = matrix.data
-    self._search(column_dict, set_collection)
+    partial: Solution = []
+    self._search(column_dict, set_collection, partial)
     return self._solutions</code></pre>
 </details>
 </dd>
@@ -597,11 +374,6 @@ exactly cover the given matrix.</p>
 <li>
 <h4><code><a title="exact_cover_solver.algos.dictx.DictX" href="#exact_cover_solver.algos.dictx.DictX">DictX</a></code></h4>
 <ul class="">
-<li><code><a title="exact_cover_solver.algos.dictx.DictX.__init__" href="#exact_cover_solver.algos.dictx.DictX.__init__">__init__</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dictx.DictX._choose_optimal_column" href="#exact_cover_solver.algos.dictx.DictX._choose_optimal_column">_choose_optimal_column</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dictx.DictX._cover" href="#exact_cover_solver.algos.dictx.DictX._cover">_cover</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dictx.DictX._search" href="#exact_cover_solver.algos.dictx.DictX._search">_search</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dictx.DictX._uncover" href="#exact_cover_solver.algos.dictx.DictX._uncover">_uncover</a></code></li>
 <li><code><a title="exact_cover_solver.algos.dictx.DictX.solve" href="#exact_cover_solver.algos.dictx.DictX.solve">solve</a></code></li>
 </ul>
 </li>
@@ -611,7 +383,7 @@ exactly cover the given matrix.</p>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>

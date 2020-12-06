@@ -19,6 +19,9 @@
   - `services`- -paketti sisältää sovelluslogiikan:
     - solver-moduuli toimii rajapinta käyttöliittymään ja mm. käynnistää datan generoinnin, algoritmit jne. sekä palauttaa löydetyt ratkaisut
     - pentomino_browser -moduuli palautetaan solver-moduulin käyttäjälle ja sen avulla voi selata generoituja pentomino-ratkaisuja.
+- Importit:
+  - Packagen `__init__.py` -tiedostossa määritellään mitä luokkia paketista voi tuoda suoraan
+  - Testeissä paketit tuodaan aina suoraan
 
 ## Saavutetut aika- ja tilavaativuudet
 

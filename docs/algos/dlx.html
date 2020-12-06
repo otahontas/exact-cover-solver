@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>exact_cover_solver.algos.dlx API documentation</title>
-<meta name="description" content="Dancing links implementation for algorithm X." />
+<meta name="description" content="Dancing links based implementation for algorithm X." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,24 +22,26 @@
 <h1 class="title">Module <code>exact_cover_solver.algos.dlx</code></h1>
 </header>
 <section id="section-intro">
-<p>Dancing links implementation for algorithm X.</p>
+<p>Dancing links based implementation for algorithm X.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
+<pre><code class="python">&#34;&#34;&#34;Dancing links based implementation for algorithm X.&#34;&#34;&#34;
 
 from typing import List
 
-from exact_cover_solver.algos import AlgorithmX, Solution
+from .algox_base import AlgorithmX
+from exact_cover_solver.types import Solution
 from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
 
 
-class DLX(AlgorithmX):
-    &#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
+class DLX(AlgorithmX[DLXMatrix]):
+    &#34;&#34;&#34;Dancing links based implementation for algorithm X.&#34;&#34;&#34;
 
     def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize object by calling parent constructor.&#34;&#34;&#34;
         super().__init__()
 
     def solve(self, matrix: DLXMatrix) -&gt; List[Solution]:
@@ -49,31 +51,24 @@ class DLX(AlgorithmX):
         recursive method.
 
         Args:
-            matrix: Matrix representation implemented as circular doubly linked lists.
+            matrix: Matrix representation implemented with circular doubly linked lists.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         &#34;&#34;&#34;
-        if not isinstance(matrix, DLXMatrix):
-            raise ValueError(&#34;Given matrix can&#39;t be processed by DLX algorithm.&#34;)
         self._solutions.clear()
-        self._search(matrix)
+        partial: Solution = []
+        self._search(matrix, partial)
         return self._solutions
 
-    def _search(self, matrix: DLXMatrix, partial: Solution = None) -&gt; None:
+    def _search(self, matrix: DLXMatrix, partial: Solution) -&gt; None:
         &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
 
         Args:
             matrix: Matrix representation implemented as circular doubly linked lists.
             partial: List including rows collected this far in recursion.
         &#34;&#34;&#34;
-        if not partial:
-            partial: Solution = []
-
         if matrix.right == matrix:
             self._solutions.append(partial[:])
             return
@@ -151,7 +146,7 @@ class DLX(AlgorithmX):
         steps done during column covering.
 
         Args:
-            Linked list column node.
+            column: Linked list column node.
         &#34;&#34;&#34;
         row = column.up
         while row != column:
@@ -160,15 +155,7 @@ class DLX(AlgorithmX):
                 node.attach()
                 node = node.left
             row = row.up
-        column.attach()
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f&#34;DLX.{func}&#34;: True
-    for func in dir(DLX)
-    if callable(getattr(DLX, func)) and func.startswith(&#34;_&#34;)
-}</code></pre>
+        column.attach()</code></pre>
 </details>
 </section>
 <section>
@@ -184,16 +171,17 @@ __pdoc__ = {
 <span>class <span class="ident">DLX</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Dancing links implementation for algorithm X.</p>
-<p>Initialize with empty solution counter and matrix.</p></div>
+<div class="desc"><p>Dancing links based implementation for algorithm X.</p>
+<p>Initialize object by calling parent constructor.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DLX(AlgorithmX):
-    &#34;&#34;&#34;Dancing links implementation for algorithm X.&#34;&#34;&#34;
+<pre><code class="python">class DLX(AlgorithmX[DLXMatrix]):
+    &#34;&#34;&#34;Dancing links based implementation for algorithm X.&#34;&#34;&#34;
 
     def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize object by calling parent constructor.&#34;&#34;&#34;
         super().__init__()
 
     def solve(self, matrix: DLXMatrix) -&gt; List[Solution]:
@@ -203,31 +191,24 @@ __pdoc__ = {
         recursive method.
 
         Args:
-            matrix: Matrix representation implemented as circular doubly linked lists.
+            matrix: Matrix representation implemented with circular doubly linked lists.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         &#34;&#34;&#34;
-        if not isinstance(matrix, DLXMatrix):
-            raise ValueError(&#34;Given matrix can&#39;t be processed by DLX algorithm.&#34;)
         self._solutions.clear()
-        self._search(matrix)
+        partial: Solution = []
+        self._search(matrix, partial)
         return self._solutions
 
-    def _search(self, matrix: DLXMatrix, partial: Solution = None) -&gt; None:
+    def _search(self, matrix: DLXMatrix, partial: Solution) -&gt; None:
         &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
 
         Args:
             matrix: Matrix representation implemented as circular doubly linked lists.
             partial: List including rows collected this far in recursion.
         &#34;&#34;&#34;
-        if not partial:
-            partial: Solution = []
-
         if matrix.right == matrix:
             self._solutions.append(partial[:])
             return
@@ -305,7 +286,7 @@ __pdoc__ = {
         steps done during column covering.
 
         Args:
-            Linked list column node.
+            column: Linked list column node.
         &#34;&#34;&#34;
         row = column.up
         while row != column:
@@ -318,193 +299,14 @@ __pdoc__ = {
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="exact_cover_solver.algos.AlgorithmX" href="index.html#exact_cover_solver.algos.AlgorithmX">AlgorithmX</a></li>
+<li><a title="exact_cover_solver.algos.algox_base.AlgorithmX" href="algox_base.html#exact_cover_solver.algos.algox_base.AlgorithmX">AlgorithmX</a></li>
 <li>abc.ABC</li>
+<li>typing.Generic</li>
 </ul>
-<h3>Static methods</h3>
-<dl>
-<dt id="exact_cover_solver.algos.dlx.DLX._choose_optimal_column_object"><code class="name flex">
-<span>def <span class="ident">_choose_optimal_column_object</span></span>(<span>matrix: <a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="../datastructures/dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a>) ‑> <a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="../datastructures/dlxdataobjects.html#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Find column with smallest number of 1s to minimize the branching factor.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>matrix</code></strong></dt>
-<dd>Matrix representation implemented as circular doubly linked lists.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<p>Linked list column node representing column with smallest number of 1s.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _choose_optimal_column_object(matrix: DLXMatrix) -&gt; ColumnObject:
-    &#34;&#34;&#34;Find column with smallest number of 1s to minimize the branching factor.
-
-    Args:
-        matrix: Matrix representation implemented as circular doubly linked lists.
-
-    Returns:
-        Linked list column node representing column with smallest number of 1s.
-    &#34;&#34;&#34;
-    current_column = matrix.right
-    column = current_column
-    size = current_column.size
-    while current_column != matrix:
-        column, size = (
-            (current_column, current_column.size)
-            if current_column.size &lt; size
-            else (column, size)
-        )
-        current_column = current_column.right
-    return column</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dlx.DLX._cover"><code class="name flex">
-<span>def <span class="ident">_cover</span></span>(<span>column: <a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="../datastructures/dlxdataobjects.html#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a>) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Cover given column.</p>
-<p>First remove column from the header list and then remove all rows
-in column from other column lists rows are in. Covering is done from top to
-bottom and from left to right.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>column</code></strong></dt>
-<dd>Linked list column node.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _cover(column: ColumnObject) -&gt; None:
-    &#34;&#34;&#34;Cover given column.
-
-    First remove column from the header list and then remove all rows
-    in column from other column lists rows are in. Covering is done from top to
-    bottom and from left to right.
-
-    Args:
-        column: Linked list column node.
-    &#34;&#34;&#34;
-    column.detach()
-    row = column.down
-    while row != column:
-        node = row.right
-        while node != row:
-            node.detach()
-            node = node.right
-        row = row.down</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dlx.DLX._uncover"><code class="name flex">
-<span>def <span class="ident">_uncover</span></span>(<span>column: <a title="exact_cover_solver.datastructures.dlxdataobjects.ColumnObject" href="../datastructures/dlxdataobjects.html#exact_cover_solver.datastructures.dlxdataobjects.ColumnObject">ColumnObject</a>) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Uncover given column.</p>
-<p>Uncovering is done from bottom to top and from right to left in order to undo
-steps done during column covering.</p>
-<h2 id="args">Args</h2>
-<p>Linked list column node.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def _uncover(column: ColumnObject) -&gt; None:
-    &#34;&#34;&#34;Uncover given column.
-
-    Uncovering is done from bottom to top and from right to left in order to undo
-    steps done during column covering.
-
-    Args:
-        Linked list column node.
-    &#34;&#34;&#34;
-    row = column.up
-    while row != column:
-        node = row.left
-        while node != row:
-            node.attach()
-            node = node.left
-        row = row.up
-    column.attach()</code></pre>
-</details>
-</dd>
-</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="exact_cover_solver.algos.dlx.DLX.__init__"><code class="name flex">
-<span>def <span class="ident">__init__</span></span>(<span>self) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Initialize with empty solution counter and matrix.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def __init__(self) -&gt; None:
-    super().__init__()</code></pre>
-</details>
-</dd>
-<dt id="exact_cover_solver.algos.dlx.DLX._search"><code class="name flex">
-<span>def <span class="ident">_search</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="../datastructures/dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a>, partial: List[int] = None) ‑> NoneType</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Perform algorithm X recursively and collect solutions.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>matrix</code></strong></dt>
-<dd>Matrix representation implemented as circular doubly linked lists.</dd>
-<dt><strong><code>partial</code></strong></dt>
-<dd>List including rows collected this far in recursion.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def _search(self, matrix: DLXMatrix, partial: Solution = None) -&gt; None:
-    &#34;&#34;&#34;Perform algorithm X recursively and collect solutions.
-
-    Args:
-        matrix: Matrix representation implemented as circular doubly linked lists.
-        partial: List including rows collected this far in recursion.
-    &#34;&#34;&#34;
-    if not partial:
-        partial: Solution = []
-
-    if matrix.right == matrix:
-        self._solutions.append(partial[:])
-        return
-
-    column = self._choose_optimal_column_object(matrix)
-
-    if not column.size:
-        return
-
-    self._cover(column)
-
-    row = column.down
-    while row != column:
-        partial.append(row.row)
-        node = row.right
-        while node != row:
-            self._cover(node.column)
-            node = node.right
-        self._search(matrix, partial)
-        node = row.left
-        while node != row:
-            self._uncover(node.column)
-            node = node.left
-        partial.pop()
-        row = row.down
-    self._uncover(column)</code></pre>
-</details>
-</dd>
 <dt id="exact_cover_solver.algos.dlx.DLX.solve"><code class="name flex">
-<span>def <span class="ident">solve</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="../datastructures/dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a>) ‑> List[List[int]]</span>
+<span>def <span class="ident">solve</span></span>(<span>self, matrix: <a title="exact_cover_solver.datastructures.dlxmatrix.DLXMatrix" href="../datastructures/dlxmatrix.html#exact_cover_solver.datastructures.dlxmatrix.DLXMatrix">DLXMatrix</a>) ‑> List[List[Union[int, str]]]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Solve which rows cover the given matrix.</p>
@@ -513,16 +315,11 @@ recursive method.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>matrix</code></strong></dt>
-<dd>Matrix representation implemented as circular doubly linked lists.</dd>
+<dd>Matrix representation implemented with circular doubly linked lists.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>List of solutions. Each solution is a list of indexes of rows that will
-exactly cover the given matrix.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>Error is raised if given matrix has wrong type.</dd>
-</dl></div>
+<p>List of solutions. Solution is a list identifiers of rows that were
+picked to solution.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -534,19 +331,15 @@ exactly cover the given matrix.</p>
     recursive method.
 
     Args:
-        matrix: Matrix representation implemented as circular doubly linked lists.
+        matrix: Matrix representation implemented with circular doubly linked lists.
 
     Returns:
-        List of solutions. Each solution is a list of indexes of rows that will
-            exactly cover the given matrix.
-
-    Raises:
-        ValueError: Error is raised if given matrix has wrong type.
+        List of solutions. Solution is a list identifiers of rows that were
+        picked to solution.
     &#34;&#34;&#34;
-    if not isinstance(matrix, DLXMatrix):
-        raise ValueError(&#34;Given matrix can&#39;t be processed by DLX algorithm.&#34;)
     self._solutions.clear()
-    self._search(matrix)
+    partial: Solution = []
+    self._search(matrix, partial)
     return self._solutions</code></pre>
 </details>
 </dd>
@@ -571,11 +364,6 @@ exactly cover the given matrix.</p>
 <li>
 <h4><code><a title="exact_cover_solver.algos.dlx.DLX" href="#exact_cover_solver.algos.dlx.DLX">DLX</a></code></h4>
 <ul class="">
-<li><code><a title="exact_cover_solver.algos.dlx.DLX.__init__" href="#exact_cover_solver.algos.dlx.DLX.__init__">__init__</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dlx.DLX._choose_optimal_column_object" href="#exact_cover_solver.algos.dlx.DLX._choose_optimal_column_object">_choose_optimal_column_object</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dlx.DLX._cover" href="#exact_cover_solver.algos.dlx.DLX._cover">_cover</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dlx.DLX._search" href="#exact_cover_solver.algos.dlx.DLX._search">_search</a></code></li>
-<li><code><a title="exact_cover_solver.algos.dlx.DLX._uncover" href="#exact_cover_solver.algos.dlx.DLX._uncover">_uncover</a></code></li>
 <li><code><a title="exact_cover_solver.algos.dlx.DLX.solve" href="#exact_cover_solver.algos.dlx.DLX.solve">solve</a></code></li>
 </ul>
 </li>
@@ -585,7 +373,7 @@ exactly cover the given matrix.</p>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>

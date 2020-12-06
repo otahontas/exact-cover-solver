@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>exact_cover_solver.ui.pentomino_view API documentation</title>
 <meta name="description" content="Pentomino view function and helper functions." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
@@ -28,7 +28,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Pentomino view function and helper functions.&#34;&#34;&#34;
-import PySimpleGUI as sg
+import PySimpleGUI
 
 pentomino_colors = {
     &#34;V&#34;: &#34;yellow&#34;,
@@ -49,9 +49,9 @@ pentomino_colors = {
 def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;):
     if not pentomino_browser:
         return [
-            [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
+            [PySimpleGUI.Text(&#34;Select which pentomino board size you want to use. &#34;)],
             [
-                sg.Text(
+                PySimpleGUI.Text(
                     &#34;Program will generate all the solutions for selected &#34;
                     &#34;size and let&#39;s you browse solutions one by one. This is a &#34;
                     &#34;blocking operation that might take a while to perform.&#34;,
@@ -60,10 +60,10 @@ def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;
                 )
             ],
             [
-                sg.Button(&#34;3x20&#34;),
-                sg.Button(&#34;4x15&#34;),
-                sg.Button(&#34;5x12&#34;),
-                sg.Button(&#34;6x10&#34;),
+                PySimpleGUI.Button(&#34;3x20&#34;),
+                PySimpleGUI.Button(&#34;4x15&#34;),
+                PySimpleGUI.Button(&#34;5x12&#34;),
+                PySimpleGUI.Button(&#34;6x10&#34;),
             ],
         ]
     if board_to_get == &#34;next&#34;:
@@ -72,19 +72,19 @@ def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;
         grid = create_grid(pentomino_browser.previous_board)
     else:
         grid = create_grid(pentomino_browser.current_board)
-    header = [sg.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
+    header = [PySimpleGUI.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
     buttons = []
     if pentomino_browser.has_previous_board():
-        buttons.append(sg.Button(&#34;Previous&#34;))
+        buttons.append(PySimpleGUI.Button(&#34;Previous&#34;))
     if pentomino_browser.has_next_board():
-        buttons.append(sg.Button(&#34;Next&#34;))
+        buttons.append(PySimpleGUI.Button(&#34;Next&#34;))
     return [header, *grid, buttons]
 
 
 def create_grid(grid):
     return [
         [
-            sg.Canvas(
+            PySimpleGUI.Canvas(
                 background_color=pentomino_colors[grid[row][col]],
                 size=(15, 15),
                 border_width=1,
@@ -114,7 +114,7 @@ def create_grid(grid):
 <pre><code class="python">def create_grid(grid):
     return [
         [
-            sg.Canvas(
+            PySimpleGUI.Canvas(
                 background_color=pentomino_colors[grid[row][col]],
                 size=(15, 15),
                 border_width=1,
@@ -137,9 +137,9 @@ def create_grid(grid):
 <pre><code class="python">def create_pentomino_view(pentomino_browser=None, board_to_get=&#34;current&#34;):
     if not pentomino_browser:
         return [
-            [sg.Text(&#34;Select which pentomino board size you want to use. &#34;)],
+            [PySimpleGUI.Text(&#34;Select which pentomino board size you want to use. &#34;)],
             [
-                sg.Text(
+                PySimpleGUI.Text(
                     &#34;Program will generate all the solutions for selected &#34;
                     &#34;size and let&#39;s you browse solutions one by one. This is a &#34;
                     &#34;blocking operation that might take a while to perform.&#34;,
@@ -148,10 +148,10 @@ def create_grid(grid):
                 )
             ],
             [
-                sg.Button(&#34;3x20&#34;),
-                sg.Button(&#34;4x15&#34;),
-                sg.Button(&#34;5x12&#34;),
-                sg.Button(&#34;6x10&#34;),
+                PySimpleGUI.Button(&#34;3x20&#34;),
+                PySimpleGUI.Button(&#34;4x15&#34;),
+                PySimpleGUI.Button(&#34;5x12&#34;),
+                PySimpleGUI.Button(&#34;6x10&#34;),
             ],
         ]
     if board_to_get == &#34;next&#34;:
@@ -160,12 +160,12 @@ def create_grid(grid):
         grid = create_grid(pentomino_browser.previous_board)
     else:
         grid = create_grid(pentomino_browser.current_board)
-    header = [sg.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
+    header = [PySimpleGUI.Text(f&#34;Solution {pentomino_browser.current_status}&#34;)]
     buttons = []
     if pentomino_browser.has_previous_board():
-        buttons.append(sg.Button(&#34;Previous&#34;))
+        buttons.append(PySimpleGUI.Button(&#34;Previous&#34;))
     if pentomino_browser.has_next_board():
-        buttons.append(sg.Button(&#34;Next&#34;))
+        buttons.append(PySimpleGUI.Button(&#34;Next&#34;))
     return [header, *grid, buttons]</code></pre>
 </details>
 </dd>
@@ -195,7 +195,7 @@ def create_grid(grid):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
 </body>
 </html>
