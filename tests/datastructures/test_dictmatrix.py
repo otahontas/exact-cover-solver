@@ -1,4 +1,3 @@
-"""Unit tests for dict matrix."""
 import pytest
 
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix

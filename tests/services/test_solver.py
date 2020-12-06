@@ -1,4 +1,3 @@
-"""Unit tests for solver."""
 import pytest
 
 from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser

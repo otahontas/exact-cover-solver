@@ -1,5 +1,3 @@
-"""Unit tests for pentomino generator."""
-
 import pytest
 from unittest.mock import patch
 

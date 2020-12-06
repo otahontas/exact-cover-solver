@@ -1,4 +1,3 @@
-"""Unit tests for dlx implementation of algo X."""
 import pytest
 
 from exact_cover_solver.algos import DLX, DictX
@@ -34,7 +33,10 @@ def collection_with_multiple_solutions():
 
 
 def calc_dlx_node_amount(changed_matrix):
-    """Calculate nodes in dlx matrix, helper function for tests."""
+    """Calculate nodes in given dlx matrix.
+
+    Helper function for tests.
+    """
     tmp_amount = 0
     column = changed_matrix.right
     while column != changed_matrix:
@@ -133,7 +135,7 @@ def test_uncovering_restores_correct_nodes_in_dlx(
     assert amount_after_uncover == original_amount
 
 
-def test_covering_detaches_correct_amount_of_nodes_in_dictx(
+def test_covering_detaches_correct_amount_of_nodes_in_dict_x(
     universe, collection_with_single_solution
 ):
     constrains = (universe, collection_with_single_solution)
@@ -165,13 +167,3 @@ def test_uncovering_restores_correct_nodes_in_dict_x(
     dict_x._uncover(column_dict, set_collection, 1, removed_columns)
     amount_after_uncover = sum(len(col) for col in column_dict.values())
     assert amount_after_uncover == original_amount
-
-
-@pytest.mark.parametrize(
-    "algo_class, matrix_class", [(DLX, DictMatrix), (DictX, DLXMatrix)]
-)
-def test_solve_errors_when_trying_to_give_wrong_matrix(algo_class, matrix_class):
-    algo = algo_class()
-    with pytest.raises(ValueError):
-        matrix_no_init = object.__new__(matrix_class)
-        algo.solve(matrix_no_init)

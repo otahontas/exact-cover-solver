@@ -1,5 +1,6 @@
 import pytest
 from exact_cover_solver.algos.algox_base import AlgorithmX
+from unittest.mock import Mock
 
 
 def test_not_possible_to_call_solve_without_real_implementation():
@@ -9,4 +10,4 @@ def test_not_possible_to_call_solve_without_real_implementation():
 
     with pytest.raises(NotImplementedError):
         algo = FakeAlgoX()
-        algo.solve(None)
+        algo.solve(Mock())

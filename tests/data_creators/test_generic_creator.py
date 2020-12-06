@@ -1,5 +1,3 @@
-"""Unit tests for pentomino generator."""
-
 import pytest
 
 from exact_cover_solver.data_creators.generic_creator import (

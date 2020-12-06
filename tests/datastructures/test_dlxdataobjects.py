@@ -1,7 +1,3 @@
-"""Unit tests for dlx data objects."""
-
-# TODO: check these through
-
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
 
 
