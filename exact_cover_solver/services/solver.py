@@ -85,7 +85,7 @@ class Solver:
         if not self._algorithm:
             raise AlgorithmNotChosenError
         generic_creator = GenericCreator(universe, set_collection)
-        constrains = generic_creator.create_constrains()
+        constrains = generic_creator.create_problem_data()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
         if not solutions:
@@ -114,7 +114,7 @@ class Solver:
             raise AlgorithmNotChosenError
         pentomino_creator = PentominoCreator()
         pentomino_creator.change_board_size(board_height, board_width)
-        constrains = pentomino_creator.create_constrains()
+        constrains = pentomino_creator.create_problem_data()
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(pentomino_creator, solutions)

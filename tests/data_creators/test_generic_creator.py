@@ -15,7 +15,7 @@ def test_correct_universe_and_set_collection_are_both_parsed():
     universe_input = "1,2,3,4"
     set_collection_input = "1,3;2,4;2,3;1,4"
     gc = GenericCreator(universe_input, set_collection_input)
-    universe, set_collection = gc.create_constrains()
+    universe, set_collection = gc.create_problem_data()
     assert universe == [1, 2, 3, 4]
     assert set_collection == [[1, 3], [2, 4], [2, 3], [1, 4]]
 

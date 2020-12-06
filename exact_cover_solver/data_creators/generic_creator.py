@@ -37,7 +37,7 @@ class GenericCreator(DataCreator):
         self._parse_universe(universe)
         self._parse_set_collection(set_collection)
 
-    def create_constrains(self) -> ProblemData:
+    def create_problem_data(self) -> ProblemData:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:

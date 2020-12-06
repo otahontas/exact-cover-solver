@@ -97,7 +97,7 @@ def test_correct_cells_are_covered(point, width, pentomino, correct_covered, gen
 def test_same_size_universe_is_generated_for_each_board_size(height, width, generator):
     correct_universe_size = 72
     generator.change_board_size(height, width)
-    universe, _ = generator.create_constrains()
+    universe, _ = generator.create_problem_data()
     assert len(universe) == correct_universe_size
 
 
@@ -132,17 +132,17 @@ def test_correct_amounts_of_sets_is_generated_for_3_20_board(
     with patch.object(generator, "_pentominoes") as mocked_pentominoes:
         mocked_pentominoes.as_list.return_value = [pentomino]
         generator.change_board_size(3, 20)
-        _, set_collection = generator.create_constrains()
+        _, set_collection = generator.create_problem_data()
         assert len(set_collection) == correct_amount
 
 
 def test_set_collection_does_not_have_previous_set_collection(generator):
     generator.change_board_size(3, 20)
-    _, set_collection = generator.create_constrains()
+    _, set_collection = generator.create_problem_data()
     first_run_size = len(set_collection)
 
     generator.change_board_size(3, 20)
-    _, set_collection = generator.create_constrains()
+    _, set_collection = generator.create_problem_data()
     second_run_size = len(set_collection)
 
     assert first_run_size == second_run_size

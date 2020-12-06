@@ -108,7 +108,7 @@ class PentominoBoardBrowser:
             solutions_index: Index of the solution to be turned into board.
         """
         solution = self._solutions[solutions_index]
-        _, set_collection = self._pentomino_creator.create_constrains()
+        _, set_collection = self._pentomino_creator.create_problem_data()
         board_height, board_width = self._pentomino_creator.board_size
         placements = [set_collection[set_number] for set_number in solution]
         self._boards.append(

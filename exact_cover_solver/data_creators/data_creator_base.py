@@ -10,21 +10,14 @@ from exact_cover_solver.types import ProblemData
 
 
 class DataCreator(ABC):
-    """Abstract base class for data creator.
-
-    Creator generates universe and collection of sets that together represent some
-    problem reduced to exact cover problem.
-    """
+    """Abstract base class for data creator."""
 
     @abstractmethod
-    def create_constrains(self) -> ProblemData:
+    def create_problem_data(self) -> ProblemData:
         """Abstract creator method that should be implemented by a subclass.
 
         Returns:
-            Tuple containing:
-                - universe, a list of integers representing some set of elements
-                - collection of sets, a list of lists, each made from integers in
-                    the universe
+            Data that can be used to create exact cover problem matrix.
 
         Raises:
             NotImplementedError: Error is raised if this abstract method is called

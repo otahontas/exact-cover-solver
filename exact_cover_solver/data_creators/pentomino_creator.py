@@ -38,7 +38,7 @@ class PentominoCreator(DataCreator):
         self._width: Optional[int] = None
         self._height: Optional[int] = None
 
-    def create_constrains(self) -> ProblemData:
+    def create_problem_data(self) -> ProblemData:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:
