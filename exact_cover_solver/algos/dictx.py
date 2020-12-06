@@ -3,7 +3,7 @@
 from typing import List
 
 from .algox_base import AlgorithmX, Solution
-from exact_cover_solver.data_creators import SetCollection
+from ..data_creators.data_creator_base import SetCollection
 from exact_cover_solver.datastructures.dictmatrix import (
     DictMatrix,
     ColumnDict,

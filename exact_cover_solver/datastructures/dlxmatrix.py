@@ -4,7 +4,7 @@ from typing import Optional
 
 from exact_cover_solver.datastructures import Matrix
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.data_creators import Constrains
+from exact_cover_solver.data_creators.data_creator_base import Constrains
 
 
 class DLXMatrix(Matrix):

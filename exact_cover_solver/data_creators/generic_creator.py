@@ -1,9 +1,6 @@
 """Universe and set collection creator for generic problems."""
 
-from exact_cover_solver.data_creators import (
-    DataCreator,
-    Constrains,
-)
+from .data_creator_base import Constrains, DataCreator
 
 
 class ParsingError(Exception):
@@ -86,11 +83,3 @@ class GenericCreator(DataCreator):
                         f"universe: {self._universe}, set_collection: {set_collection}",
                     )
             self._set_collection.append(parsed_set)
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"GenericCreator.{func}": True
-    for func in dir(GenericCreator)
-    if callable(getattr(GenericCreator, func)) and func.startswith("_")
-}

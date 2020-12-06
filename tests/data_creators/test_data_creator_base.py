@@ -1,5 +1,5 @@
 import pytest
-from exact_cover_solver.data_creators import DataCreator
+from exact_cover_solver.data_creators.data_creator_base import DataCreator
 
 
 def test_not_possible_to_call_constrain_creating_without_real_implementation():

@@ -1,12 +1,7 @@
 """Universe and set collection creator for pentomino problem."""
 from typing import Tuple, List, Optional
 
-from exact_cover_solver.data_creators import (
-    DataCreator,
-    Universe,
-    SetCollection,
-    Constrains,
-)
+from .data_creator_base import Universe, SetCollection, Constrains, DataCreator
 from exact_cover_solver.datastructures.pentomino import Pentominoes, PentominoGrid
 
 Point = Tuple[int, int]
@@ -150,11 +145,3 @@ class PentominoCreator(DataCreator):
         y = cell // self._width
         x = cell - (y * self._width)
         return y, x
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"PentominoCreator.{func}": True
-    for func in dir(PentominoCreator)
-    if callable(getattr(PentominoCreator, func)) and func.startswith("_")
-}
