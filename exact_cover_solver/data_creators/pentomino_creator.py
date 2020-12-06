@@ -1,7 +1,8 @@
 """Universe and set collection creator for pentomino problem."""
 from typing import Tuple, List, Optional
 
-from .data_creator_base import Universe, SetCollection, Constrains, DataCreator
+from .data_creator_base import DataCreator
+from exact_cover_solver.types import Universe, SetCollection, Constrains
 from exact_cover_solver.datastructures.pentomino import Pentominoes, PentominoGrid
 
 Point = Tuple[int, int]

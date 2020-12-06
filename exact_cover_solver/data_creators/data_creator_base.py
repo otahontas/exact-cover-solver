@@ -1,15 +1,12 @@
-"""Abstract base and types for data creator implementations.
+"""Abstract base for data creator implementations.
 
 Data creators are used to generate exact cover data for different types of problems,
 such as finding Pentomino tilings and solving Sudoku.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 
-Universe = List[int]
-SetCollection = List[List[int]]
-Constrains = Tuple[Universe, SetCollection]
+from exact_cover_solver.types import Constrains
 
 
 class DataCreator(ABC):

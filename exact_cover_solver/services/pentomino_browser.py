@@ -1,6 +1,6 @@
 """Classes used to browse pentomino solutions."""
 
-from exact_cover_solver.algos import Solution
+from exact_cover_solver.types import Solution
 from typing import List, Tuple, Callable
 
 from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator

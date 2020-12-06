@@ -1,7 +1,7 @@
 """Dictionary-based 0s and 1s matrix implementation class."""
 
 from exact_cover_solver.datastructures import Matrix
-from exact_cover_solver.data_creators.data_creator_base import SetCollection, Constrains
+from exact_cover_solver.types import SetCollection, Constrains
 from typing import Dict, Set, Optional, Tuple
 
 ColumnDict = Dict[int, Set[int]]

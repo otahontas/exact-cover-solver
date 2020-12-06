@@ -1,6 +1,7 @@
 """Universe and set collection creator for generic problems."""
 
-from .data_creator_base import Constrains, DataCreator
+from .data_creator_base import DataCreator
+from exact_cover_solver.types import Constrains
 
 
 class ParsingError(Exception):

@@ -1,1 +1,1 @@
-"""Package for services implementing program logic."""
+"""Package for services that are used to communicate with program logic."""

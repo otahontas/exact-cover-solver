@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar
 
-from exact_cover_solver.data_creators.data_creator_base import Constrains
+from exact_cover_solver.types import Constrains
 
 
 class Matrix(ABC):

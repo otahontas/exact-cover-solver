@@ -1,4 +1,4 @@
-"""Abstract base and types for algorithm X implementations.
+"""Abstract base for algorithm X implementations.
 
 Algorithm X is a straightforward recursive, nondeterministic, depth-first and
 backtracking algorithm.
@@ -7,8 +7,7 @@ backtracking algorithm.
 from abc import ABC, abstractmethod
 from typing import List, Generic
 from exact_cover_solver.datastructures import GenericMatrix
-
-Solution = List[int]
+from exact_cover_solver.types import Solution
 
 
 class AlgorithmX(ABC, Generic[GenericMatrix]):

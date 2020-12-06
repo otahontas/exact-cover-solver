@@ -2,8 +2,8 @@
 
 from typing import List
 
-from .algox_base import AlgorithmX, Solution
-from ..data_creators.data_creator_base import SetCollection
+from .algox_base import AlgorithmX
+from exact_cover_solver.types import Solution, SetCollection
 from exact_cover_solver.datastructures.dictmatrix import (
     DictMatrix,
     ColumnDict,

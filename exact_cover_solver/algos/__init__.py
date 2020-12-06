@@ -4,4 +4,3 @@ Defines imports for things that can be imported directly from this package.
 """
 from .dlx import DLX
 from .dictx import DictX
-from .algox_base import Solution
