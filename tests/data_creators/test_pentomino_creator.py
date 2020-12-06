@@ -38,7 +38,7 @@ def test_not_correct_size_can_not_be_set(height, width, generator):
 @pytest.mark.parametrize(
     "generator_method_and_params",
     [
-        ("create_constrains", None),
+        ("create_problem_data", None),
         ("_generate_set_collection", None),
         ("_point_to_cell_num", (0, 0)),
         ("cell_num_to_point", 0),
