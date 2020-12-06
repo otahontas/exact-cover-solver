@@ -3,8 +3,10 @@
 from exact_cover_solver.types import Solution
 from typing import List, Tuple, Callable
 
-from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.data_creators import PentominoCreator
 from exact_cover_solver.datastructures.pentomino import Pentominoes
+
+Grid = List[List[str]]
 
 
 class PentominoBoard:
@@ -18,13 +20,13 @@ class PentominoBoard:
         board_width: int,
         placements: List[List[int]],
         convert_cell_num_to_point: Callable,
-    ):
+    ) -> None:
         self._grid = [[""] * board_width for _ in range(board_height)]
         self._place_pentominoes(placements, convert_cell_num_to_point)
 
     def _place_pentominoes(
         self, placements: List[List[int]], convert_cell_num_to_point: Callable
-    ):
+    ) -> None:
         """Add pentominoes to board based on given cell list."""
         for placement in placements:
             pentomino_index, *cells = placement
@@ -34,7 +36,7 @@ class PentominoBoard:
                 self._grid[y][x] = pentomino_name
 
     @property
-    def board(self):
+    def board(self) -> Grid:
         """Get two dimensional array grid and return it."""
         return self._grid
 
@@ -46,7 +48,7 @@ class PentominoBoardBrowser:
         self,
         pentomino_creator: PentominoCreator,
         solutions: List[Solution],
-    ):
+    ) -> None:
         self._pentomino_creator = pentomino_creator
         self._solutions = solutions
         self._boards = []
@@ -54,7 +56,7 @@ class PentominoBoardBrowser:
         self._create_board_on_demand(self._current_board_index)
 
     @property
-    def previous_board(self):
+    def previous_board(self) -> Grid:
         """Generate previous board."""
         if self._current_board_index == 0:
             raise IndexError("Previous board not available")
@@ -62,12 +64,12 @@ class PentominoBoardBrowser:
         return self._boards[self._current_board_index].board
 
     @property
-    def current_board(self):
+    def current_board(self) -> Grid:
         """Generate current board."""
         return self._boards[self._current_board_index].board
 
     @property
-    def next_board(self):
+    def next_board(self) -> Grid:
         """Generate next board."""
         if self._current_board_index > len(self._solutions) - 1:
             raise IndexError("Next board not available")
@@ -119,17 +121,3 @@ class PentominoBoardBrowser:
                 self._pentomino_creator.cell_num_to_point,
             )
         )
-
-
-# Add all private methods to pdoc when generating documentation
-browser_doc = {
-    f"PentominoBoardBrowser.{func}": True
-    for func in dir(PentominoBoardBrowser)
-    if callable(getattr(PentominoBoardBrowser, func)) and func.startswith("_")
-}
-board_doc = {
-    f"PentominoBoard.{func}": True
-    for func in dir(PentominoBoard)
-    if callable(getattr(PentominoBoard, func)) and func.startswith("_")
-}
-__pdoc__ = {**browser_doc, **board_doc}

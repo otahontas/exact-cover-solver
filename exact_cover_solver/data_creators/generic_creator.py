@@ -1,7 +1,7 @@
 """Universe and set collection creator for generic problems."""
 
 from .data_creator_base import DataCreator
-from exact_cover_solver.types import ProblemData
+from exact_cover_solver.types import ProblemData, SubsetCollection, Universe
 
 
 class ParsingError(Exception):
@@ -11,7 +11,7 @@ class ParsingError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, message: str, given_input: str):
+    def __init__(self, message: str, given_input: str) -> None:
         """Initialize error with message."""
         self.message = (
             f"Parsing failed with following input:" f" {given_input}\n{message}"
@@ -48,7 +48,7 @@ class GenericCreator(DataCreator):
         """
         return self._universe, self._set_collection
 
-    def _parse_universe(self, universe) -> None:
+    def _parse_universe(self, universe: Universe) -> None:
         """Parse universe into correct format."""
         try:
             parsed_universe = [int(x.strip()) for x in universe.split(",")]
@@ -64,7 +64,7 @@ class GenericCreator(DataCreator):
 
         self._universe = parsed_universe
 
-    def _parse_set_collection(self, set_collection) -> None:
+    def _parse_set_collection(self, set_collection: SubsetCollection) -> None:
         """Parse set collection into correct format."""
         universe_as_set = set(self._universe)
         self._set_collection = []

@@ -1,6 +1,6 @@
 """Data creator for sudoku problem."""
 from .data_creator_base import DataCreator
-from exact_cover_solver.types import ProblemData
+from exact_cover_solver.types import ProblemData, Subset
 from typing import List, Tuple
 
 Sudoku = List[List[int]]
@@ -11,6 +11,7 @@ class SudokuCreator(DataCreator):
     """Data creator for sudoku problem."""
 
     def create_problem_data(self, sudoku: Sudoku = None) -> ProblemData:
+        """Create universe and subset collection."""
         self._check_that_sudoku_is_valid(sudoku)
         if not sudoku:
             raise ValueError
@@ -38,14 +39,16 @@ class SudokuCreator(DataCreator):
         return universe, subset_collection
 
     @staticmethod
-    def _check_that_sudoku_is_valid(sudoku):
+    def _check_that_sudoku_is_valid(sudoku: Sudoku) -> None:
+        """Check that sudoku is valid sudoku (no duplicates etc.)."""
         if not sudoku:
             raise ValueError("You called sudoku creator without sudoku as argument.")
         # TODO: Add validator checker here
-        # TODO: set some max size here
+        # TODO: set some max size here for sudoku size (4x4, 5x5?)
+        # TODO: set some min size for clues, so amount of solutions does not explode
 
     @staticmethod
-    def _create_subset(value: int, point: Point):
+    def _create_subset(value: int, point: Point) -> Subset:
         """Create subset representing placing a value to point (x,y) in sudoku.
 
         Subset will have four values each representing some constrain:

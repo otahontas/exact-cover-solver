@@ -3,6 +3,7 @@
 Correct solution amounts are from wikipedia:
 https://en.wikipedia.org/wiki/Pentomino#Constructing_rectangular_dimensions
 """
+from typing import List
 
 from exact_cover_solver.services.solver import Solver
 import time
@@ -30,12 +31,55 @@ def generate_pentomino_board_solutions(
         )
 
 
-def main():
+def generate_sudoku_solutions(sudoku: List[List[int]]) -> None:
+    """Test solutions can be created for given sudoku."""
+    for algo in ["DLX", "DictX"]:
+        solver = Solver()
+        solver.algorithm = algo
+
+        start_time = time.time()
+        solutions_amount = len(solver.solve_sudoku_problem(sudoku))
+
+        time_solving = time.time() - start_time
+        rounded_time = round(time_solving, 2)
+        print(
+            f"Algorithm {algo} found {solutions_amount} solutions in {rounded_time} "
+            "seconds."
+        )
+
+
+def main() -> None:
     """Run different type of big input performance tests against algorithms."""
     pentomino_option_sets = [[3, 20, 2], [4, 15, 368], [5, 12, 1010], [6, 10, 2339]]
     print("\n=== Running tests for pentomino boards===")
     for option_set in pentomino_option_sets:
         generate_pentomino_board_solutions(*option_set)
+    print("\n=== Running tests for sudokus===")
+    # see https://www.conceptispuzzles.com/index.aspx?uri=info/article/424
+    hardest_sudoku_ever = [
+        [8, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 3, 6, 0, 0, 0, 0, 0],
+        [0, 7, 0, 0, 9, 0, 2, 0, 0],
+        [0, 5, 0, 0, 0, 7, 0, 0, 0],
+        [0, 0, 0, 0, 4, 5, 7, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 3, 0],
+        [0, 0, 1, 0, 0, 0, 0, 6, 8],
+        [0, 0, 8, 5, 0, 0, 0, 1, 0],
+        [0, 9, 0, 0, 0, 0, 4, 0, 0],
+    ]
+    generate_sudoku_solutions(hardest_sudoku_ever)
+    almost_empty_sudoku = [
+        [1, 0, 0, 0, 0, 0, 0, 0, 2],
+        [0, 2, 0, 0, 0, 0, 0, 1, 0],
+        [0, 0, 3, 0, 0, 0, 4, 0, 0],
+        [0, 0, 0, 4, 8, 3, 0, 0, 0],
+        [0, 0, 0, 1, 5, 2, 0, 0, 0],
+        [0, 0, 0, 7, 9, 6, 0, 0, 0],
+        [0, 0, 6, 0, 0, 0, 7, 0, 0],
+        [0, 9, 0, 0, 0, 0, 0, 8, 0],
+        [8, 0, 0, 0, 0, 0, 0, 0, 9],
+    ]
+    generate_sudoku_solutions(almost_empty_sudoku)
 
 
 if __name__ == "__main__":

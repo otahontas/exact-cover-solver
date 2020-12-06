@@ -1,12 +1,17 @@
 """Solver service, handles different solving modes."""
-from typing import Optional, Union
+from typing import Optional, Union, List
 
+from .pentomino_browser import PentominoBoardBrowser
 from exact_cover_solver.algos import DictX, DLX
-from exact_cover_solver.data_creators.generic_creator import GenericCreator
-from exact_cover_solver.data_creators.pentomino_creator import PentominoCreator
+from exact_cover_solver.data_creators import (
+    GenericCreator,
+    PentominoCreator,
+    SudokuCreator,
+)
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from exact_cover_solver.services.pentomino_browser import PentominoBoardBrowser
+from ..data_creators.sudoku_creator import Sudoku
+from ..types import Solution
 
 
 class AlgorithmNotChosenError(Exception):
@@ -16,7 +21,7 @@ class AlgorithmNotChosenError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, message="Algorithm is not chosen."):
+    def __init__(self, message: str = "Algorithm is not chosen.") -> None:
         """Initialize error with message."""
         self.message = message
         super().__init__(self.message)
@@ -31,7 +36,7 @@ class Solver:
     _algorithms = [DLX, DictX]
     _matrices = {"DLX": DLXMatrix, "DictX": DictMatrix}
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize algorithm variable."""
         self._algorithm: Optional[Union[DLXMatrix, DictMatrix]] = None
 
@@ -118,3 +123,13 @@ class Solver:
         matrix_class = self._matrices[self.algorithm]
         solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(pentomino_creator, solutions)
+
+    def solve_sudoku_problem(self, sudoku: Sudoku) -> List[Solution]:
+        """Generate needed data, solve cover problem and return solutions."""
+        if not self._algorithm:
+            raise AlgorithmNotChosenError
+        sudoku_creator = SudokuCreator()
+        problem_data = sudoku_creator.create_problem_data(sudoku)
+        matrix_class = self._matrices[self.algorithm]
+        solutions = self._algorithm.solve(matrix_class(problem_data))
+        return solutions

@@ -8,7 +8,7 @@ PentominoGrid = List[List[int]]
 class Pentomino:
     """Single pentomino class and methods for generating orientations."""
 
-    def __init__(self, name: str, shape: PentominoGrid):
+    def __init__(self, name: str, shape: PentominoGrid) -> None:
         """Create pentomino.
 
         Args:
@@ -90,7 +90,7 @@ class Pentomino:
 class Pentominoes:
     """Collection of all pentominoes."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Create all pentominoes, save them to list."""
         self._pentomino_list = [
             Pentomino("V", [[0, 0, 1], [0, 0, 1], [1, 1, 1]]),

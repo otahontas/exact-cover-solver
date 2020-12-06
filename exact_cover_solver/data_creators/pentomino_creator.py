@@ -15,7 +15,9 @@ class BoardSizeNotInitializedError(Exception):
         message -- explanation of the error
     """
 
-    def __init__(self, message="Either board height or width is not initialized."):
+    def __init__(
+        self, message: str = "Either board height or width is not initialized."
+    ) -> None:
         """Initialize error with message."""
         self.message = message
         super().__init__(self.message)
