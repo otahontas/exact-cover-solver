@@ -3,7 +3,7 @@
 from typing import List
 
 from .algox_base import AlgorithmX
-from exact_cover_solver.types import Solution, SetCollection
+from exact_cover_solver.types import Solution, SubsetCollection
 from exact_cover_solver.datastructures.dictmatrix import (
     DictMatrix,
     ColumnDict,
@@ -40,7 +40,7 @@ class DictX(AlgorithmX[DictMatrix]):
     def _search(
         self,
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         partial: Solution = None,
     ) -> None:
         """Perform algorithm X recursively and collect solutions.
@@ -84,7 +84,7 @@ class DictX(AlgorithmX[DictMatrix]):
 
     @staticmethod
     def _cover(
-        column_dict: ColumnDict, set_collection: SetCollection, set_index: int
+        column_dict: ColumnDict, set_collection: SubsetCollection, set_index: int
     ) -> List[ColumnValue]:
         """Cover columns in given set.
 
@@ -112,7 +112,7 @@ class DictX(AlgorithmX[DictMatrix]):
     @staticmethod
     def _uncover(
         column_dict: ColumnDict,
-        set_collection: SetCollection,
+        set_collection: SubsetCollection,
         set_index: int,
         removed_columns: List[ColumnValue],
     ) -> None:

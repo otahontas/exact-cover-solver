@@ -1,7 +1,7 @@
 """Universe and set collection creator for generic problems."""
 
 from .data_creator_base import DataCreator
-from exact_cover_solver.types import Constrains
+from exact_cover_solver.types import ProblemData
 
 
 class ParsingError(Exception):
@@ -37,7 +37,7 @@ class GenericCreator(DataCreator):
         self._parse_universe(universe)
         self._parse_set_collection(set_collection)
 
-    def create_constrains(self) -> Constrains:
+    def create_constrains(self) -> ProblemData:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:

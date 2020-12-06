@@ -1,8 +1,8 @@
-"""Universe and set collection creator for pentomino problem."""
+"""Data creator for pentomino problem."""
 from typing import Tuple, List, Optional
 
 from .data_creator_base import DataCreator
-from exact_cover_solver.types import Universe, SetCollection, Constrains
+from exact_cover_solver.types import Universe, SubsetCollection, ProblemData
 from exact_cover_solver.datastructures.pentomino import Pentominoes, PentominoGrid
 
 Point = Tuple[int, int]
@@ -22,7 +22,7 @@ class BoardSizeNotInitializedError(Exception):
 
 
 class PentominoCreator(DataCreator):
-    """Universe and set collection creator for pentomino problem.
+    """Data creator for pentomino problem.
 
     Problem has always same amount of pentominoes, cells on board and same universe,
     but the board size varies.
@@ -34,11 +34,11 @@ class PentominoCreator(DataCreator):
 
     def __init__(self) -> None:
         """Initialize DLX with empty set collection and without dimensions."""
-        self._set_collection: SetCollection = []
+        self._set_collection: SubsetCollection = []
         self._width: Optional[int] = None
         self._height: Optional[int] = None
 
-    def create_constrains(self) -> Constrains:
+    def create_constrains(self) -> ProblemData:
         """Create data representing the pentomino problem in certain board size.
 
         Returns:

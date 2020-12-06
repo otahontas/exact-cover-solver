@@ -6,7 +6,7 @@ such as finding Pentomino tilings and solving Sudoku.
 
 from abc import ABC, abstractmethod
 
-from exact_cover_solver.types import Constrains
+from exact_cover_solver.types import ProblemData
 
 
 class DataCreator(ABC):
@@ -17,7 +17,7 @@ class DataCreator(ABC):
     """
 
     @abstractmethod
-    def create_constrains(self) -> Constrains:
+    def create_constrains(self) -> ProblemData:
         """Abstract creator method that should be implemented by a subclass.
 
         Returns:

@@ -2,13 +2,13 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar
 
-from exact_cover_solver.types import Constrains
+from exact_cover_solver.types import ProblemData
 
 
 class Matrix(ABC):
     """Base class for matrix used by algorithm X implementations."""
 
-    def __init__(self, constrains: Constrains) -> None:
+    def __init__(self, constrains: ProblemData) -> None:
         """Initialize matrix details and call column and node creator methods.
 
         Args:

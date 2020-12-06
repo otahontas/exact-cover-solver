@@ -4,13 +4,13 @@ from typing import Optional
 
 from exact_cover_solver.datastructures import Matrix
 from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.types import Constrains
+from exact_cover_solver.types import ProblemData
 
 
 class DLXMatrix(Matrix):
     """Matrix representation and initialization methods for circular linked lists."""
 
-    def __init__(self, constrains: Constrains) -> None:
+    def __init__(self, constrains: ProblemData) -> None:
         """Initialize linked list based matrix.
 
         Create initial links to column objects, then pass the universe and the set
