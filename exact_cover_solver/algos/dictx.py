@@ -28,17 +28,13 @@ class DictX(AlgorithmX[DictMatrix]):
             matrix: Matrix representation implemented with dictionaries and sets.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         """
-        if not isinstance(matrix, DictMatrix):
-            raise ValueError("Given matrix can't be processed by DictX algorithm.")
         self._solutions.clear()
         column_dict, set_collection = matrix.data
-        self._search(column_dict, set_collection)
+        partial: Solution = []
+        self._search(column_dict, set_collection, partial)
         return self._solutions
 
     def _search(
@@ -54,9 +50,6 @@ class DictX(AlgorithmX[DictMatrix]):
             set_collection: Original set collection used to create the matrix.
             partial: List including rows collected this far in recursion.
         """
-        if not partial:
-            partial: Solution = []
-
         if not column_dict:
             self._solutions.append(partial[:])
             return

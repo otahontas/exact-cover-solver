@@ -21,31 +21,24 @@ class DLX(AlgorithmX[DLXMatrix]):
         recursive method.
 
         Args:
-            matrix: Matrix representation implemented as circular doubly linked lists.
+            matrix: Matrix representation implemented with circular doubly linked lists.
 
         Returns:
-            List of solutions. Each solution is a list of indexes of rows that will
-                exactly cover the given matrix.
-
-        Raises:
-            ValueError: Error is raised if given matrix has wrong type.
+            List of solutions. Solution is a list identifiers of rows that were
+            picked to solution.
         """
-        if not isinstance(matrix, DLXMatrix):
-            raise ValueError("Given matrix can't be processed by DLX algorithm.")
         self._solutions.clear()
-        self._search(matrix)
+        partial: Solution = []
+        self._search(matrix, partial)
         return self._solutions
 
-    def _search(self, matrix: DLXMatrix, partial: Solution = None) -> None:
+    def _search(self, matrix: DLXMatrix, partial: Solution) -> None:
         """Perform algorithm X recursively and collect solutions.
 
         Args:
             matrix: Matrix representation implemented as circular doubly linked lists.
             partial: List including rows collected this far in recursion.
         """
-        if not partial:
-            partial: Solution = []
-
         if matrix.right == matrix:
             self._solutions.append(partial[:])
             return
