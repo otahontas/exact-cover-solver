@@ -1,5 +1,5 @@
 """Pentomino view function and helper functions."""
-import PySimpleGUI as sg
+import PySimpleGUI
 
 pentomino_colors = {
     "V": "yellow",
@@ -20,9 +20,9 @@ pentomino_colors = {
 def create_pentomino_view(pentomino_browser=None, board_to_get="current"):
     if not pentomino_browser:
         return [
-            [sg.Text("Select which pentomino board size you want to use. ")],
+            [PySimpleGUI.Text("Select which pentomino board size you want to use. ")],
             [
-                sg.Text(
+                PySimpleGUI.Text(
                     "Program will generate all the solutions for selected "
                     "size and let's you browse solutions one by one. This is a "
                     "blocking operation that might take a while to perform.",
@@ -31,10 +31,10 @@ def create_pentomino_view(pentomino_browser=None, board_to_get="current"):
                 )
             ],
             [
-                sg.Button("3x20"),
-                sg.Button("4x15"),
-                sg.Button("5x12"),
-                sg.Button("6x10"),
+                PySimpleGUI.Button("3x20"),
+                PySimpleGUI.Button("4x15"),
+                PySimpleGUI.Button("5x12"),
+                PySimpleGUI.Button("6x10"),
             ],
         ]
     if board_to_get == "next":
@@ -43,19 +43,19 @@ def create_pentomino_view(pentomino_browser=None, board_to_get="current"):
         grid = create_grid(pentomino_browser.previous_board)
     else:
         grid = create_grid(pentomino_browser.current_board)
-    header = [sg.Text(f"Solution {pentomino_browser.current_status}")]
+    header = [PySimpleGUI.Text(f"Solution {pentomino_browser.current_status}")]
     buttons = []
     if pentomino_browser.has_previous_board():
-        buttons.append(sg.Button("Previous"))
+        buttons.append(PySimpleGUI.Button("Previous"))
     if pentomino_browser.has_next_board():
-        buttons.append(sg.Button("Next"))
+        buttons.append(PySimpleGUI.Button("Next"))
     return [header, *grid, buttons]
 
 
 def create_grid(grid):
     return [
         [
-            sg.Canvas(
+            PySimpleGUI.Canvas(
                 background_color=pentomino_colors[grid[row][col]],
                 size=(15, 15),
                 border_width=1,

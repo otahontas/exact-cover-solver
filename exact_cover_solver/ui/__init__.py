@@ -1,9 +1,9 @@
 """Package for handling UI-related functionality."""
 from typing import Optional
 
-import PySimpleGUI as sg
+import PySimpleGUI
 
-from ..services.solver import Solver, AlgorithmNotChosenError
+from exact_cover_solver.services.solver import Solver, AlgorithmNotChosenError
 from .pentomino_view import create_pentomino_view
 
 
@@ -14,7 +14,7 @@ class UI:
         """Initialize ui components."""
         self._title = "Exact cover solver"
         self._solver = solver
-        self._window: Optional[sg.Window] = None
+        self._window: Optional[PySimpleGUI.Window] = None
         self._window_width = 600
         self._pentomino_browser = None
         self._pentomino_board_to_get = "current"
@@ -24,7 +24,7 @@ class UI:
         """Start event Loop to process "events" and get the "values" of the inputs."""
         while True:
             event, values = self._window.read()
-            if event == sg.WIN_CLOSED or event == "Exit program":
+            if event == PySimpleGUI.WIN_CLOSED or event == "Exit program":
                 break
             if event == "DLX":
                 self._change_current_algo("DLX")
@@ -34,9 +34,9 @@ class UI:
                 self._pentomino_browser = None
                 self._update_view("Pentomino")
             if event == "Generic":
-                sg.popup("Not implemented yet.")
+                PySimpleGUI.popup("Not implemented yet.")
             if event == "Sudoku":
-                sg.popup("Not implemented yet.")
+                PySimpleGUI.popup("Not implemented yet.")
             if event == "Next":
                 self._pentomino_board_to_get = "next"
                 self._update_view("Pentomino")
@@ -64,22 +64,26 @@ class UI:
         except AlgorithmNotChosenError:
             algo_name = ""
         algos = [
-            [sg.Text("Select algo to use")],
-            [sg.Button("DLX"), sg.Button("DictX")],
+            [PySimpleGUI.Text("Select algo to use")],
+            [PySimpleGUI.Button("DLX"), PySimpleGUI.Button("DictX")],
             [
-                sg.Text("Algorithm currently in use: "),
-                sg.Text(algo_name, size=(15, 1), key="-CURRENT_ALGO-"),
+                PySimpleGUI.Text("Algorithm currently in use: "),
+                PySimpleGUI.Text(algo_name, size=(15, 1), key="-CURRENT_ALGO-"),
             ],
         ]
         problems = [
-            [sg.Text("Select problem to solve")],
-            [sg.Button("Generic"), sg.Button("Pentomino"), sg.Button("Sudoku")],
+            [PySimpleGUI.Text("Select problem to solve")],
+            [
+                PySimpleGUI.Button("Generic"),
+                PySimpleGUI.Button("Pentomino"),
+                PySimpleGUI.Button("Sudoku"),
+            ],
         ]
-        separator = [sg.Canvas(size=(self._window_width, 20))]
+        separator = [PySimpleGUI.Canvas(size=(self._window_width, 20))]
         main = self._create_main_view(problem)
-        footer = [sg.Button("Exit program")]
+        footer = [PySimpleGUI.Button("Exit program")]
         layout = [*algos, *problems, separator, *main, footer]
-        self._window = sg.Window(self._title, layout)
+        self._window = PySimpleGUI.Window(self._title, layout)
 
     def _change_current_algo(self, algo_name: str) -> None:
         self._solver.algorithm = algo_name
@@ -87,7 +91,7 @@ class UI:
 
     def _create_main_view(self, problem=None):
         if not problem:
-            return [[sg.Canvas(size=(self._window_width, 300))]]
+            return [[PySimpleGUI.Canvas(size=(self._window_width, 300))]]
         if problem == "Pentomino":
             if not self._pentomino_browser:
                 return create_pentomino_view()
@@ -101,6 +105,6 @@ class UI:
                 height, width
             )
         except AlgorithmNotChosenError:
-            sg.popup("Please select which algorithm to use.")
+            PySimpleGUI.popup("Please select which algorithm to use.")
             return
         self._update_view("Pentomino")
