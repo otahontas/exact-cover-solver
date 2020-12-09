@@ -5,14 +5,8 @@ stuff_to_analyze = "exact_cover_solver/ performance_tests/ tests/ tasks.py"
 
 
 @task
-def start(ctx):
-    """Start program with cpython."""
-    ctx.run("python3 exact_cover_solver/main.py")
-
-
-@task
 def test(ctx):
-    """Run unit tests. Tests are run against cpython."""
+    """Run unit tests."""
     ctx.run("pytest --cov=exact_cover_solver tests")
 
 
