@@ -1,0 +1,12 @@
+FROM pypy:3.7-7.3.3
+
+WORKDIR /app
+
+# Install package and perf tests via pip
+COPY pyproject.toml .
+COPY exact_cover_solver/ ./exact_cover_solver/
+COPY performance_tests/ ./performance_tests/
+RUN pip install .
+
+# Run performance tests using unbuffered output
+CMD [ "pypy3", "-u", "performance_tests/main.py" ]

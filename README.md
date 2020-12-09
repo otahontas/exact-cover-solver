@@ -8,10 +8,12 @@
 
 Project for Helsinki University's Data structures and algorithms -project course. Repository docs are written in Finnish.
 
-Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä täsmäpeiteongelmaksi kääntyviä ongelmia, mm. pentomino-pelejä. Ohjelmassa on toteutettu Donald Knuthin Algorithm X dancing links -implementaatiolla.
+Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä täsmäpeiteongelmaksi kääntyviä ongelmia, mm. pentomino-pelejä. Ohjelmassa on toteutettu Donald Knuthin Algorithm X dancing links -implementaatiolla sekä hajautuspohjaisella implementaatiolla.
 
 ## Dokumentaatio
 - [Määrittelydokumentti](docs/maarittely.md)
+- [Testausdokumentti](docs/testaus.md)
+- [Toteutusdokumentti](docs/toteutus.md)
 - [Testikattavuusraportti](https://coveralls.io/github/otahontas/exact-cover-solver?branch=master)
 - [Koodin dokumentaatio](https://otahontas.github.io/exact-cover-solver/)
 
@@ -25,39 +27,25 @@ Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä t�
 
 ## Käyttöohje
 
-Ohjelmistovaatimukset:
-- `Pypy 3.7+` / `Python 3.6+`. 
-  - Koska ohjelma on toteutettu puhtaasti pythonilla, Pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti. Esimerkiksi vastausten lukumäärän etsiminen [pentomino-pelissä](https://en.wikipedia.org/wiki/Pentomino) 6x10-kokoisen ruudukolla kestää Pypyllä n. 30 sek ja cpythonilla n. 10 minuuttia (ks. [suorituskykytestit Github actioneista](https://github.com/otahontas/exact-cover-solver/actions?query=workflow%3A%22Performance+tests%22
-))
-  - Pypyn voit ladata [projektin nettisivuilta](https://www.pypy.org/download.html), [pyenvin avulla](https://github.com/pyenv/pyenv) tai todennäköisesti käyttöjärjestelmäsi paketinhallinnasta.
-
-Voit asentaa ja käynnistää ohjelman melko yksinkertaisesti ilman kehittäjätyökaluja seuraavasti (korvaa komennoissa oleva `pypy3` komennolla `python3`, jos et halua / voi käyttää pypyä):
-- Tee virtuaaliympäristö ajamalla `pypy3 -m venv venv`
-- Ota virtuaaliympäristö käyttöön `source venv/bin/activate`
-- Päivitä pip: `pypy3 -m pip install --upgrade pip`
-- Asenna ohjelma `pypy3 -m pip install .`
-- Käynnistä ohjelma `pypy3 exact_cover_solver/main.py`
-- Voit vaihtoehtoisesti ohjelman suorituskykytestit suoraan komentoriviltä komennolla `pypy3 performance_tests/test_pentominoes_with_dlx.py`
+(Tulossa)
 
 ## Kehittäminen
-Ohjelmistovaatimukset:
-- `Poetry 1.0+`, 
-  - Poetryn asennusohjeet ja -skripti löytyvät [projektin sivuilta](https://python-poetry.org/docs/#installation).
-- (Suositeltava): `pyenv` helpottaa python-versioiden hallinnassa
-  - Pyenvin asennusohjeet ja -skripti [projektin githubista](https://github.com/pyenv/pyenv)
 
-### Asennus
+- Kloonaa repo, siirry repon juureen
+- Jos sinulla on Docker, voit asentaa projektin helposti seuraavasti:
+  - komento `docker build . -t exact-cover-solver-dev -f Dockerfile-dev` asentaa kehitysympäristön, jossa voit ajaa testit, coveragen jne. Käynnistä sitten docker-container ajamalla `docker run -it -v $(pwd):/app exact-cover-solver-dev` ja saat listan sopivista komennoista. Komentoja käytetään argumenttina edelliseen eli `docker run -v $(pwd):/app exact-cover-solver-dev <komento>`.
+  - komento `docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests` asentaa ympäristön, jossa voit ajaa pypyllä suorituskykytestit. Testit käynnistät komennolla `docker run exact-cover-solver-perf-tests`. Ks. lisää testeistä [testausdokumentista](docs/testaus.md).
+- Muussa tapauksessa huolehdi, että vaaditut ohjelma on asennettu:
+  1. `Python 3.7+` sekä [pypy3.7](https://www.pypy.org/download.html) 
+    - Ohjelma on toteutettu pythonin standardikirjastolla, joten pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti, jopa 20-kertaisesti. Suorituskykytestit ajetaankin vain pypyä vasten.
+    - Jos sinulla ei ole sopivia versioita, voit joko:
+      - asentaa pypyn [pypy.org -sivulta](https://www.pypy.org/download.html) ja pythonin [python.org -sivulta](https://www.python.org/downloads/) tai
+      - asentaa pypyn ja pythonin eri versiot käyttöjärjestelmäsi paketinhallinnasta (`brew, apt-get...` jne) tai
+      - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.7.9` sekä `pyenv install pypy3.7-7.3.3`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.7.9 pypy3.7-7.3.3`.
+  2. [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.7.9` (tai mitä pythonin versiota käytätkään
 
-Jos koneesi oletus-python on alle python3.6, aseta poetry käyttämään oikeaa python-versiota ajamalla `poetry env use <versio>` (esim `poetry env use 3.6`).
+Asennettuasi projektin tarvitsemat paketit, voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list` (tai dockerilla oletuksena ilman mitään argumentteja).
 
-Asenna projektin tarvitsemat paketit komennolla `poetry install`. Tämän jälkeen voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list`.
-
-### Käynnistys
-Käynnistä ohjelma komennolla:
-
-```
-poetry run invoke start
-```
 
 ### Testit
 
@@ -68,6 +56,10 @@ poetry run invoke test
 ```
 
 Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-muotoisen raportin saat ajamalla `poetry run invoke cov`, minkä jälkeen raportti löytyy polusta `htmlcov/index.html`.
+
+### Suorituskykytestit
+
+(Seuraa myöhemmin)
 
 ### Koodityylit
 
@@ -98,3 +90,4 @@ poetry run invoke docs
 ```
 
 Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
+
