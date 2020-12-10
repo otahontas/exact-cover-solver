@@ -8,9 +8,10 @@
 
 Project for Helsinki University's Data structures and algorithms -project course. Repository docs are written in Finnish.
 
-Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä täsmäpeiteongelmaksi kääntyviä ongelmia, mm. pentomino-pelejä. Ohjelmassa on toteutettu Donald Knuthin Algorithm X dancing links -implementaatiolla sekä hajautuspohjaisella implementaatiolla.
+Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä täsmäpeiteongelmaksi kääntyviä ongelmia, mm. pentomino-pelejä. Ohjelmassa on toteutettu Donald Knuthin Algorithm X dancing links- ja hajautuspohjaisella implementaatiolla.
 
 ## Dokumentaatio
+
 - [Määrittelydokumentti](docs/maarittely.md)
 - [Testausdokumentti](docs/testaus.md)
 - [Toteutusdokumentti](docs/toteutus.md)
@@ -18,6 +19,7 @@ Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä t�
 - [Koodin dokumentaatio](https://otahontas.github.io/exact-cover-solver/)
 
 ## Viikkoraportit
+
 - [Viikko 1](docs/raportit/viikko1.md)
 - [Viikko 2](docs/raportit/viikko2.md)
 - [Viikko 3](docs/raportit/viikko3.md)
@@ -32,20 +34,31 @@ Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä t�
 ## Kehittäminen
 
 - Kloonaa repo, siirry repon juureen
-- Jos sinulla on Docker, voit asentaa projektin helposti seuraavasti:
-  - komento `docker build . -t exact-cover-solver-dev -f Dockerfile-dev` asentaa kehitysympäristön, jossa voit ajaa testit, coveragen jne. Käynnistä sitten docker-container ajamalla `docker run -it -v $(pwd):/app exact-cover-solver-dev` ja saat listan sopivista komennoista. Komentoja käytetään argumenttina edelliseen eli `docker run -v $(pwd):/app exact-cover-solver-dev <komento>`.
-  - komento `docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests` asentaa ympäristön, jossa voit ajaa pypyllä suorituskykytestit. Testit käynnistät komennolla `docker run exact-cover-solver-perf-tests`. Ks. lisää testeistä [testausdokumentista](docs/testaus.md).
-- Muussa tapauksessa huolehdi, että vaaditut ohjelma on asennettu:
-  - `Python 3.7+` sekä [pypy3.7](https://www.pypy.org/download.html) 
-    - Ohjelma on toteutettu pythonin standardikirjastolla, joten pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti, jopa 20-kertaisesti. Suorituskykytestit ajetaankin vain pypyä vasten.
-    - Jos sinulla ei ole sopivia versioita, voit joko:
-      - asentaa pypyn [pypy.org -sivulta](https://www.pypy.org/download.html) ja pythonin [python.org -sivulta](https://www.python.org/downloads/) tai
-      - asentaa pypyn ja pythonin eri versiot käyttöjärjestelmäsi paketinhallinnasta (`brew, apt-get...` jne) tai
-      - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.7.9` sekä `pyenv install pypy3.7-7.3.3`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.7.9 pypy3.7-7.3.3`.
-  - [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.7.9` (tai mitä pythonin versiota käytätkään)
 
-Asennettuasi projektin tarvitsemat paketit, voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list` (tai dockerilla oletuksena ilman mitään argumentteja).
+### Docker
 
+- Rakenna kehitysympäristö docker-imageen komennolla: `docker build . -t exact-cover-solver-dev -f Dockerfile-dev`
+- Käynnistä docker-container ajamalla `docker run -it -v $(pwd):/app exact-cover-solver-dev` ja saat listan sopivista komennoista. Repon kansio kiinnitetään dockeriin, jotta mahdolliset muutokset (coverage tms) päivttyvät kansioon.
+- Komentoja käytetään argumenttina edelliseen eli `docker run -v $(pwd):/app exact-cover-solver-dev <komento>`.
+- Suorituskykytestit tulee ajaa pypyllä. Ympäristön tähän voit rakentaa ja testit ajaa seuraavasti:
+
+```
+docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests && docker run exact-cover-solver-perf-tests
+```
+  
+### Ilman Dockeria
+
+Huolehdi, että vaaditut ohjelma on asennettu:
+
+- `Python 3.7+` sekä [pypy3.7](https://www.pypy.org/download.html)
+  - Ohjelma on toteutettu pythonin standardikirjastolla, joten pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti, jopa 20-kertaisesti. Suorituskykytestit ajetaankin vain pypyä vasten.
+  - Jos sinulla ei ole sopivia versioita, voit joko:
+    - asentaa pypyn [pypy.org -sivulta](https://www.pypy.org/download.html) ja pythonin [python.org -sivulta](https://www.python.org/downloads/) tai
+    - asentaa pypyn ja pythonin eri versiot käyttöjärjestelmäsi paketinhallinnasta (`brew, apt-get...` jne) tai
+    - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.7.9` sekä `pyenv install pypy3.7-7.3.3`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.7.9 pypy3.7-7.3.3`.
+- [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.7.9` (tai mitä pythonin versiota käytätkään)
+
+Asennettuasi projektin tarvitsemat paketit jommalla kummalla tavalla, voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list` (tai dockerilla yllä mainitulla komennolla).
 
 ### Testit
 
@@ -63,7 +76,6 @@ Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-mu
 
 ### Koodityylit
 
-
 Tarkista koodityylit komennolla:
 
 ```
@@ -71,6 +83,7 @@ poetry run invoke lint
 ```
 
 Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html) - ja [black](https://black.readthedocs.io/en/stable/) -työkaluilla. Tarkemmin nämä sisältävät tarkistukset:
+
 - [pep8-tyyliohjeiden](https://www.python.org/dev/peps/pep-0008/) noudattamisesta
 - virheistä, turhista importeista jne
 - koodin liiallisesta haarautumisesta / kompleksisuudesta
@@ -90,4 +103,3 @@ poetry run invoke docs
 ```
 
 Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
-
