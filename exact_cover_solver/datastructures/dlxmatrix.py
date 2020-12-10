@@ -2,8 +2,8 @@
 
 from typing import Optional
 
-from exact_cover_solver.datastructures import Matrix
-from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
+from .matrix_base import Matrix
+from .dlxdataobjects import DataObject, ColumnObject
 from exact_cover_solver.types import ProblemData
 
 
@@ -80,11 +80,3 @@ class DLXMatrix(Matrix):
 
             previous.right = first
             first.left = previous
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"DLXMatrix.{func}": True
-    for func in dir(DLXMatrix)
-    if callable(getattr(DLXMatrix, func)) and func.startswith("_")
-}

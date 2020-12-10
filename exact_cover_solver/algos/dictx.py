@@ -4,11 +4,7 @@ from typing import List
 
 from .algox_base import AlgorithmX
 from exact_cover_solver.types import Solution, SubsetCollection
-from exact_cover_solver.datastructures.dictmatrix import (
-    DictMatrix,
-    ColumnDict,
-    ColumnValue,
-)
+from exact_cover_solver.datastructures import DictMatrix, ColumnDict, ColumnValue
 
 
 class DictX(AlgorithmX[DictMatrix]):

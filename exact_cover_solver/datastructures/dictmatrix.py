@@ -1,6 +1,6 @@
 """Dictionary-based 0s and 1s matrix implementation class."""
 
-from exact_cover_solver.datastructures import Matrix
+from .matrix_base import Matrix
 from exact_cover_solver.types import SubsetCollection, ProblemData
 from typing import Dict, Set, Optional, Tuple
 
@@ -45,11 +45,3 @@ class DictMatrix(Matrix):
             Tuple containing created matrix and set collection used to create matrix.
         """
         return self._columns, self._set_collection
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"DictMatrix.{func}": True
-    for func in dir(DictMatrix)
-    if callable(getattr(DictMatrix, func)) and func.startswith("_")
-}

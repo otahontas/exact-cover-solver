@@ -5,7 +5,7 @@ https://en.wikipedia.org/wiki/Pentomino#Constructing_rectangular_dimensions
 """
 from typing import List
 
-from exact_cover_solver.services.solver import Solver
+from exact_cover_solver import Solver
 import time
 
 

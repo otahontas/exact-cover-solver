@@ -133,11 +133,3 @@ class Pentominoes:
     def amount(self) -> int:
         """Get amount of pentominoes in this collection."""
         return len(self._pentomino_list)
-
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"Pentomino.{func}": True
-    for func in dir(Pentomino)
-    if callable(getattr(Pentomino, func)) and func.startswith("_")
-}

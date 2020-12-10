@@ -4,7 +4,7 @@ from exact_cover_solver.types import Solution
 from typing import List, Tuple, Callable
 
 from exact_cover_solver.data_creators import PentominoCreator
-from exact_cover_solver.datastructures.pentomino import Pentominoes
+from exact_cover_solver.datastructures import Pentominoes
 
 Grid = List[List[str]]
 

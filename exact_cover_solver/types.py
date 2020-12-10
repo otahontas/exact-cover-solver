@@ -14,7 +14,7 @@ Types used:
   solution.
 - ProblemData: Data needed to solve an exact cover problem.
 """
-#
+
 from typing import List, Tuple, TypeVar, Union
 
 UniverseElement = TypeVar("UniverseElement")

@@ -4,8 +4,7 @@ from typing import List
 
 from .algox_base import AlgorithmX
 from exact_cover_solver.types import Solution
-from exact_cover_solver.datastructures.dlxdataobjects import ColumnObject
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
+from exact_cover_solver.datastructures import DLXMatrix, ColumnObject
 
 
 class DLX(AlgorithmX[DLXMatrix]):

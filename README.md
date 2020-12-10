@@ -36,13 +36,13 @@ Exact cover solver -ohjelma ratkoo np-täydellisen täsmäpeiteongelman sekä t�
   - komento `docker build . -t exact-cover-solver-dev -f Dockerfile-dev` asentaa kehitysympäristön, jossa voit ajaa testit, coveragen jne. Käynnistä sitten docker-container ajamalla `docker run -it -v $(pwd):/app exact-cover-solver-dev` ja saat listan sopivista komennoista. Komentoja käytetään argumenttina edelliseen eli `docker run -v $(pwd):/app exact-cover-solver-dev <komento>`.
   - komento `docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests` asentaa ympäristön, jossa voit ajaa pypyllä suorituskykytestit. Testit käynnistät komennolla `docker run exact-cover-solver-perf-tests`. Ks. lisää testeistä [testausdokumentista](docs/testaus.md).
 - Muussa tapauksessa huolehdi, että vaaditut ohjelma on asennettu:
-  1. `Python 3.7+` sekä [pypy3.7](https://www.pypy.org/download.html) 
+  - `Python 3.7+` sekä [pypy3.7](https://www.pypy.org/download.html) 
     - Ohjelma on toteutettu pythonin standardikirjastolla, joten pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti, jopa 20-kertaisesti. Suorituskykytestit ajetaankin vain pypyä vasten.
     - Jos sinulla ei ole sopivia versioita, voit joko:
       - asentaa pypyn [pypy.org -sivulta](https://www.pypy.org/download.html) ja pythonin [python.org -sivulta](https://www.python.org/downloads/) tai
       - asentaa pypyn ja pythonin eri versiot käyttöjärjestelmäsi paketinhallinnasta (`brew, apt-get...` jne) tai
       - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.7.9` sekä `pyenv install pypy3.7-7.3.3`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.7.9 pypy3.7-7.3.3`.
-  2. [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.7.9` (tai mitä pythonin versiota käytätkään
+  - [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.7.9` (tai mitä pythonin versiota käytätkään)
 
 Asennettuasi projektin tarvitsemat paketit, voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list` (tai dockerilla oletuksena ilman mitään argumentteja).
 
