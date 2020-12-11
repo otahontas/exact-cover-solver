@@ -4,7 +4,6 @@ from typing import Optional, Union, List
 from .pentomino_browser import PentominoBoardBrowser
 from exact_cover_solver.algos import DictX, DLX
 from exact_cover_solver.data_creators import (
-    GenericCreator,
     PentominoCreator,
     SudokuCreator,
 )
@@ -87,21 +86,7 @@ class Solver:
         Returns:
             Solution formatted as printable string.
         """
-        if not self._algorithm:
-            raise AlgorithmNotChosenError
-        generic_creator = GenericCreator(universe, set_collection)
-        constrains = generic_creator.create_problem_data()
-        matrix_class = self._matrices[self.algorithm]
-        solutions = self._algorithm.solve(matrix_class(constrains))
-        if not solutions:
-            return "No solutions found with given universe and set collection."
-        formatted_solution = (
-            f"For given set_collection: {set_collection} you can "
-            f"create exact cover solution by following ways:\n"
-        )
-        for solution in solutions:
-            formatted_solution = f"{formatted_solution}Choose rows: {solution}\n"
-        return formatted_solution
+        pass
 
     def solve_pentomino_problem(
         self, board_height: int, board_width: int

@@ -10,18 +10,18 @@ from exact_cover_solver.types import ProblemData
 class DLXMatrix(Matrix):
     """Matrix representation and initialization methods for circular linked lists."""
 
-    def __init__(self, constrains: ProblemData) -> None:
+    def __init__(self, problem_data: ProblemData) -> None:
         """Initialize linked list based matrix.
 
         Create initial links to column objects, then pass the universe and the set
         collection constrains to parent initializer.
 
         Args:
-            constrains: Tuple containing universe and set collection.
+            problem_data: Tuple containing universe and set collection.
         """
         self.right: Optional[ColumnObject] = None
         self.left: Optional[ColumnObject] = None
-        super().__init__(constrains)
+        super().__init__(problem_data)
 
     def _create(self) -> None:
         """Call creator methods for different linked list data types."""
@@ -54,7 +54,7 @@ class DLXMatrix(Matrix):
                 correct_column = correct_column.right
             return correct_column
 
-        for set_number, set_elements in enumerate(self._set_collection):
+        for set_number, set_elements in enumerate(self._subset_collection):
             previous = None
             first = None
 

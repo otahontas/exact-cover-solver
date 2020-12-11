@@ -11,7 +11,7 @@ ColumnValue = Set[int]
 class DictMatrix(Matrix):
     """Matrix representation based on dictionaries and sets."""
 
-    def __init__(self, constrains: ProblemData) -> None:
+    def __init__(self, problem_data: ProblemData) -> None:
         """Initialize dictionary based matrix.
 
         Create initial variable for matrix, then pass the universe and the set
@@ -21,10 +21,10 @@ class DictMatrix(Matrix):
         column) and each row where element is presented collected to set as values.
 
         Args:
-            constrains: Tuple containing universe and set collection.
+            problem_data: Tuple containing universe and set collection.
         """
         self._columns: Optional[ColumnDict] = None
-        super().__init__(constrains)
+        super().__init__(problem_data)
 
     def _create(self) -> None:
         """Create dict with sets representing elements in each set in collection.
@@ -33,7 +33,7 @@ class DictMatrix(Matrix):
         to internal dictionary.
         """
         self._columns = {element: set() for element in self._universe}
-        for set_index, set_elements in enumerate(self._set_collection):
+        for set_index, set_elements in enumerate(self._subset_collection):
             for element in set_elements:
                 self._columns[element].add(set_index)
 
@@ -44,4 +44,4 @@ class DictMatrix(Matrix):
         Returns:
             Tuple containing created matrix and set collection used to create matrix.
         """
-        return self._columns, self._set_collection
+        return self._columns, self._subset_collection
