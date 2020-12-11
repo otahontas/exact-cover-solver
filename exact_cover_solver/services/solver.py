@@ -10,7 +10,7 @@ from exact_cover_solver.data_creators import (
 )
 from exact_cover_solver.datastructures.dictmatrix import DictMatrix
 from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from ..data_creators.sudoku_creator import Sudoku
+from ..data_creators.sudoku_creator import SudokuInput
 from ..types import Solution
 
 
@@ -124,7 +124,7 @@ class Solver:
         solutions = self._algorithm.solve(matrix_class(constrains))
         return PentominoBoardBrowser(pentomino_creator, solutions)
 
-    def solve_sudoku_problem(self, sudoku: Sudoku) -> List[Solution]:
+    def solve_sudoku_problem(self, sudoku: SudokuInput) -> List[Solution]:
         """Generate needed data, solve cover problem and return solutions."""
         if not self._algorithm:
             raise AlgorithmNotChosenError
