@@ -4,8 +4,8 @@ Types used:
 - UniverseElement: A single, unique element of universe. Could be any sort of object
   that can exist inside a mathematical set, e.g. int 1, tuple (1,2) or str "Cheese".
 - Universe: A collection of universe elements.
-- SubsetName: Name of the subset, should uniquely identify subset from other subsets.
-  Name should be immutable and hence hashable.
+- SubsetId: Id of the subset, should uniquely identify subset from other subsets and
+  be hashable.
 - Subset: A collection of universe elements.
 - SubsetCollection: A collection of subsets.
 - Solution: List of SubsetNames that identify which disjoint subsets were picked to
@@ -13,14 +13,12 @@ Types used:
 - ProblemData: Data needed to create an exact cover problem matrix.
 """
 
-from typing import Dict, List, Tuple, TypeVar, Hashable, Union
+from typing import Dict, List, Tuple, TypeVar, Hashable
 
-# TODO: create better type for UniverseElement. It should allow any type and allow
-# multiple types in same list (like str, tuple)
-UniverseElement = Union[str, Tuple, int]
+UniverseElement = TypeVar("UniverseElement")
 Universe = List[UniverseElement]
-SubsetName = TypeVar("SubsetName", bound=Hashable)
+SubsetId = TypeVar("SubsetId", bound=Hashable)
 Subset = List[UniverseElement]
-SubsetCollection = Dict[SubsetName, List[Subset]]
-Solution = List[SubsetName]
+SubsetCollection = Dict[SubsetId, Subset]
+Solution = List[SubsetId]
 ProblemData = Tuple[Universe, SubsetCollection]
