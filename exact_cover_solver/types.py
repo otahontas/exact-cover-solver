@@ -13,12 +13,14 @@ Types used:
 - ProblemData: Data needed to create an exact cover problem matrix.
 """
 
-from typing import Dict, List, Tuple, TypeVar, Hashable
+from typing import Dict, List, Tuple, TypeVar, Hashable, Union
 
-UniverseElement = TypeVar("UniverseElement")
+# TODO: create better type for UniverseElement. It should allow any type and allow
+# multiple types in same list (like str, tuple)
+UniverseElement = Union[str, Tuple, int]
 Universe = List[UniverseElement]
 SubsetName = TypeVar("SubsetName", bound=Hashable)
-Subset = Dict[SubsetName, List[UniverseElement]]
-SubsetCollection = List[Subset]
+Subset = List[UniverseElement]
+SubsetCollection = Dict[SubsetName, List[Subset]]
 Solution = List[SubsetName]
 ProblemData = Tuple[Universe, SubsetCollection]
