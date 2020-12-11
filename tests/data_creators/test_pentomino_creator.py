@@ -16,7 +16,7 @@ def test_generator_is_initialized_with_correct_attributes(creator):
 
 
 @pytest.mark.parametrize("height, width", [(6, 10), (5, 12), (4, 15), (3, 20)])
-def test_problem_data_can_be_created_with_correct_sizes(height, width, creator):
+def test_problem_data_returns_correct_values_with_correct_sizes(height, width, creator):
     fake_universe = [1, 2]
     fake_subset_collection = {1: [1], 2: [2]}
     mocked_create_universe = MagicMock(return_value=fake_universe)
@@ -27,8 +27,8 @@ def test_problem_data_can_be_created_with_correct_sizes(height, width, creator):
     universe, subset_collection = creator.create_problem_data(height, width)
     assert universe == fake_universe
     assert subset_collection == fake_subset_collection
-    assert mocked_create_universe.call_args == ((height, width),)
-    assert mocked_create_subset_collection.call_args == ((height, width),)
+    assert mocked_create_universe.call_count == 1
+    assert mocked_create_subset_collection.call_count == 1
 
 
 @pytest.mark.parametrize("height, width", [(2, 20), (3, 19), (4, 20)])
