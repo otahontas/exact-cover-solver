@@ -82,13 +82,13 @@ class PentominoCreator(DataCreator):
                 for row in range(height + 1 - pentomino_height):
                     for col in range(width + 1 - pentomino_width):
                         point = (col, row)
-                        covered = self._solve_covered_cells(orientation, point)
+                        covered = self._solve_covered_points(orientation, point)
                         subset_collection[subset_id] = [pentomino.name, *covered]
                         subset_id += 1
         return subset_collection
 
     @staticmethod
-    def _solve_covered_cells(pentomino: PentominoGrid, start: Point) -> List[Point]:
+    def _solve_covered_points(pentomino: PentominoGrid, start: Point) -> List[Point]:
         """Find points this pentomino covers.
 
         Args:

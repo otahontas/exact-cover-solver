@@ -116,5 +116,5 @@ def test_correct_amounts_of_sets_is_generated_for_3_20_board(
 )
 def test_correct_cells_are_covered(start, pentomino_grid, correct_covered, creator):
     """Test cell coverage with different pentominoes from different starting points."""
-    covered = creator._solve_covered_cells(pentomino_grid, start)
+    covered = creator._solve_covered_points(pentomino_grid, start)
     assert covered == correct_covered
