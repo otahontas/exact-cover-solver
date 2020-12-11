@@ -1,14 +1,13 @@
 """Data creator for pentomino problem."""
 from typing import Tuple, List
 
-from .data_creator_base import DataCreator
 from exact_cover_solver.types import Universe, SubsetCollection, ProblemData
 from exact_cover_solver.datastructures.pentomino import Pentominoes, PentominoGrid
 
 Point = Tuple[int, int]
 
 
-class PentominoCreator(DataCreator):
+class PentominoCreator:
     """Data creator for pentomino problem.
 
     Attributes:

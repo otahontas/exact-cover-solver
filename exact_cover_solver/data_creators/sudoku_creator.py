@@ -1,13 +1,18 @@
 """Data creator for sudoku problem."""
-from .data_creator_base import DataCreator
-from exact_cover_solver.types import ProblemData, Subset
+from exact_cover_solver.types import (
+    ProblemData,
+    Subset,
+    Universe,
+    SubsetCollection,
+    SubsetId,
+)
 from typing import List, Tuple
 
 SudokuInput = List[List[int]]
 Point = Tuple[int, int]
 
 
-class SudokuCreator(DataCreator):
+class SudokuCreator:
     """Data creator for sudoku problem."""
 
     def create_problem_data(self, sudoku_input: SudokuInput) -> ProblemData:

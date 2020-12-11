@@ -1,6 +1,5 @@
 """Universe and set collection creator for generic problems."""
 
-from .data_creator_base import DataCreator
 from exact_cover_solver.types import ProblemData, SubsetCollection, Universe
 
 
@@ -19,7 +18,7 @@ class ParsingError(Exception):
         super().__init__(self.message)
 
 
-class GenericCreator(DataCreator):
+class GenericCreator:
     """Universe and set collection creator for pentomino problem.
 
     Problem has always same amount of pentominoes, cells on board and same universe,
