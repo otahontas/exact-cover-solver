@@ -15,7 +15,6 @@ def solver():
 def solver_method_and_params(request):
     method_name, *params = request.param
     method = getattr(Solver(), method_name)
-    print(params)
     return method, params
 
 

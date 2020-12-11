@@ -45,7 +45,8 @@ class Matrix(ABC):
         if len(universe_set) != len(universe):
             raise ValueError("Universe should only have unique elements.")
         for subset in subset_collection.values():
-            print(subset)
+            if not subset:
+                raise ValueError("Empty subsets are not allowed.")
             if len(set(subset)) != len(subset):
                 raise ValueError("Subset should only have unique elements.")
             if any(element not in universe_set for element in subset):

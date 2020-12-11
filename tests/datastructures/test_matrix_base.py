@@ -50,6 +50,7 @@ def test_validation_passes_with_valid_data(problem_data):
         (([], {}), "empty universe"),
         (([1, 2], {}), "empty subset collection"),
         (([1, 1, 2], {}), "Universe should only have unique elements"),
+        (([1, 2], {1: []}), "Empty subsets are not allowed."),
         (([1, 2], {1: [1, 1]}), "Subset should only have unique elements"),
         (([1, 2], {1: [1, 2], 2: [3]}), "are not elements of the universe"),
     ],
