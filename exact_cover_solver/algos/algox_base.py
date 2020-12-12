@@ -7,7 +7,7 @@ backtracking algorithm.
 from abc import ABC, abstractmethod
 from typing import List, Generic
 from exact_cover_solver.datastructures import GenericMatrix
-from exact_cover_solver.types import Solution, UniverseElement
+from exact_cover_solver.types import Solution
 
 
 class AlgorithmX(ABC, Generic[GenericMatrix]):
