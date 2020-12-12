@@ -2,7 +2,7 @@
 from typing import Union, Optional
 
 from .matrix_base import Matrix
-from .dlxdataobjects import DataObject, ColumnObject, RootObject
+from .dlxdataobjects import RootObject, ColumnObject, DataObject
 from exact_cover_solver.types import ProblemData, UniverseElement
 
 
