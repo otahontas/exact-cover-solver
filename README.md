@@ -45,7 +45,7 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
 ```
 docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests && docker run exact-cover-solver-perf-tests
 ```
-  
+
 ### Ilman Dockeria
 
 Huolehdi, että vaaditut ohjelma on asennettu:
@@ -76,21 +76,22 @@ Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-mu
 
 ### Koodityylit
 
-Tarkista koodityylit komennolla:
+Tarkista koodityylit ja tyypitykset komennolla:
 
 ```
 poetry run invoke lint
 ```
 
-Koodityylit tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html) - ja [black](https://black.readthedocs.io/en/stable/) -työkaluilla. Tarkemmin nämä sisältävät tarkistukset:
+Koodityylit ja tyypitykset tarkistetaan [flake8](https://flake8.pycqa.org/en/latest/index.html) -, [black](https://black.readthedocs.io/en/stable/) ja [mypy](http://mypy-lang.org/) -työkaluilla. Tarkemmin nämä sisältävät tarkistukset:
 
 - [pep8-tyyliohjeiden](https://www.python.org/dev/peps/pep-0008/) noudattamisesta
 - virheistä, turhista importeista jne
 - koodin liiallisesta haarautumisesta / kompleksisuudesta
 - black-formatoijan tyyliohjeiden noudattamisesta
 - [Google Python Style Guiden](https://www.python.org/dev/peps/pep-0257/) noudattamisesta docstringeissä (vain lähdekoodille, testeille ei ajeta docstring-tarkastuksia)
+- virheistä staattisen tyypityksen kanssa
 
-Blackin huomaamat virheet voi korjata automaattisesti ajamalla `poetry run invoke list`. Flaken huomaamat virheet täytyy sen sijaan korjata käsin.
+Blackin huomaamat virheet voi korjata automaattisesti ajamalla `poetry run invoke list`. Flaken ja mypyn huomaamat virheet täytyy sen sijaan korjata käsin.
 
 ### API-dokumentaatio
 
