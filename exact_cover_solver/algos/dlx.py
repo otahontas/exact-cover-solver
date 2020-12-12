@@ -1,10 +1,10 @@
 """Dancing links based implementation for algorithm X."""
 
-from typing import List
+from typing import List, Union
 
 from .algox_base import AlgorithmX
 from exact_cover_solver.types import Solution
-from exact_cover_solver.datastructures import DLXMatrix, ColumnObject
+from exact_cover_solver.datastructures import DLXMatrix, ColumnObject, RootObject
 
 
 class DLX(AlgorithmX[DLXMatrix]):
@@ -29,35 +29,35 @@ class DLX(AlgorithmX[DLXMatrix]):
         """
         self._solutions.clear()
         partial: Solution = []
-        self._search(matrix, partial)
+        self._search(matrix.root, partial)
         return self._solutions
 
-    def _search(self, matrix: DLXMatrix, partial: Solution) -> None:
+    def _search(self, root: RootObject, partial: Solution) -> None:
         """Perform algorithm X recursively and collect solutions.
 
         Args:
-            matrix: Matrix representation implemented as circular doubly linked lists.
+            root: Matrix representation implemented as circular doubly linked lists.
             partial: List including rows collected this far in recursion.
         """
-        if matrix.right == matrix:
+        if isinstance(root.right, RootObject) and root.right is root:
             self._solutions.append(partial[:])
             return
 
-        column = self._choose_optimal_column_object(matrix)
+        column = self._choose_optimal_column_object(root)
 
-        if not column.size:
+        if column.size == 0:
             return
 
         self._cover(column)
 
         row = column.down
-        while row != column:
-            partial.append(row.row)
+        while not isinstance(row, ColumnObject) and row != column:
+            partial.append(row.id)
             node = row.right
             while node != row:
                 self._cover(node.column)
                 node = node.right
-            self._search(matrix, partial)
+            self._search(root, partial)
             node = row.left
             while node != row:
                 self._uncover(node.column)
@@ -67,26 +67,31 @@ class DLX(AlgorithmX[DLXMatrix]):
         self._uncover(column)
 
     @staticmethod
-    def _choose_optimal_column_object(matrix: DLXMatrix) -> ColumnObject:
+    def _choose_optimal_column_object(root: RootObject) -> ColumnObject:
         """Find column with smallest number of 1s to minimize the branching factor.
 
         Args:
-            matrix: Matrix representation implemented as circular doubly linked lists.
+            root: Matrix representation implemented as circular doubly linked lists.
 
         Returns:
             Linked list column node representing column with smallest number of 1s.
+
+        Raises:
+            ValueError: if not possible to find any column from given root
         """
-        current_column = matrix.right
-        column = current_column
+        current_column: Union[ColumnObject, RootObject] = root.right
+        if isinstance(current_column, RootObject):
+            raise ValueError("No columns reachable from given root")
+        optimal_column: ColumnObject = current_column
         size = current_column.size
-        while current_column != matrix:
-            column, size = (
+        while not isinstance(current_column, RootObject):
+            optimal_column, size = (
                 (current_column, current_column.size)
                 if current_column.size < size
-                else (column, size)
+                else (optimal_column, size)
             )
             current_column = current_column.right
-        return column
+        return optimal_column
 
     @staticmethod
     def _cover(column: ColumnObject) -> None:
@@ -101,7 +106,7 @@ class DLX(AlgorithmX[DLXMatrix]):
         """
         column.detach()
         row = column.down
-        while row != column:
+        while not isinstance(row, ColumnObject) and row != column:
             node = row.right
             while node != row:
                 node.detach()
@@ -119,7 +124,7 @@ class DLX(AlgorithmX[DLXMatrix]):
             column: Linked list column node.
         """
         row = column.up
-        while row != column:
+        while not isinstance(row, ColumnObject) and row != column:
             node = row.left
             while node != row:
                 node.attach()
