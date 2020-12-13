@@ -1,7 +1,7 @@
 """Solver service, handles different solving modes."""
 from typing import List
 
-from .pentomino_browser import PentominoBoardBrowser
+from exact_cover_solver.translator import Translator, PentominoBoard
 from exact_cover_solver.algos import DictX, DLX
 from exact_cover_solver.data_creators import (
     PentominoCreator,
@@ -31,13 +31,12 @@ class Solver:
             List of solutions, each solution having a list of ids identifying which
             subsets were picked to solution.
         """
-        solutions = self._solve(algorithm, problem_data)
         # TODO: return solutions formatted with original data
-        return solutions
+        return self._solve(algorithm, problem_data)
 
     def solve_pentomino_problem(
         self, algorithm: str, board_height: int, board_width: int
-    ) -> PentominoBoardBrowser:
+    ) -> List[PentominoBoard]:
         """Generate needed data, solve cover problem and return solution browser.
 
         Args:
@@ -50,8 +49,11 @@ class Solver:
         """
         pentomino_creator = PentominoCreator()
         problem_data = pentomino_creator.create_problem_data(board_height, board_width)
+        _, subset_collection = problem_data
         solutions = self._solve(algorithm, problem_data)
-        return PentominoBoardBrowser(pentomino_creator, solutions)
+        return Translator().to_pentomino_boards(
+            solutions, board_height, board_width, subset_collection
+        )
 
     def solve_sudoku_problem(
         self, algorithm: str, sudoku_input: SudokuInput
@@ -69,9 +71,8 @@ class Solver:
         """
         sudoku_creator = SudokuCreator()
         problem_data = sudoku_creator.create_problem_data(sudoku_input)
-        solutions = self._solve(algorithm, problem_data)
         # TODO: return sudokuboard browser
-        return solutions
+        return self._solve(algorithm, problem_data)
 
     @staticmethod
     def _solve(algorithm: str, problem_data: ProblemData) -> List[Solution]:

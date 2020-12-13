@@ -15,13 +15,12 @@ def generate_pentomino_board_solutions(
     """Test correct amount of solutions is created with given board."""
     for algo in ["DLX", "DictX"]:
         solver = Solver()
-        solver.algorithm = algo
 
         start_time = time.time()
-        browser = solver.solve_pentomino_problem(board_height, board_width)
+        boards = solver.solve_pentomino_problem(algo, board_height, board_width)
 
         time_solving = time.time() - start_time
-        solutions_amount = len(browser.all_solutions)
+        solutions_amount = len(boards)
         rounded_time = round(time_solving, 2)
 
         assert solutions_amount == correct_amount
@@ -35,10 +34,9 @@ def generate_sudoku_solutions(sudoku: List[List[int]]) -> None:
     """Test solutions can be created for given sudoku."""
     for algo in ["DLX", "DictX"]:
         solver = Solver()
-        solver.algorithm = algo
 
         start_time = time.time()
-        solutions_amount = len(solver.solve_sudoku_problem(sudoku))
+        solutions_amount = len(solver.solve_sudoku_problem(algo, sudoku))
 
         time_solving = time.time() - start_time
         rounded_time = round(time_solving, 2)
