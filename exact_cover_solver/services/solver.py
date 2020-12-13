@@ -1,7 +1,7 @@
 """Solver service, handles different solving modes."""
 from typing import List
 
-from exact_cover_solver.translator import Translator, PentominoBoard
+from exact_cover_solver.translator import Translator, PentominoBoard, SudokuBoard
 from exact_cover_solver.algos import DictX, DLX
 from exact_cover_solver.data_creators import (
     PentominoCreator,
@@ -57,7 +57,7 @@ class Solver:
 
     def solve_sudoku_problem(
         self, algorithm: str, sudoku_input: SudokuInput
-    ) -> List[Solution]:
+    ) -> List[SudokuBoard]:
         """Generate needed data, solve cover problem and return solutions.
 
         Args:
@@ -71,8 +71,8 @@ class Solver:
         """
         sudoku_creator = SudokuCreator()
         problem_data = sudoku_creator.create_problem_data(sudoku_input)
-        # TODO: return sudokuboard browser
-        return self._solve(algorithm, problem_data)
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_sudoku_boards(solutions)
 
     @staticmethod
     def _solve(algorithm: str, problem_data: ProblemData) -> List[Solution]:

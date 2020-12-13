@@ -36,9 +36,10 @@ def generate_sudoku_solutions(sudoku: List[List[int]]) -> None:
         solver = Solver()
 
         start_time = time.time()
-        solutions_amount = len(solver.solve_sudoku_problem(algo, sudoku))
-
+        boards = solver.solve_sudoku_problem(algo, sudoku)
         time_solving = time.time() - start_time
+
+        solutions_amount = len(boards)
         rounded_time = round(time_solving, 2)
         print(
             f"Algorithm {algo} found {solutions_amount} solutions in {rounded_time} "
