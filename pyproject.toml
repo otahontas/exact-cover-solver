@@ -5,7 +5,7 @@ description = "Exact cover solver library"
 authors = ["Otto Ahoniemi <otto@ottoahoniemi.fi>"]
 
 [tool.poetry.dependencies]
-python = ">=3.7.0,<4.0"
+python = ">=3.6.12,<4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1.2"

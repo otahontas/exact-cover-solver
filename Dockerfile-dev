@@ -1,10 +1,10 @@
 # Setup 
-FROM python:3.7.9
+FROM python:3.6.12
 WORKDIR /app
 
 # Copy dependency info and install dependencies, but not the project itself
 RUN pip install poetry
-COPY pyproject.toml poetry.lock .
+COPY pyproject.toml .
 RUN poetry install --no-root
 
 # Copy package files and install package

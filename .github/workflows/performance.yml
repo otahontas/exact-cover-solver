@@ -7,7 +7,7 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: [pypy3.7]
+        python-version: [pypy3]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
