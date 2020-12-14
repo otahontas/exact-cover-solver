@@ -1,5 +1,5 @@
 # Setup 
-FROM python:3.6.12
+FROM python:3.6.9
 WORKDIR /app
 
 # Copy dependency info and install dependencies, but not the project itself

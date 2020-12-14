@@ -50,13 +50,13 @@ docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests && dock
 
 Huolehdi, että vaaditut ohjelma on asennettu:
 
-- `Python 3.6.12+` sekä [pypy3.6](https://www.pypy.org/download.html)
+- Vähintään `Python 3.6.9` sekä `pypy3.6-7.3.1`
   - Ohjelma on toteutettu pythonin standardikirjastolla, joten pypyn käyttö parantaa ohjelman suorituskykyä huomattavasti, jopa 20-kertaisesti. Suorituskykytestit ajetaankin vain pypyä vasten.
   - Jos sinulla ei ole sopivia versioita, voit joko:
     - asentaa pypyn [pypy.org -sivulta](https://www.pypy.org/download.html) ja pythonin [python.org -sivulta](https://www.python.org/downloads/) tai
     - asentaa pypyn ja pythonin eri versiot käyttöjärjestelmäsi paketinhallinnasta (`brew, apt-get...` jne) tai
-    - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.6.12` sekä `pyenv install pypy3.6-7.3.1`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.6.12 pypy3.6-7.3.1`.
-- [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.6.12`.
+    - asentaa [pyenvin](https://github.com/pyenv/pyenv) ja ajaa asennuksen jälkeen repon juuressa `pyenv install 3.6.9` sekä `pyenv install pypy3.6-7.3.1`. Ota sitten versiot käyttöön ajamalla `pyenv local 3.6.9 pypy3.6-7.3.1`.
+- [Poetry 1.1+](https://python-poetry.org/docs/#installation), jonka voit asentaa monella eri tapaa, ks. linkatut ohjeet. Jos käytät pyenviä, poetry käyttää automaattisesti oikeaa versiota. Muussa tapauksessa joudut asettamaan version ajamalla projektin juuressa `poetry use 3.6.9`.
 
 Asennettuasi projektin tarvitsemat paketit jommalla kummalla tavalla, voit käyttää [invoken](https://www.pyinvoke.org/) avulla tehtyjä skriptejä. Skriptit saat esille myös ajamalla `poetry run invoke --list` (tai dockerilla yllä mainitulla komennolla).
 
