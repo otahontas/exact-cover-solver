@@ -3,6 +3,15 @@ from pydantic import BaseModel
 from exact_cover_solver import Solver
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+import os
+import logging
+
+mode = os.getenv("SERVER_ENV_MODE", "development")
+spa_location = os.environ.get("SERVER_SPA_LOCATION")
+
+logger = logging.getLogger("main")
+level = logging.WARNING if mode == "production" else logging.INFO
+logger.setLevel(level)
 
 app = FastAPI()
 
@@ -48,3 +57,14 @@ async def solve_sudoku(sudoku_input: SudokuBody):
         sudoku_input.algorithm, sudoku_input.sudoku_board
     )
     return {"boards": boards}
+
+
+if mode == "production":
+    if not spa_location:
+        logger.critical("SPA folder not found, not able to serve frontpage!")
+
+    @app.get("/")
+    async def read_items():
+        return FileResponse(f"{spa_location}/index.html")
+
+    app.mount("/", StaticFiles(directory=spa_location), name="")
