@@ -30,7 +30,7 @@ class SudokuBody(BaseModel):
     algorithm: str
 
 
-@app.get("/solve/pentomino")
+@app.post("/solve/pentomino")
 async def solve_pentomino(pentomino_input: PentominoBody):
     """Get boards from solver, return them."""
     boards = solver.solve_pentomino_problem(
@@ -41,7 +41,7 @@ async def solve_pentomino(pentomino_input: PentominoBody):
     return {"boards": boards}
 
 
-@app.get("/solve/sudoku")
+@app.post("/solve/sudoku")
 async def solve_sudoku(sudoku_input: SudokuBody):
     """Get boards from solver, return them."""
     boards = solver.solve_sudoku_problem(
