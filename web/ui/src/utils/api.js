@@ -1,7 +1,7 @@
 import { create } from 'apisauce';
 
 const api = create({
-  baseURL: 'http://localhost:8000/solve',
+  baseURL: '/solve',
 });
 
 const solvePentomino = async data => {
