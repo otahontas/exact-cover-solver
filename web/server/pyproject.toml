@@ -9,6 +9,8 @@ python = ">=3.6.9,<4.0"
 fastapi = "^0.62.0"
 uvicorn = "^0.13.1"
 exact-cover-solver = {path = "../.."}
+gunicorn = "^20.0.4"
+aiofiles = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 
