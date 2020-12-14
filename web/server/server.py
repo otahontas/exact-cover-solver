@@ -19,6 +19,7 @@ solver = Solver()
 
 class PentominoBody(BaseModel):
     """Pentomino input model for validation."""
+
     height: int
     width: int
     algorithm: str
@@ -26,6 +27,7 @@ class PentominoBody(BaseModel):
 
 class SudokuBody(BaseModel):
     """Sudoku input model for validation."""
+
     sudoku_board: List[List[int]]
     algorithm: str
 
@@ -34,9 +36,7 @@ class SudokuBody(BaseModel):
 async def solve_pentomino(pentomino_input: PentominoBody):
     """Get boards from solver, return them."""
     boards = solver.solve_pentomino_problem(
-        pentomino_input.algorithm,
-        pentomino_input.height,
-        pentomino_input.width
+        pentomino_input.algorithm, pentomino_input.height, pentomino_input.width
     )
     return {"boards": boards}
 
@@ -45,7 +45,6 @@ async def solve_pentomino(pentomino_input: PentominoBody):
 async def solve_sudoku(sudoku_input: SudokuBody):
     """Get boards from solver, return them."""
     boards = solver.solve_sudoku_problem(
-        sudoku_input.algorithm,
-        sudoku_input.sudoku_board
+        sudoku_input.algorithm, sudoku_input.sudoku_board
     )
     return {"boards": boards}
