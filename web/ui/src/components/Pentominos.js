@@ -1,4 +1,14 @@
-import { Box, Button, HStack, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import React from 'react';
 import apiService from '../utils/api';
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -6,29 +16,30 @@ import { Loader } from './Loader';
 
 const PentominoRow = ({ row }) => {
   const colors = {
-    'F': 'red.200',
-    'I': 'red.800',
-    'L': 'orange.400',
-    'N': 'yellow.100',
-    'P': 'green.300',
-    'T': 'green.600',
-    'U': 'teal.300',
-    'V': 'blue.100',
-    'W': 'blue.500',
-    'X': 'cyan.200',
-    'Y': 'purple.400',
-    'Z': 'pink.200',
+    F: 'red.200',
+    I: 'red.800',
+    L: 'orange.400',
+    N: 'yellow.100',
+    P: 'green.300',
+    T: 'green.600',
+    U: 'teal.300',
+    V: 'blue.100',
+    W: 'blue.500',
+    X: 'cyan.200',
+    Y: 'purple.400',
+    Z: 'pink.200',
   };
   return (
     <HStack>
       {row.map(cell => (
-        <Box id={cell}
-             w='40px'
-             h='40px'
-             margin={0}
-             padding={0}
-             bg={colors[cell]}>
-        </Box>
+        <Box
+          id={cell}
+          w="40px"
+          h="40px"
+          margin={0}
+          padding={0}
+          bg={colors[cell]}
+        ></Box>
       ))}
     </HStack>
   );
@@ -36,7 +47,9 @@ const PentominoRow = ({ row }) => {
 const PentominoBoard = ({ grid }) => {
   return (
     <VStack>
-      {grid.map(row => <PentominoRow id={row} row={row} />)}
+      {grid.map(row => (
+        <PentominoRow id={row} row={row} />
+      ))}
     </VStack>
   );
 };
@@ -47,14 +60,23 @@ const PentominoBoardBrowser = ({ boards }) => {
     <Box margin={10}>
       <PentominoBoard grid={boards[boardIndex]} />
       <HStack spacing={5} margin={5}>
-        <Button disabled={boardIndex === 0} colorScheme='teal' onClick={() => setBoardIndex(boardIndex - 1)}>
+        <Button
+          disabled={boardIndex === 0}
+          colorScheme="teal"
+          onClick={() => setBoardIndex(boardIndex - 1)}
+        >
           Previous
         </Button>
-        <Button disabled={boardIndex == boards.length - 1} colorScheme='teal'
-                onClick={() => setBoardIndex(boardIndex + 1)}>
+        <Button
+          disabled={boardIndex === boards.length - 1}
+          colorScheme="teal"
+          onClick={() => setBoardIndex(boardIndex + 1)}
+        >
           Next
         </Button>
-        <Text>Solution {boardIndex + 1} / {boards.length}</Text>
+        <Text>
+          Solution {boardIndex + 1} / {boards.length}
+        </Text>
       </HStack>
     </Box>
   );
@@ -63,7 +85,7 @@ export const PentominoView = () => {
   const [boardStatus, setBoardStatus] = React.useState('idle');
   const [boardData, setBoardData] = React.useState(null);
 
-  const startBoardLoading = async (size) => {
+  const startBoardLoading = async size => {
     setBoardStatus('loading');
     const [boardHeightStr, boardWidthStr] = size.split('x');
     const data = {
@@ -90,10 +112,11 @@ export const PentominoView = () => {
         </MenuList>
       </Menu>
       <Box>
-        {boardStatus === 'loaded'
-          ? <PentominoBoardBrowser boards={boardData} />
-          : <Loader status={boardStatus} />
-        }
+        {boardStatus === 'loaded' ? (
+          <PentominoBoardBrowser boards={boardData} />
+        ) : (
+          <Loader status={boardStatus} />
+        )}
       </Box>
     </Box>
   );
