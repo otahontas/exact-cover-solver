@@ -45,8 +45,12 @@ COPY --from=build /app/build /app/web/server/build
 # Run the image as a non-root user
 RUN useradd -m app
 USER app
+
+EXPOSE 8000
   
-# Run the app with four uvicorn worker
+# Run the app with:
+# - two pypy-compatible uvicorn workers
+# - 180 second timeout for each worker
 # CMD is required to run on Heroku
 # $PORT is set by Heroku			
-CMD gunicorn server:app --bind 0.0.0.0:$PORT -w 4 -k uvicorn.workers.UvicornH11Worker
+CMD gunicorn server:app --bind 0.0.0.0:$PORT -w 2 -k uvicorn.workers.UvicornH11Worker -t 180

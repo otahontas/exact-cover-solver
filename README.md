@@ -29,12 +29,15 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
 
 ## Käyttöohje
 
-- Projektissa laadittua kirjastoa voit käyttää simppelin Herokussa olevan [web-ui:n kautta](https://mysterious-harbor-76202.herokuapp.com/). 
+- Projektissa laadittua kirjastoa voit käyttää:
+  - Herokussa olevan [web-appin kautta](https://mysterious-harbor-76202.herokuapp.com/) tai
+  - asentamalla web-appin lokaalisti Dockerilla: `docker run -p 8000:8000 -e PORT=8000 otahontas/exact-cover-solver-web` ja avaamalla `localhost:8000` selaimessasi
 - UI:ssa voit käyttää seuraavia kirjaston tarjoamia ominaisuuksia:
   - [Tulossa] Suoritettavan algoritmin valinta ("Dancing links with Algorithm X" eli "DLX" vai dictionary-pohjainen "DictX"). Näistä DLX on nopeampi ja oletusarvoisesti valittuna.
   - Pentomino-ongelmien ratkominen: voit valita neljästä valmiista laudan koosta jonkun, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin.
   - Sudokuiden ratkominen: syötä osittain täytetty (mielellään +15 vihjettä, jotta hakuavaruus ei ole todella massiivinen) sudoku, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin. Voit myös valita valmiista sudokusta jonkun demomielessä ratkaistavaksi.
   - [Tulossa] Yleisten täsmäpeiteongelmien ratkominen. Anna jokin joukko elementtejä sekä näistä koostettuja joukkoja. Ohjelma etsii kaikki mahdolliset täsmäpeitteet annetuista joukoista ja palauttaa ne näkyviin.
+- Ohjelmoinnillisesti kirjastoa käytetään sen tarjoaman `Solver` -luokan kautta, ks. lisää [dokumentaatiosta](https://otahontas.github.io/exact-cover-solver/)
 
 ## Kehittäminen
 
