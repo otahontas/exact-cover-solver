@@ -29,7 +29,12 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
 
 ## Käyttöohje
 
-(Tulossa)
+- Projektissa laadittua kirjastoa voit käyttää simppelin Herokussa olevan [web-ui:n kautta](https://mysterious-harbor-76202.herokuapp.com/). 
+- UI:ssa voit käyttää seuraavia kirjaston tarjoamia ominaisuuksia:
+  - [Tulossa] Suoritettavan algoritmin valinta ("Dancing links with Algorithm X" eli "DLX" vai dictionary-pohjainen "DictX"). Näistä DLX on nopeampi ja oletusarvoisesti valittuna.
+  - Pentomino-ongelmien ratkominen: voit valita neljästä valmiista laudan koosta jonkun, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin.
+  - Sudokuiden ratkominen: syötä osittain täytetty (mielellään +15 vihjettä, jotta hakuavaruus ei ole todella massiivinen) sudoku, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin. Voit myös valita valmiista sudokusta jonkun demomielessä ratkaistavaksi.
+  - [Tulossa] Yleisten täsmäpeiteongelmien ratkominen. Anna jokin joukko elementtejä sekä näistä koostettuja joukkoja. Ohjelma etsii kaikki mahdolliset täsmäpeitteet annetuista joukoista ja palauttaa ne näkyviin.
 
 ## Kehittäminen
 
@@ -72,7 +77,7 @@ Komento printtaa yleisen koodikattavuusraportin terminaaliin. Tarkemman, html-mu
 
 ### Suorituskykytestit
 
-(Seuraa myöhemmin)
+Ks. [testausdokumentti](docs/testaus.md)
 
 ### Koodityylit
 
@@ -104,3 +109,7 @@ poetry run invoke docs
 ```
 
 Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
+
+### Web (ui + server)
+
+Ks. [README web-kansiossa](web/README.md)
