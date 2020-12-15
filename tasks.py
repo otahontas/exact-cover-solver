@@ -5,14 +5,8 @@ stuff_to_analyze = "exact_cover_solver/ performance_tests/ tests/ tasks.py"
 
 
 @task
-def start(ctx):
-    """Start program with cpython."""
-    ctx.run("python3 exact_cover_solver/main.py")
-
-
-@task
 def test(ctx):
-    """Run unit tests. Tests are run against cpython."""
+    """Run unit tests."""
     ctx.run("pytest --cov=exact_cover_solver tests")
 
 
@@ -24,8 +18,11 @@ def format(ctx):
 
 @task
 def lint(ctx):
-    """Lint project with flake8 and black. This does not modify code, only checks."""
-    ctx.run(f"flake8 {stuff_to_analyze} && black --check {stuff_to_analyze}")
+    """Lint project with flake8, black and mypy."""
+    ctx.run(
+        f"flake8 {stuff_to_analyze}; black --check {stuff_to_analyze}; "
+        "mypy exact_cover_solver/"
+    )
 
 
 @task
@@ -37,5 +34,5 @@ def cov(ctx):
 @task
 def docs(ctx):
     """Generate docs with pdoc and move them to correct folder."""
-    ctx.run("pdoc --html --force --output-dir docs exact_cover_solver")
+    ctx.run("pdoc --html --force --output-dir docs exact_cover_solver && ")
     ctx.run("cp -vaR docs/exact_cover_solver/. docs/ && rm -r docs/exact_cover_solver")

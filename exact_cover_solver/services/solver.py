@@ -1,135 +1,101 @@
 """Solver service, handles different solving modes."""
-from typing import Optional, Union, List
+from typing import List
 
-from .pentomino_browser import PentominoBoardBrowser
+from exact_cover_solver.translator import Translator, PentominoBoard, SudokuBoard
 from exact_cover_solver.algos import DictX, DLX
 from exact_cover_solver.data_creators import (
-    GenericCreator,
     PentominoCreator,
     SudokuCreator,
+    SudokuInput,
 )
-from exact_cover_solver.datastructures.dictmatrix import DictMatrix
-from exact_cover_solver.datastructures.dlxmatrix import DLXMatrix
-from ..data_creators.sudoku_creator import Sudoku
-from ..types import Solution
-
-
-class AlgorithmNotChosenError(Exception):
-    """Exception raised when algorithm is not chosen.
-
-    Attributes:
-        message -- explanation of the error
-    """
-
-    def __init__(self, message: str = "Algorithm is not chosen.") -> None:
-        """Initialize error with message."""
-        self.message = message
-        super().__init__(self.message)
+from exact_cover_solver.datastructures import DictMatrix, DLXMatrix
+from exact_cover_solver.types import Solution, ProblemData
 
 
 class Solver:
-    """Class for solving an exact cover problem from given input.
+    """Class for solving an exact cover problem from given input."""
 
-    Algorithms list define possible algorithms used by class instances.
-    """
-
-    _algorithms = [DLX, DictX]
-    _matrices = {"DLX": DLXMatrix, "DictX": DictMatrix}
-
-    def __init__(self) -> None:
-        """Initialize algorithm variable."""
-        self._algorithm: Optional[Union[DLXMatrix, DictMatrix]] = None
-
-    @property
-    def algorithm(self) -> Optional[str]:
-        """Maintain a reference to one of the algorithm X objects.
-
-        Returns:
-            Name of the algorithm currently in use.
-
-        Raises:
-            AlgorithmNotChosenError: Raised if algorithm not chosen.
-        """
-        if not self._algorithm:
-            raise AlgorithmNotChosenError
-        return self._algorithm.__class__.__name__
-
-    @algorithm.setter
-    def algorithm(self, algorithm_name: str) -> None:
-        """Replace algorithm object at runtime.
-
-        Try to filter correct algorithm class, then create instance of that class.
-
-        Args:
-            algorithm_name: Name of the algorithm to be used
-        """
-        try:
-            algo_class = next(
-                algo_class
-                for algo_class in self._algorithms
-                if algo_class.__name__ == algorithm_name
-            )
-        except StopIteration:
-            valid_names = [algo_class.__name__ for algo_class in self._algorithms]
-            raise ValueError(
-                f"Algorithm {algorithm_name} is not valid algorithm. "
-                f"Valid algorithms are: {valid_names}"
-            )
-        self._algorithm = algo_class()
-
-    def solve_generic_problem(self, universe: str, set_collection: str) -> str:
+    def solve_generic_problem(
+        self, algorithm: str, problem_data: ProblemData
+    ) -> List[Solution]:
         """Parse given data, solve cover problem and format solution to string.
 
         Args:
-            universe: used universe
-            set_collection: set collection based on universe elements
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix. Should
+                          be a tuple containing list of universe elements and dictionary
+                          containing subsets with unique ids as keys and list of
+                          subset elements as values.
 
         Returns:
-            Solution formatted as printable string.
+            List of solutions, each solution having a list of ids identifying which
+            subsets were picked to solution.
         """
-        if not self._algorithm:
-            raise AlgorithmNotChosenError
-        generic_creator = GenericCreator(universe, set_collection)
-        constrains = generic_creator.create_problem_data()
-        matrix_class = self._matrices[self.algorithm]
-        solutions = self._algorithm.solve(matrix_class(constrains))
-        if not solutions:
-            return "No solutions found with given universe and set collection."
-        formatted_solution = (
-            f"For given set_collection: {set_collection} you can "
-            f"create exact cover solution by following ways:\n"
-        )
-        for solution in solutions:
-            formatted_solution = f"{formatted_solution}Choose rows: {solution}\n"
-        return formatted_solution
+        # TODO: return solutions formatted with original data
+        return self._solve(algorithm, problem_data)
 
     def solve_pentomino_problem(
-        self, board_height: int, board_width: int
-    ) -> PentominoBoardBrowser:
+        self, algorithm: str, board_height: int, board_width: int
+    ) -> List[PentominoBoard]:
         """Generate needed data, solve cover problem and return solution browser.
 
         Args:
+            algorithm: Name of the algorithm to use
             board_height: Height of the pentomino board
             board_width: Width of the pentomino board
 
         Returns:
             PentominoBoardBrowser which can be used to browse generated solutions.
         """
-        if not self._algorithm:
-            raise AlgorithmNotChosenError
         pentomino_creator = PentominoCreator()
-        pentomino_creator.change_board_size(board_height, board_width)
-        constrains = pentomino_creator.create_problem_data()
-        matrix_class = self._matrices[self.algorithm]
-        solutions = self._algorithm.solve(matrix_class(constrains))
-        return PentominoBoardBrowser(pentomino_creator, solutions)
+        problem_data = pentomino_creator.create_problem_data(board_height, board_width)
+        _, subset_collection = problem_data
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_pentomino_boards(
+            solutions, board_height, board_width, subset_collection
+        )
 
-    def solve_sudoku_problem(self, sudoku: Sudoku) -> List[Solution]:
-        """Generate needed data, solve cover problem and return solutions."""
-        if not self._algorithm:
-            raise AlgorithmNotChosenError
+    def solve_sudoku_problem(
+        self, algorithm: str, sudoku_input: SudokuInput
+    ) -> List[SudokuBoard]:
+        """Generate needed data, solve cover problem and return solutions.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            sudoku_input: Two-dimensional sudoku board, where empty cells are marked
+                          with zero and other cells have preselected numbers.
+
+        Returns:
+            List of solutions, each solution having a list of ids identifying which
+            subsets were picked to solution.
+        """
         sudoku_creator = SudokuCreator()
-        problem_data = sudoku_creator.create_problem_data(sudoku)
-        matrix_class = self._matrices[self.algorithm]
-        solutions = self._algorithm.solve(matrix_class(problem_data))
-        return solutions
+        problem_data = sudoku_creator.create_problem_data(sudoku_input)
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_sudoku_boards(solutions)
+
+    @staticmethod
+    def _solve(algorithm: str, problem_data: ProblemData) -> List[Solution]:
+        """Solve exact cover problem.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix.
+
+        Returns:
+            List of solutions, each solution having a list of ids identifying which
+            subsets were picked to solution.
+
+        Raises:
+            ValueError: There's no algorithm with the given name.
+        """
+        if algorithm == "DLX":
+            return DLX().solve(DLXMatrix(problem_data))
+        elif algorithm == "DictX":
+            return DictX().solve(DictMatrix(problem_data))
+        else:
+            valid_names = ["DLX", "DictX"]
+            raise ValueError(
+                f"Algorithm {algorithm} is not valid algorithm. "
+                f"Valid algorithms are: {valid_names}"
+            )

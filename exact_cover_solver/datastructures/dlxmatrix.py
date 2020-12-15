@@ -1,90 +1,98 @@
-"""Wrappers to represent dancing links data and column objects as matrix."""
+"""Exact cover matrix implementation with dancing links."""
+from typing import Union, Optional
 
-from typing import Optional
-
-from exact_cover_solver.datastructures import Matrix
-from exact_cover_solver.datastructures.dlxdataobjects import DataObject, ColumnObject
-from exact_cover_solver.types import ProblemData
+from .matrix_base import Matrix
+from .dlxdataobjects import RootObject, ColumnObject, DataObject
+from exact_cover_solver.types import ProblemData, UniverseElement
 
 
 class DLXMatrix(Matrix):
-    """Matrix representation and initialization methods for circular linked lists."""
+    """Exact cover matrix implementation with dancing links.."""
 
-    def __init__(self, constrains: ProblemData) -> None:
-        """Initialize linked list based matrix.
-
-        Create initial links to column objects, then pass the universe and the set
-        collection constrains to parent initializer.
+    def __init__(self, problem_data: ProblemData) -> None:
+        """Initialize matrix with root object.
 
         Args:
-            constrains: Tuple containing universe and set collection.
+            problem_data: Data needed to create matrix.
         """
-        self.right: Optional[ColumnObject] = None
-        self.left: Optional[ColumnObject] = None
-        super().__init__(constrains)
+        self.root = RootObject()
+        super().__init__(problem_data)
 
     def _create(self) -> None:
-        """Call creator methods for different linked list data types."""
-        self._create_column_nodes()
-        self._create_data_nodes()
+        """Call creator methods for column and data objects."""
+        self._create_column_objects()
+        self._create_data_objects()
 
-    def _create_column_nodes(self) -> None:
-        """Create column columns and attach them to root."""
-        previous = self
-        for element in self._universe:
-            column = ColumnObject(column_id=element)
-            column.left = previous
-            previous.right = column
-            previous = column
-        self.left = previous
-        previous.right = self
+    def _create_column_objects(self) -> None:
+        """Create column objects representing elements in universe.
 
-    def _create_data_nodes(self) -> None:
-        """Create nodes representing elements in each set in collection.
-
-        All sets are iterated through. For each element in set the element is
-        linked to the correct column and columns column. Elements in set are
-        also linked together to form a circular row.
+        Column objects are linked to root and together to form a circular row.
         """
+        previous_column: Union[ColumnObject, RootObject] = self.root
+        for element in self._universe:
+            created_column = ColumnObject(element)
+            created_column.left = previous_column
+            previous_column.right = created_column
+            previous_column = created_column
+        self.root.left = previous_column
+        previous_column.right = self.root
 
-        def find_column(_id: int) -> ColumnObject:
-            """Find column with given id."""
-            correct_column = self
-            while correct_column.id != _id:
-                correct_column = correct_column.right
-            return correct_column
+    def _create_data_objects(self) -> None:
+        """Create data objects representing elements in each subset.
 
-        for set_number, set_elements in enumerate(self._set_collection):
-            previous = None
-            first = None
+        Data objects are linked to correct column object and linked together to form
+        a circular row.
+        """
+        for subset_id, subset_elements in self._subset_collection.items():
+            leftmost_data_object: Optional[DataObject] = None
+            previous_data_object: Optional[DataObject] = None
 
-            for element in set_elements:
-                column = find_column(element)
-                cell = DataObject(column, set_number)
+            for element in subset_elements:
+                column = self._find_column(element)
+                created_data_object = DataObject(column, subset_id)
 
-                prev_up = column.up
-                prev_up.down = cell
+                lowest_data_object = column.up
+                lowest_data_object.down = created_data_object
 
-                cell.up = prev_up
-                cell.down = column
-                column.up = cell
+                created_data_object.up = lowest_data_object
+                created_data_object.down = column
+                column.up = created_data_object
 
-                if previous:
-                    previous.right = cell
-                    cell.left = previous
-                else:
-                    first = cell
+                if not leftmost_data_object:
+                    leftmost_data_object = created_data_object
 
-                previous = cell
-                column.size += 1
+                if previous_data_object:
+                    previous_data_object.right = created_data_object
+                    created_data_object.left = previous_data_object
 
-            previous.right = first
-            first.left = previous
+                previous_data_object = created_data_object
+                column.increase_size()
 
+            if not previous_data_object or not leftmost_data_object:
+                raise ValueError(
+                    "Cannot not link subset elements together for subset "
+                    f"{subset_id}: {subset_elements}"
+                )
+            previous_data_object.right = leftmost_data_object
+            leftmost_data_object.left = previous_data_object
 
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"DLXMatrix.{func}": True
-    for func in dir(DLXMatrix)
-    if callable(getattr(DLXMatrix, func)) and func.startswith("_")
-}
+    def _find_column(self, element: UniverseElement) -> ColumnObject:
+        """Find column object representing given element.
+
+        Args:
+            element: Element to look for
+
+        Returns:
+            Column object of the correct object
+
+        Raises:
+            ValueError: if root object does not have any links or there is no
+                        column for given element.
+        """
+        column = self.root.right
+        while True:
+            if isinstance(column, RootObject):
+                raise ValueError(f"Could not find column with element {element}")
+            if column.id == element:
+                return column
+            column = column.right

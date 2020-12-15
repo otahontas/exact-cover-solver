@@ -1,0 +1,21 @@
+# Setup 
+FROM python:3.6.9
+WORKDIR /app
+
+# Copy dependency info and install dependencies, but not the project itself
+RUN pip install poetry
+COPY pyproject.toml .
+RUN poetry install --no-root
+
+# Copy package files and install package
+COPY setup.cfg .
+COPY tasks.py .
+COPY tests/ ./tests/
+COPY exact_cover_solver/ ./exact_cover_solver/
+RUN poetry install
+
+# Launch invoke by default
+ENTRYPOINT ["poetry", "run", "invoke"]
+
+# List possible tasks if invoke task not given
+CMD ["--list"]

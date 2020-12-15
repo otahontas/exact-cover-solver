@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "exact-cover-solver-server"
+version = "0.1.0"
+description = ""
+authors = ["Otto Ahoniemi <otto@ottoahoniemi.fi>"]
+
+[tool.poetry.dependencies]
+python = ">=3.6.9,<4.0"
+fastapi = "^0.62.0"
+uvicorn = "^0.13.1"
+exact-cover-solver = {path = "../.."}
+gunicorn = "^20.0.4"
+aiofiles = "^0.6.0"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+start = "server:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

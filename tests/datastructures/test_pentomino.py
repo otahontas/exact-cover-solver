@@ -110,3 +110,18 @@ def test_wrong_pentomino_index_does_not_work(pentominoes):
 def test_wrong_pentomino_name_does_not_work(pentominoes):
     with pytest.raises(ValueError):
         pentominoes.get_pentomino_by_name("Ö")
+
+
+def test_list_method_returns_correct_object(pentominoes):
+    assert isinstance(pentominoes.as_list(), list)
+
+
+def test_correct_amount_is_returned(pentominoes):
+    assert pentominoes.amount == 12
+
+
+def test_correct_names_are_returned(pentominoes):
+    assert all(
+        name in pentominoes.names
+        for name in ["V", "U", "X", "T", "Y", "I", "F", "P", "W", "Z", "N", "L"]
+    )

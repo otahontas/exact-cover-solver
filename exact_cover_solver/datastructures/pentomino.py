@@ -88,10 +88,16 @@ class Pentomino:
 
 
 class Pentominoes:
-    """Collection of all pentominoes."""
+    """Collection of all pentominoes.
+
+    Attributes:
+         ORDER: Pentominoes are order 5 polyominos
+         _pentomino_list: List of all pentominoes in their base form.
+    """
 
     def __init__(self) -> None:
-        """Create all pentominoes, save them to list."""
+        """Initialize order and pentominoes."""
+        self.ORDER = 5
         self._pentomino_list = [
             Pentomino("V", [[0, 0, 1], [0, 0, 1], [1, 1, 1]]),
             Pentomino("U", [[1, 0, 1], [1, 1, 1]]),
@@ -134,10 +140,7 @@ class Pentominoes:
         """Get amount of pentominoes in this collection."""
         return len(self._pentomino_list)
 
-
-# Add all private methods to pdoc when generating documentation
-__pdoc__ = {
-    f"Pentomino.{func}": True
-    for func in dir(Pentomino)
-    if callable(getattr(Pentomino, func)) and func.startswith("_")
-}
+    @property
+    def names(self) -> List[str]:
+        """Get all used names in pentomino list."""
+        return [pentomino.name for pentomino in self._pentomino_list]

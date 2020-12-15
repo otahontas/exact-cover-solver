@@ -1,22 +1,34 @@
-"""Circular doubly linked list object definitions."""
+"""Dancing link matrix objects."""
+
+from typing import Union
+
+from exact_cover_solver.types import SubsetId, UniverseElement
+
+
+class RootObject:
+    """Column object to link matrix column and data objects together."""
+
+    def __init__(self) -> None:
+        """Initialize links."""
+        self.left: Union[RootObject, ColumnObject] = self
+        self.right: Union[RootObject, ColumnObject] = self
 
 
 class ColumnObject:
     """Column object representing matrix columns."""
 
-    def __init__(self, column_id: int) -> None:
-        """Initialize column node, links and other details.
-
-        Row is set to -1, since first real row is 0.
+    def __init__(self, column_id: UniverseElement) -> None:
+        """Initialize column object details and links.
 
         Args:
-            column_id: Which set element this column represents.
+            column_id: Which element this column represents.
         """
         self.id = column_id
         self.size = 0
-        self.row = -1
-        self.column = self
-        self.up = self.down = self.left = self.right = self
+        self.up: Union[ColumnObject, DataObject] = self
+        self.down: Union[ColumnObject, DataObject] = self
+        self.left: Union[ColumnObject, RootObject] = self
+        self.right: Union[ColumnObject, RootObject] = self
 
     def detach(self) -> None:
         """Detach column object from header list, but don't erase it from memory."""
@@ -37,18 +49,21 @@ class ColumnObject:
 
 
 class DataObject:
-    """Data object representing 1s in matrix."""
+    """Data object representing elements in subsets."""
 
-    def __init__(self, column: ColumnObject, row: int) -> None:
-        """Initialize data node, links and other details.
+    def __init__(self, column: ColumnObject, subset_id: SubsetId) -> None:
+        """Initialize data object details and links.
 
         Args:
-            column: Object which represents index of this nodes column
-            row: Index of this nodes row.
+            column: Column object this data object should be linked to
+            subset_id: Id of the subset this data object belongs to.
         """
         self.column = column
-        self.row = row
-        self.up = self.down = self.left = self.right = self
+        self.id = subset_id
+        self.up: Union[DataObject, ColumnObject] = self
+        self.down: Union[DataObject, ColumnObject] = self
+        self.left: DataObject = self
+        self.right: DataObject = self
 
     def detach(self) -> None:
         """Detach data object from linked list, but don't erase it from memory."""

@@ -13,6 +13,9 @@ from exact_cover_solver.types import Solution
 class AlgorithmX(ABC, Generic[GenericMatrix]):
     """Abstract base class for algorithm X.
 
+    Inheriting from generic type GenericMatrix allows its bounded usage inside this
+    class.
+
     Attributes:
         _solutions: List for solutions algorithm produces.
     """
