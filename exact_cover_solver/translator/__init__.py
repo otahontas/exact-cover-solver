@@ -1,5 +1,4 @@
 """Translator for decoding solutions to understandable output format."""
-import math
 
 from exact_cover_solver.types import Solution, SubsetCollection, Subset
 from typing import List
@@ -51,7 +50,7 @@ class Translator:
         """
         boards: List[SudokuBoard] = []
         for solution in solutions:
-            size = int(math.sqrt(len(solution)))
+            size = int(len(solution) ** 0.5)
             board: SudokuBoard = [[0] * size for _ in range(size)]
             for subset_id in solution:
                 y, x, value = subset_id
