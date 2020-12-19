@@ -111,7 +111,7 @@ Generoi dokumentaatio (vrt. Javadocit) komennolla:
 poetry run invoke docs
 ```
 
-Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `docs/index.html`.
+Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `pdoc/index.html`.
 
 ### Web (ui + server)
 

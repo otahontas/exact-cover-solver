@@ -34,5 +34,7 @@ def cov(ctx):
 @task
 def docs(ctx):
     """Generate docs with pdoc and move them to correct folder."""
-    ctx.run("pdoc --html --force --output-dir docs exact_cover_solver && ")
-    ctx.run("cp -vaR docs/exact_cover_solver/. docs/ && rm -r docs/exact_cover_solver")
+    ctx.run("if [[ -e pdoc/ ]]; then rm -r pdoc/; fi")
+    ctx.run("pdoc --html --force --output-dir pdoc exact_cover_solver")
+    ctx.run("cp -vaR pdoc/exact_cover_solver/. pdoc/")
+    ctx.run("rm -r pdoc/exact_cover_solver")
