@@ -2,7 +2,8 @@
 
 ## Mitä algoritmeja ja tietorakenteita toteutat työssäsi
 
-Toteutan DLX:n eli rekursiivisen ja ei-deterministisen peruuttavan haun algoritmin täsmällisen peitteen (*exact cover*) löytämiseksi dancing links -tekniikan avulla. Dancing links -tekniikaassa käytetään kahteen suuntaan linkitettyjä listoja (*doubly linked list*). 
+Toteutan Algoritmi X:n eli rekursiivisen ja ei-deterministisen peruuttavan haun algoritmin täsmällisen peitteen (*exact cover*) löytämiseksi. 
+Algoritmi toteutetaan kahdella eri tavalla: toinen dancing links -tekniikan avulla ja toinen hajautukseen perustuvien pythonin set- ja dictionary-rakenteiden avulla. Dancing links -tekniikaassa käytetään kahteen suuntaan linkitettyjä listoja (*doubly linked list*). 
 
 ## Mitä ongelmaa ratkaiset ja miksi valitsit kyseiset algoritmit/tietorakenteet
 
@@ -10,13 +11,10 @@ Täsmällisen peitteen ongelma on NP-täydellinen päätösongelma ja siten pelk
 
 ## Mitä syötteitä ohjelma saa ja miten näitä käytetään
 
-Tarkoituksenani on pyrkiä toteuttamaan ainakin kaksi eri tyyppistä syötemahdollisuutta:
+Ohjelmassa on kolme eri tyyppistä syötemahdollisuutta:
 1. Erilaisten pentominojen (koot 6×10, 5×12, 4×15 and 3×20) ratkaisujen löytäminen: esim. yksittäisen ratkaisun palauttaminen tai kaikkien mahdollisten ratkaisujen lukumäärän laskeminen
 2. Sudokujen ratkaisujen löytäminen
-
-Myös muita mahdollisia syötteitä (mm. kahdeksan kuningattaren ongelma) ja ongelmanratkaisun visualisointia on mahdollista tehdä, jos aikaa riittää. Alustavasti tarkoituksena on kuitenkin keskittyä kahteen ensimmäiseen ja tekstikäyttöliittymään: ratkaisut palautettaisiin suoraan käyttäjän komentoriville.
-
-Kumpikin syötetyypeistä käännetään täsmällisen peitteen ongelmaksi ja sen jälkeen ongelma ratkaistaan.
+3. Täsmäpeitteen löytäminen suoraan syötteestä, jossa annetaan universumi ja joukko universumin elementeistä koostettuja osajoukkoja.
 
 ## Tavoitteena olevat aika- ja tilavaativuudet (m.m. O-analyysit)
 
