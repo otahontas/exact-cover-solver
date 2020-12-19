@@ -280,3 +280,30 @@ def test_pentomino_solution_is_converted_to_board(
 def test_sudoku_solution_is_converted_to_board(solutions, correct_sudoku, translator):
     board = translator.to_sudoku_boards(solutions)[0]
     assert board == correct_sudoku
+
+
+@pytest.mark.parametrize(
+    "solutions, subset_collection, correct_subsets",
+    [
+        ([[1]], {1: [1, 2]}, [[[1, 2]]]),
+        (
+            [["H", (1, 2), (3, 2)], ["G", (0, 0), (0, 1)]],
+            {
+                "H": [1, 2],
+                (1, 2): [3, 4],
+                (3, 2): [5, 6],
+                "G": [7, 8],
+                (0, 0): [9, 10],
+                (0, 1): [11, 12],
+            },
+            [[[1, 2], [3, 4], [5, 6]], [[7, 8], [9, 10], [11, 12]]],
+        ),
+    ],
+)
+def test_correct_subsets_are_picked_to_solution(
+    solutions, subset_collection, correct_subsets, translator
+):
+    solutions_with_subset = translator.to_generic_solutions(
+        solutions, subset_collection
+    )
+    assert solutions_with_subset == correct_subsets
