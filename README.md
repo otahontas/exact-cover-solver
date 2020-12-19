@@ -33,11 +33,10 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
   - Herokussa olevan [web-appin kautta](https://mysterious-harbor-76202.herokuapp.com/) tai
   - asentamalla web-appin lokaalisti Dockerilla: `docker run -p 8000:8000 -e PORT=8000 otahontas/exact-cover-solver-web` ja avaamalla `localhost:8000` selaimessasi
 - UI:ssa voit käyttää seuraavia kirjaston tarjoamia ominaisuuksia:
-  - [Tulossa] Suoritettavan algoritmin valinta ("Dancing links with Algorithm X" eli "DLX" vai dictionary-pohjainen "DictX"). Näistä DLX on nopeampi ja oletusarvoisesti valittuna.
   - Pentomino-ongelmien ratkominen: voit valita neljästä valmiista laudan koosta jonkun, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin.
   - Sudokuiden ratkominen: syötä osittain täytetty (mielellään +15 vihjettä, jotta hakuavaruus ei ole todella massiivinen) sudoku, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin. Voit myös valita valmiista sudokusta jonkun demomielessä ratkaistavaksi.
-  - [Tulossa] Yleisten täsmäpeiteongelmien ratkominen. Anna jokin joukko elementtejä sekä näistä koostettuja joukkoja. Ohjelma etsii kaikki mahdolliset täsmäpeitteet annetuista joukoista ja palauttaa ne näkyviin.
-- Ohjelmoinnillisesti kirjastoa käytetään sen tarjoaman `Solver` -luokan kautta, ks. lisää [dokumentaatiosta](https://otahontas.github.io/exact-cover-solver/)
+- Ohjelmoinnillisesti kirjastoa käytetään sen tarjoaman `Solver` -luokan kautta, ks.
+lisää [dokumentaatiosta](https://otahontas.github.io/exact-cover-solver/) ja [toteutusdokumentista](docs/toteutus.md)
 
 ## Kehittäminen
 
@@ -111,7 +110,8 @@ Generoi dokumentaatio (vrt. Javadocit) komennolla:
 poetry run invoke docs
 ```
 
-Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen dokumentaatio löytyy polusta `pdoc/index.html`.
+Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen
+dokumentaatio löytyy polusta `pdoc/index.html`.
 
 ### Web (ui + server)
 
