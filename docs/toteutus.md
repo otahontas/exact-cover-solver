@@ -64,6 +64,10 @@ UI on toteutettu pienen python-serverin ja react-appin avulla. Kaikki ohjelman o
 
 # Saavutetut aika- ja tilavaativuudet
 
+Datan generointi ja saatujen tulosten kääntäminen valmiiksi pentomino- sekä sudoku-laudoiksi sujuu melko lailla vakioajassa: 
+esimerkiksi tyhjän 9x9 -sudokun täsmäpeitematriisiin tarvittavan datan generoiminen kestää n. sekunnin kymmennesosan. 
+Analyysissä keskitytäänkin siksi vain Algoritmi X:n implementaatioihin.
+
 ## Algoritmi X
 
 ### DLX
@@ -83,8 +87,7 @@ Toteutus toimii muuten samoin kuin DLX, mutta palautu
 
 # Suorituskyky ja O-analyysivertailu
 
-Linkitettyihin listoihin perustuva algoritmi suoriutuu ratkaisemisesta selvästi nopeammin kuin hajautustauluperustainen. Tämä johtunee... (analyysi seuraa). 
-
+###### Linkitettyihin listoihin perustuva algoritmi suoriutuu ratkaisemisesta selvästi nopeammin kuin hajautustauluperustainen. Tämä johtunee... (analyysi seuraa).
 
 # Työn mahdolliset puutteet ja parannusehdotukset
 
