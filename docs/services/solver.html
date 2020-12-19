@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.2" />
+<title>exact_cover_solver.services.solver API documentation</title>
+<meta name="description" content="Solver service, handles different solving modes." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>exact_cover_solver.services.solver</code></h1>
+</header>
+<section id="section-intro">
+<p>Solver service, handles different solving modes.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Solver service, handles different solving modes.&#34;&#34;&#34;
+from typing import List
+
+from exact_cover_solver.translator import Translator, PentominoBoard, SudokuBoard
+from exact_cover_solver.algos import DictX, DLX
+from exact_cover_solver.data_creators import (
+    PentominoCreator,
+    SudokuCreator,
+    SudokuInput,
+)
+from exact_cover_solver.datastructures import DictMatrix, DLXMatrix
+from exact_cover_solver.types import Solution, ProblemData, Subset
+
+
+class Solver:
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
+
+    def solve_pentomino_problem(
+        self, algorithm: str, board_height: int, board_width: int
+    ) -&gt; List[PentominoBoard]:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solution boards.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            board_height: Height of the pentomino board
+            board_width: Width of the pentomino board
+
+        Returns:
+            List of boards with pentominos placed
+        &#34;&#34;&#34;
+        pentomino_creator = PentominoCreator()
+        problem_data = pentomino_creator.create_problem_data(board_height, board_width)
+        _, subset_collection = problem_data
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_pentomino_boards(
+            solutions, board_height, board_width, subset_collection
+        )
+
+    def solve_sudoku_problem(
+        self, algorithm: str, sudoku_input: SudokuInput
+    ) -&gt; List[SudokuBoard]:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solutions.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            sudoku_input: Two-dimensional sudoku board, where empty cells are marked
+                          with zero and other cells have preselected numbers.
+
+        Returns:
+            List of correct sudoku boards.
+        &#34;&#34;&#34;
+        sudoku_creator = SudokuCreator()
+        problem_data = sudoku_creator.create_problem_data(sudoku_input)
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_sudoku_boards(solutions)
+
+    def solve_generic_problem(
+        self, algorithm: str, problem_data: ProblemData
+    ) -&gt; List[List[Subset]]:
+        &#34;&#34;&#34;Solve cover problem and return solutions.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix. Should
+                          be a tuple containing list of universe elements and dictionary
+                          containing subsets with unique ids as keys and list of
+                          subset elements as values.
+
+        Returns:
+            List of lists where each list has the subsets picked to solution.
+        &#34;&#34;&#34;
+        solutions = self._solve(algorithm, problem_data)
+        _, subset_collection = problem_data
+        return Translator.to_generic_solutions(solutions, subset_collection)
+
+    @staticmethod
+    def _solve(algorithm: str, problem_data: ProblemData) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solve exact cover problem.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix.
+
+        Returns:
+            List of solutions, each solution having a list of ids identifying which
+            subsets were picked to solution.
+
+        Raises:
+            ValueError: There&#39;s no algorithm with the given name.
+        &#34;&#34;&#34;
+        if algorithm == &#34;DLX&#34;:
+            return DLX().solve(DLXMatrix(problem_data))
+        elif algorithm == &#34;DictX&#34;:
+            return DictX().solve(DictMatrix(problem_data))
+        else:
+            valid_names = [&#34;DLX&#34;, &#34;DictX&#34;]
+            raise ValueError(
+                f&#34;Algorithm {algorithm} is not valid algorithm. &#34;
+                f&#34;Valid algorithms are: {valid_names}&#34;
+            )</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="exact_cover_solver.services.solver.Solver"><code class="flex name class">
+<span>class <span class="ident">Solver</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class for solving an exact cover problem from given input.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Solver:
+    &#34;&#34;&#34;Class for solving an exact cover problem from given input.&#34;&#34;&#34;
+
+    def solve_pentomino_problem(
+        self, algorithm: str, board_height: int, board_width: int
+    ) -&gt; List[PentominoBoard]:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solution boards.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            board_height: Height of the pentomino board
+            board_width: Width of the pentomino board
+
+        Returns:
+            List of boards with pentominos placed
+        &#34;&#34;&#34;
+        pentomino_creator = PentominoCreator()
+        problem_data = pentomino_creator.create_problem_data(board_height, board_width)
+        _, subset_collection = problem_data
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_pentomino_boards(
+            solutions, board_height, board_width, subset_collection
+        )
+
+    def solve_sudoku_problem(
+        self, algorithm: str, sudoku_input: SudokuInput
+    ) -&gt; List[SudokuBoard]:
+        &#34;&#34;&#34;Generate needed data, solve cover problem and return solutions.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            sudoku_input: Two-dimensional sudoku board, where empty cells are marked
+                          with zero and other cells have preselected numbers.
+
+        Returns:
+            List of correct sudoku boards.
+        &#34;&#34;&#34;
+        sudoku_creator = SudokuCreator()
+        problem_data = sudoku_creator.create_problem_data(sudoku_input)
+        solutions = self._solve(algorithm, problem_data)
+        return Translator().to_sudoku_boards(solutions)
+
+    def solve_generic_problem(
+        self, algorithm: str, problem_data: ProblemData
+    ) -&gt; List[List[Subset]]:
+        &#34;&#34;&#34;Solve cover problem and return solutions.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix. Should
+                          be a tuple containing list of universe elements and dictionary
+                          containing subsets with unique ids as keys and list of
+                          subset elements as values.
+
+        Returns:
+            List of lists where each list has the subsets picked to solution.
+        &#34;&#34;&#34;
+        solutions = self._solve(algorithm, problem_data)
+        _, subset_collection = problem_data
+        return Translator.to_generic_solutions(solutions, subset_collection)
+
+    @staticmethod
+    def _solve(algorithm: str, problem_data: ProblemData) -&gt; List[Solution]:
+        &#34;&#34;&#34;Solve exact cover problem.
+
+        Args:
+            algorithm: Name of the algorithm to use
+            problem_data: Data needed to create an exact cover problem matrix.
+
+        Returns:
+            List of solutions, each solution having a list of ids identifying which
+            subsets were picked to solution.
+
+        Raises:
+            ValueError: There&#39;s no algorithm with the given name.
+        &#34;&#34;&#34;
+        if algorithm == &#34;DLX&#34;:
+            return DLX().solve(DLXMatrix(problem_data))
+        elif algorithm == &#34;DictX&#34;:
+            return DictX().solve(DictMatrix(problem_data))
+        else:
+            valid_names = [&#34;DLX&#34;, &#34;DictX&#34;]
+            raise ValueError(
+                f&#34;Algorithm {algorithm} is not valid algorithm. &#34;
+                f&#34;Valid algorithms are: {valid_names}&#34;
+            )</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="exact_cover_solver.services.solver.Solver.solve_generic_problem"><code class="name flex">
+<span>def <span class="ident">solve_generic_problem</span></span>(<span>self, algorithm: str, problem_data: Tuple[List[~UniverseElement], Dict[~SubsetId, List[~UniverseElement]]]) ‑> List[List[List[~UniverseElement]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Solve cover problem and return solutions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>algorithm</code></strong></dt>
+<dd>Name of the algorithm to use</dd>
+<dt><strong><code>problem_data</code></strong></dt>
+<dd>Data needed to create an exact cover problem matrix. Should
+be a tuple containing list of universe elements and dictionary
+containing subsets with unique ids as keys and list of
+subset elements as values.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of lists where each list has the subsets picked to solution.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_generic_problem(
+    self, algorithm: str, problem_data: ProblemData
+) -&gt; List[List[Subset]]:
+    &#34;&#34;&#34;Solve cover problem and return solutions.
+
+    Args:
+        algorithm: Name of the algorithm to use
+        problem_data: Data needed to create an exact cover problem matrix. Should
+                      be a tuple containing list of universe elements and dictionary
+                      containing subsets with unique ids as keys and list of
+                      subset elements as values.
+
+    Returns:
+        List of lists where each list has the subsets picked to solution.
+    &#34;&#34;&#34;
+    solutions = self._solve(algorithm, problem_data)
+    _, subset_collection = problem_data
+    return Translator.to_generic_solutions(solutions, subset_collection)</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.solver.Solver.solve_pentomino_problem"><code class="name flex">
+<span>def <span class="ident">solve_pentomino_problem</span></span>(<span>self, algorithm: str, board_height: int, board_width: int) ‑> List[List[List[str]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate needed data, solve cover problem and return solution boards.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>algorithm</code></strong></dt>
+<dd>Name of the algorithm to use</dd>
+<dt><strong><code>board_height</code></strong></dt>
+<dd>Height of the pentomino board</dd>
+<dt><strong><code>board_width</code></strong></dt>
+<dd>Width of the pentomino board</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of boards with pentominos placed</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_pentomino_problem(
+    self, algorithm: str, board_height: int, board_width: int
+) -&gt; List[PentominoBoard]:
+    &#34;&#34;&#34;Generate needed data, solve cover problem and return solution boards.
+
+    Args:
+        algorithm: Name of the algorithm to use
+        board_height: Height of the pentomino board
+        board_width: Width of the pentomino board
+
+    Returns:
+        List of boards with pentominos placed
+    &#34;&#34;&#34;
+    pentomino_creator = PentominoCreator()
+    problem_data = pentomino_creator.create_problem_data(board_height, board_width)
+    _, subset_collection = problem_data
+    solutions = self._solve(algorithm, problem_data)
+    return Translator().to_pentomino_boards(
+        solutions, board_height, board_width, subset_collection
+    )</code></pre>
+</details>
+</dd>
+<dt id="exact_cover_solver.services.solver.Solver.solve_sudoku_problem"><code class="name flex">
+<span>def <span class="ident">solve_sudoku_problem</span></span>(<span>self, algorithm: str, sudoku_input: List[List[int]]) ‑> List[List[List[int]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generate needed data, solve cover problem and return solutions.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>algorithm</code></strong></dt>
+<dd>Name of the algorithm to use</dd>
+<dt><strong><code>sudoku_input</code></strong></dt>
+<dd>Two-dimensional sudoku board, where empty cells are marked
+with zero and other cells have preselected numbers.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>List of correct sudoku boards.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def solve_sudoku_problem(
+    self, algorithm: str, sudoku_input: SudokuInput
+) -&gt; List[SudokuBoard]:
+    &#34;&#34;&#34;Generate needed data, solve cover problem and return solutions.
+
+    Args:
+        algorithm: Name of the algorithm to use
+        sudoku_input: Two-dimensional sudoku board, where empty cells are marked
+                      with zero and other cells have preselected numbers.
+
+    Returns:
+        List of correct sudoku boards.
+    &#34;&#34;&#34;
+    sudoku_creator = SudokuCreator()
+    problem_data = sudoku_creator.create_problem_data(sudoku_input)
+    solutions = self._solve(algorithm, problem_data)
+    return Translator().to_sudoku_boards(solutions)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="exact_cover_solver.services" href="index.html">exact_cover_solver.services</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="exact_cover_solver.services.solver.Solver" href="#exact_cover_solver.services.solver.Solver">Solver</a></code></h4>
+<ul class="">
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_generic_problem" href="#exact_cover_solver.services.solver.Solver.solve_generic_problem">solve_generic_problem</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_pentomino_problem" href="#exact_cover_solver.services.solver.Solver.solve_pentomino_problem">solve_pentomino_problem</a></code></li>
+<li><code><a title="exact_cover_solver.services.solver.Solver.solve_sudoku_problem" href="#exact_cover_solver.services.solver.Solver.solve_sudoku_problem">solve_sudoku_problem</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
+</footer>
+</body>
+</html>

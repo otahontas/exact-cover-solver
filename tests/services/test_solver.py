@@ -24,6 +24,3 @@ def test_all_algo_names_are_returned_in_error_message(solver, algo_names):
         solver._solve("WrongAlgo", Mock())
         for algo_name in algo_names:
             assert algo_name in error
-
-
-# TODO: Write test for each solver method

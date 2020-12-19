@@ -22,7 +22,7 @@ Yksikkötestit voi ajaa README:n ohjeiden mukaisesti joko poetryn asennuksen jä
 
 Suorituskykytesteissä testataan ohjelman toimintaan isoilla hakuavaruuksilla. Syötteen koot ja rakenne vaikuttavat erityisesti ohjelman
 rekursiotasojen määrään sekä mahdollisuuksiin karsia haara hakupuusta mahdollisimman aikaisin. Testejä on kolmea eri tyyppiä ja ne ajetaan kumpaakin algoritmin implementaatiota vasten.
-Testit raportoivat tulokset simppelisti tekstimuotoisena: tarkemmat graafiset esitykset löytyvät [toteutus.md](toteutusdokumentin O-analyysi -kohdasta).
+Testit raportoivat tulokset simppelisti tekstimuotoisena, josta niitä voi vertailla.
 
 Suorituskykytestit voi ajaa yksinkertaisesti komennolla `pypy3 performance_tests/main.py` tai dockerilla: docker build . -t exact-cover-solver-perf-tests -f Dockerfile-perf-tests && docker run exact-cover-solver-perf-tests
 

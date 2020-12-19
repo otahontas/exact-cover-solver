@@ -32,11 +32,8 @@ def generate_pentomino_board_solutions(
 
 def generate_sudoku_solutions(sudoku: List[List[int]]) -> None:
     """Test solutions can be created for given sudoku."""
-    # for algo in ["DLX", "DictX"]:
-    for algo in ["DLX"]:
+    for algo in ["DLX", "DictX"]:
         solver = Solver()
-
-        # TODO: add amount of correct solutions here
 
         start_time = time.time()
         boards = solver.solve_sudoku_problem(algo, sudoku)
@@ -131,7 +128,7 @@ def generate_generic_sample_data(n, m):
 def run_one_generic_test(n, m):
     """Run test with given sample size."""
     problem_data = generate_generic_sample_data(n, m)
-    for algo in ["DLX"]:
+    for algo in ["DLX", "DictX"]:
         solver = Solver()
 
         start_time = time.time()

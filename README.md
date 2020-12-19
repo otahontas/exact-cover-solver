@@ -30,7 +30,9 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
 ## Käyttöohje
 
 - Projektissa laadittua kirjastoa voit käyttää:
-  - Herokussa olevan [web-appin kautta](https://mysterious-harbor-76202.herokuapp.com/) tai
+  - Herokussa olevan [web-appin kautta](https://mysterious-harbor-76202.herokuapp.com/)
+    [huom herokussa ei ole kauhean korkea muistikatto, joten 6x10 pentominoboardin
+    tai vaikeamman sudokun ratkaisujen generointi saattaa kaataa ohjelman] tai
   - asentamalla web-appin lokaalisti Dockerilla: `docker run -p 8000:8000 -e PORT=8000 otahontas/exact-cover-solver-web` ja avaamalla `localhost:8000` selaimessasi
 - UI:ssa voit käyttää seuraavia kirjaston tarjoamia ominaisuuksia:
   - Pentomino-ongelmien ratkominen: voit valita neljästä valmiista laudan koosta jonkun, kirjasto laskee mahdolliset ratkaisut ja palauttaa ne näkyviin.
@@ -111,7 +113,7 @@ poetry run invoke docs
 ```
 
 Tämän jälkeen [pdoc-kirjastolla](https://pdoc3.github.io/pdoc/) generoitu html-muotoinen
-dokumentaatio löytyy polusta `pdoc/index.html`.
+dokumentaatio löytyy polusta `pdoc/index.html`. Huom: docsit sisältävät vain julkisten metodien docstringit, privaattimetodit voit tarkistaa lähdekoodista.
 
 ### Web (ui + server)
 

@@ -70,8 +70,6 @@ Analyysissä keskitytäänkin siksi vain Algoritmi X:n implementaatioihin.
 
 ## Algoritmi X
 
-### DLX
-
 Analyysi perustuu enimmäkseen [David Eppsteinin blogiin vuodelta 2008](https://11011110.github.io/blog/2008/01/10/analyzing-algorithm-x.html).
 
 Ohjelman pääalgoritmi toimii rekursiolla, ja jokaisella rekursiotasolla kutsut ovat toteutettujen tietorakenteiden ansiosta vakioaikaisia, 
@@ -79,15 +77,27 @@ joten saamme aikavaativuuden ylärajan seuraavasti: Olkoon `F` on joukko, jonka 
 Valitaan jokin `x` ja määritellään, että `C` on kaikkien niiden `F`:n alkioiden `S_i` joukko, joissa `x \in S_i`. 
 Nyt algoritmi suorittaa `|C|` rekursiokutsua, joista jokaisella `F`:n koko on enimmillään `n - |C|`. Tästä saadaan ylärajaksi `O(3^(n/3)`.
 
+Algoritmi toimii käytännössä käyttämällä raakaa voimaa kaikkien mahdollisten ratkaisujen etsintään. Tehokkaan siitä tekee kuitenkin
+toteutus, jossa 1) sopivat kolumnit haetaan ajassa O(n) käymättä kaikki n kolumnin m riviä läpi ja 2) yksittäiset solmut voidaan 
+palauttaa paikalleen ajassa O(1), eikä niitä tarvitse käydä säilöä mihinkään tietorakenteeseen haun poistaessa ne.
+
 Tilavaativuuden yläraja on `O(n)`, sillä linkitetyistä listoista koostettuun matriisiin tallennetaan ainostaan annettujen joukkojen elementtien kuvaus. Jokaista erillistä elementtiä kohtaan luodaan yksi kolumnisolmua ja jokaista elementtiä kohtaan luodaan yksi datasolmu. Esimerkiksi joukon `((1,2,4), (2,3,4))` kuvaamiseksi tarvitaan kuusi datasolmua sekä neljä kolumnisolmua.
-
-## DictX
-
-Toteutus toimii muuten samoin kuin DLX, mutta palautu
 
 # Suorituskyky ja O-analyysivertailu
 
-###### Linkitettyihin listoihin perustuva algoritmi suoriutuu ratkaisemisesta selvästi nopeammin kuin hajautustauluperustainen. Tämä johtunee... (analyysi seuraa).
+Kaikkien suurin vaikutin ohjelman tehokkuuteen on mahdollisten ratkaisujen määrässä: yksittäisen ratkaisun löytäminen on isoillakin
+(n = 10^6) syötteille melko lailla yhtä nopeaa kuin pienillä syötteillä - helposti alle sekunnin. Kaikkien ratkaisuiden löytäminen 
+sen sijaan muuttaa algoritmin suorituskestoa merkittävästi. 
+
+Testejä ajaessa huomasin, että periaatteellisesti samasta aikavaativuudesta huolimatta DictX suoriutuu selvästi hitaammin. Suurin osa huonommasta
+suorituskyvystä liittynee seuraaviin seikkoihin:
+- DictX poistaa ja palauttaa alkioita set- ja dictionary -tietorakenteista, DLX palauttaa vain viitteet toisiin solmuihin muistissa
+- DictX säilöö joka kierroksella poistetut rivit listaan, jotta ne voidaan palauttaa
+- DictX joutuu vertailemaan palautettavia ja poistettavia rivejä alkuperäiseen joukkojen kokoelmaan, DLX:n ei tarvitse tehdä vertailua.
+
+Kaiken kaikkiaan kuitenkin Algoritmi X ja erityisesti DLX-pohjainen toteutus tuo erityisesti täsmäpeitteeksi käännettäviin 
+ongelmiin merkittävää tehoa. On vaikea päästä alle sekunnin suorituskykyyn sudokujen tai pentomino-lautojen ratkaisuihin
+vain läpikäymällä mahdollisia numeroiden tai pentominojen asetteluita.
 
 # Työn mahdolliset puutteet ja parannusehdotukset
 
