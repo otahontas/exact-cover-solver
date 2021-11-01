@@ -18,15 +18,6 @@ Exact cover solver -kirjasto ratkoo np-täydellisen täsmäpeiteongelman sekä t
 - [Testikattavuusraportti](https://coveralls.io/github/otahontas/exact-cover-solver?branch=master)
 - [Koodin dokumentaatio](https://otahontas.github.io/exact-cover-solver/)
 
-## Viikkoraportit
-
-- [Viikko 1](docs/raportit/viikko1.md)
-- [Viikko 2](docs/raportit/viikko2.md)
-- [Viikko 3](docs/raportit/viikko3.md)
-- [Viikko 4](docs/raportit/viikko4.md)
-- [Viikko 5](docs/raportit/viikko5.md)
-- [Viikko 6](docs/raportit/viikko6.md)
-
 ## Käyttöohje
 
 - Projektissa laadittua kirjastoa voit käyttää:
